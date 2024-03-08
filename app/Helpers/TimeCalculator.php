@@ -26,4 +26,5 @@ class TimeCalculator
 		return sprintf('%02d:%02d:%02d', $hh, $mm, $ss);
 	}
 
+
 }
