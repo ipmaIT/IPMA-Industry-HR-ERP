@@ -32,25 +32,6 @@
 			{{ Form::close() }}
 		</div>
 	</div>
-
-	@if (isset($incentivestaffs))
-	<div class="hstack align-items-start justify-content-center">
-		<table class="table table-sm table-hover">
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th>Incentive</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-				<td></td>
-					<td></td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-	@endif
 </div>
 @endsection
 
