@@ -97,8 +97,9 @@ class ConditionalIncentiveStaffCheckingReportController extends Controller
 		// 	return Storage::download('public/excel/'.$filename);
 		// }
 
-		$batch = null;
-		return view('humanresources.hrdept.conditionalincentive.staffcheckreport.create', ['batch' => $batch]);
+		// $batch = null;
+		// return view('humanresources.hrdept.conditionalincentive.staffcheckreport.create', ['batch' => $batch]);
+		return view('humanresources.hrdept.conditionalincentive.staffcheckreport.create');
 	}
 
 	public function store(Request $request)// : RedirectResponse
@@ -127,39 +128,42 @@ class ConditionalIncentiveStaffCheckingReportController extends Controller
 			}
 		}
 		$staffs = array_unique($staf);
-		$stchunk = array_chunk($staffs, 2);
-		// process collection
-		// $batch = Bus::batch([])->name('Conditional Incentive Staff on -> '.now())->dispatch();
-		foreach ($stchunk as $index => $values) {
-			// $data[$index] = $values;
-			foreach ($values as $value) {
-				$data[$index][] = $value;
-			}
-		// 	// dd($data[$index]);
-		// 	// $batch->add(new AttendancePayslipJob($data[$index], $year));
-			$dat[] = new ConditionalIncentiveJob($data[$index], $request->only(['date_from', 'date_to']));
-		}
-		// dd($incentivestaffs, $staff, $stchunk, $data[$index]);
+		$incentivestaffs = Staff::select('staffs.id', 'logins.username', 'staffs.name')->join('logins', 'staffs.id', '=', 'logins.staff_id')->orderBy('logins.username')->whereIn('staffs.id', $staffs)->where('logins.active', 1)->get();
 
-		$batch = Bus::batch($dat)
-					->name('Conditional Incentive Staff on -> '.now()->format('j M Y'))
-		// 			// ->progress(function (Batch $batch) {
-		// 			// 	// A single job has completed successfully...
-		// 			// })
-		// 			// ->then(function (Batch $batch) {
-		// 			// 	// All jobs completed successfully...
-		// 			// })
-		// 			// ->catch(function (Batch $batch, Throwable $e) {
-		// 			// 	// First batch job failure detected...
-		// 			// })
-		// 			// ->finally(function (Batch $batch) {
-		// 			// 	// The batch has finished executing...
-		// 			// })
-					->dispatch();
-		session(['lastBatchIdPay' => $batch->id]);
-		session(['date_from' => $request->from]);
-		session(['date_to' => $request->to]);
-		return redirect()->route('cicategorystaffcheckreport.create', ['id' => $batch->id]);
+		// $stchunk = array_chunk($staffs, 2);
+		// // process collection
+		// // $batch = Bus::batch([])->name('Conditional Incentive Staff on -> '.now())->dispatch();
+		// foreach ($stchunk as $index => $values) {
+		// 	// $data[$index] = $values;
+		// 	foreach ($values as $value) {
+		// 		$data[$index][] = $value;
+		// 	}
+		// // 	// dd($data[$index]);
+		// // 	// $batch->add(new AttendancePayslipJob($data[$index], $year));
+		// 	$dat[] = new ConditionalIncentiveJob($data[$index], $request->only(['date_from', 'date_to']));
+		// }
+		// // dd($incentivestaffs, $staff, $stchunk, $data[$index]);
+
+		// $batch = Bus::batch($dat)
+		// 			->name('Conditional Incentive Staff on -> '.now()->format('j M Y'))
+		// // 			// ->progress(function (Batch $batch) {
+		// // 			// 	// A single job has completed successfully...
+		// // 			// })
+		// // 			// ->then(function (Batch $batch) {
+		// // 			// 	// All jobs completed successfully...
+		// // 			// })
+		// // 			// ->catch(function (Batch $batch, Throwable $e) {
+		// // 			// 	// First batch job failure detected...
+		// // 			// })
+		// // 			// ->finally(function (Batch $batch) {
+		// // 			// 	// The batch has finished executing...
+		// // 			// })
+		// 			->dispatch();
+		// session(['lastBatchIdPay' => $batch->id]);
+		// session(['date_from' => $request->from]);
+		// session(['date_to' => $request->to]);
+		// return redirect()->route('cicategorystaffcheckreport.create', ['id' => $batch->id]);
+		return redirect()->route('cicategorystaffcheckreport.create', ['incentivestaffs' => $incentivestaffs, 'date_from' => $request->date_from, 'date_to' => $request->date_to]);
 	}
 
 	// public function show(ConditionalIncentiveCategoryItem $cicategoryitem): View

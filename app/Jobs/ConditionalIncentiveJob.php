@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\DB;
 
 // load models
 use App\Models\Staff;
+use App\Models\HumanResources\OptWeekDates;
+use App\Models\HumanResources\ConditionalIncentiveStaffItemWeek;
 
 
 // load helper
@@ -52,8 +54,9 @@ class ConditionalIncentiveJob implements ShouldQueue
 
 	protected function str_putcsv($data) {
 		# Generate CSV data from array
-		$fh = fopen('php://temp', 'rw'); # don't create a file, attempt
-											# to use memory instead
+		// $fh = fopen('php://temp', 'rw'); # don't create a file, attempt
+		# to use memory instead
+		$fh = fopen(storage_path('app/public/excel/cistaff.csv'), 'a+') or die();
 
 		# write out the headers
 		fputcsv($fh, array_keys(current($data)));
@@ -76,6 +79,7 @@ class ConditionalIncentiveJob implements ShouldQueue
 	{
 		$staffs = $this->staffs;
 		$request = $this->request;
+		// dd($request);
 
 		$handle = fopen(storage_path('app/public/excel/cistaff.csv'), 'a+') or die();
 		// $handle = fopen(storage_path('app/public/excel/Staff_Appraisal_'.$year.'_'.now()->format('j F Y g.i').'.csv'), 'a+') or die();
@@ -83,22 +87,23 @@ class ConditionalIncentiveJob implements ShouldQueue
 		$incentivestaffs = Staff::select('staffs.id', 'logins.username', 'staffs.name')->join('logins', 'staffs.id', '=', 'logins.staff_id')->orderBy('logins.username')->whereIn('staffs.id', $staffs)->where('logins.active', 1)->get();
 
 		// finding what week for today
-		$weeks = OptWeekDates::where(function(Builder $query) {
-																	$query->whereDate('date_from', '>=', now()->startOfMonth())
-																		->whereDate('date_to', '<=', now()->endOfWeek());
-																})
-																->get();
+		for ($i=$request['date_from']; $i <= $request['date_to']; $i++) {
+			$weeks[] = OptWeekDates::find($i)->get();
+			$week_ids[] = $i;
+		}
 
 		foreach ($incentivestaffs as $k1 => $v1) {
 			foreach ($v1->belongstomanycicategoryitem()?->get() as $k2 => $v2) {
-				$desc[$k1][$k2] = $v2->description;
-				foreach ($v2 as $k3 => $v3) {
-
+				$desc[$k1][$k2] = [$v2->description, $v2->pivot->staff_id, $v2->pivot->cicategory_item_id, $v2->pivot->id];
+				foreach (ConditionalIncentiveStaffItemWeek::where('pivot_staff_item_id', $v2->pivot->id)->whereIn('week_id', $week_ids)->get() as $k3 => $v3) {
+					$do[$k1][$k2][$k3] = $v3->week_id;
 				}
 			}
+			// $records[$k1] = [$v1->username, $v1->name, $desc[$k1], $do[$k1]];
 			$records[$k1] = [$v1->username, $v1->name, $desc[$k1]];
 		}
 
+		// dd($records);
 		// foreach ($records as $k1 => $v1) {
 		// 	fputcsv($handle, [$v1[0], $v1[1]]);
 		// 	foreach ($v1[2] as $k2 => $v2) {
@@ -107,6 +112,6 @@ class ConditionalIncentiveJob implements ShouldQueue
 		// 	}
 		// }
 		// fclose($handle);
-		str_putcsv();
+		$this->str_putcsv($records);
 	}
 }

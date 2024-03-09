@@ -7,7 +7,7 @@
 
 	<div class="hstack align-items-start justify-content-between">
 		<div class="col-sm-12">
-			{{ Form::open(['route' => ['cicategorystaffcheckreport.store'], 'method' => 'POST', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) }}
+			{{ Form::open(['route' => ['cicategorystaffcheckreport.store'], 'method' => 'POST', 'id' => 'form', 'files' => true]) }}
 
 			<div class="form-group hstack @error('date_from') has-error is-invalid @enderror">
 				{{ Form::label( 'week1', 'From Week : ', ['class' => 'col-sm-2 col-form-label'] ) }}
@@ -32,6 +32,25 @@
 			{{ Form::close() }}
 		</div>
 	</div>
+
+	@if (isset($incentivestaffs))
+	<div class="hstack align-items-start justify-content-center">
+		<table class="table table-sm table-hover">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Incentive</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+				<td></td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	@endif
 </div>
 @endsection
 
