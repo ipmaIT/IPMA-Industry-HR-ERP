@@ -71,19 +71,16 @@ class ConditionalIncentiveJob implements ShouldQueue
 
 		foreach ($incentivestaffs as $k1 => $v1) {
 			$users[$k1] = $v1->username.' - '.$v1->name;
-			$pointsTotal = 0;
 			foreach ($v1->belongstomanycicategoryitem()?->get() as $k2 => $v2) {
 				$desc[$k1][$k2] = $v2->description;
 				$pid[$k1][$k2] = $v2->pivot->id;
 				$points[$k1][$k2] = $v2->point;
-				$userIncentive[$k1][$k2] = Arr::flatten(Arr::crossJoin([$users[$k1], $desc[$k1][$k2]]));
+				$userIncentive[$k1][$k2] = Arr::flatten([$users[$k1], $desc[$k1][$k2]]);
 
 				$checked[$k1][$k2] = ConditionalIncentiveStaffItemWeek::where('pivot_staff_item_id', $pid[$k1][$k2])->first();
 				foreach (OptWeekDates::whereIn('id', $week_id)->get() as $k3 => $v3) {
-					// $weeks[$k1][$k2][$k3] = $v3->week.' ('.Carbon::parse($v3->date_from)->format('j M Y').' - '.Carbon::parse($v3->date_to)->format('j M Y').')';
 					if ($v3->id == $checked[$k1][$k2]?->week_id) {
 						$weeks[$k1][$k2][$k3] = [$v3->week.' ('.Carbon::parse($v3->date_from)->format('j M Y').' - '.Carbon::parse($v3->date_to)->format('j M Y').')', $points[$k1][$k2]];
-						$pointsTotal = $points[$k1][$k2]++;
 					} else {
 						$weeks[$k1][$k2][$k3] = $v3->week.' ('.Carbon::parse($v3->date_from)->format('j M Y').' - '.Carbon::parse($v3->date_to)->format('j M Y').')';
 					}
@@ -92,7 +89,6 @@ class ConditionalIncentiveJob implements ShouldQueue
 			}
 			// $users[$k1] = [null, null, null, $pointsTotal];
 			$records[$k1] = $userIncentiveWeeks[$k1];
-			$records[$k1] += [null, null, null, $pointsTotal];
 		}
 		// dump($records);
 
