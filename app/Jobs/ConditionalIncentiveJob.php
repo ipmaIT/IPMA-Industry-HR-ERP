@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 // load models
 use App\Models\Staff;
 use App\Models\HumanResources\OptWeekDates;
+use App\Models\HumanResources\ConditionalIncentiveStaffItemWeek;
 
 
 // load helper
@@ -70,26 +71,38 @@ class ConditionalIncentiveJob implements ShouldQueue
 
 		foreach ($incentivestaffs as $k1 => $v1) {
 			$users[$k1] = $v1->username.' - '.$v1->name;
+			$pointsTotal = 0;
 			foreach ($v1->belongstomanycicategoryitem()?->get() as $k2 => $v2) {
 				$desc[$k1][$k2] = $v2->description;
-				// $userIncentive[$k1][$k2] = Arr::flatten(Arr::crossJoin([$users[$k1], $desc[$k1][$k2]]));
-				$userIncentive[$k1][$k2] = Arr::crossJoin($users[$k1], $desc[$k1][$k2]);
+				$pid[$k1][$k2] = $v2->pivot->id;
+				$points[$k1][$k2] = $v2->point;
+				$userIncentive[$k1][$k2] = Arr::flatten(Arr::crossJoin([$users[$k1], $desc[$k1][$k2]]));
+
+				$checked[$k1][$k2] = ConditionalIncentiveStaffItemWeek::where('pivot_staff_item_id', $pid[$k1][$k2])->first();
 				foreach (OptWeekDates::whereIn('id', $week_id)->get() as $k3 => $v3) {
-					$weeks[$k1][$k2][$k3] = $v3->week.' ('.Carbon::parse($v3->date_from)->format('j M Y').' - '.Carbon::parse($v3->date_to)->format('j M Y').')';
-					// $userIncentiveWeeks[$k1][$k2][$k3] = Arr::flatten(Arr::crossJoin($userIncentive[$k1][$k2], $weeks[$k1][$k2][$k3]));
-					$userIncentiveWeeks[$k1][$k2][$k3] = [$userIncentive[$k1][$k2], $weeks[$k1][$k2][$k3]];
+					// $weeks[$k1][$k2][$k3] = $v3->week.' ('.Carbon::parse($v3->date_from)->format('j M Y').' - '.Carbon::parse($v3->date_to)->format('j M Y').')';
+					if ($v3->id == $checked[$k1][$k2]?->week_id) {
+						$weeks[$k1][$k2][$k3] = [$v3->week.' ('.Carbon::parse($v3->date_from)->format('j M Y').' - '.Carbon::parse($v3->date_to)->format('j M Y').')', $points[$k1][$k2]];
+						$pointsTotal = $points[$k1][$k2]++;
+					} else {
+						$weeks[$k1][$k2][$k3] = $v3->week.' ('.Carbon::parse($v3->date_from)->format('j M Y').' - '.Carbon::parse($v3->date_to)->format('j M Y').')';
+					}
+					$userIncentiveWeeks[$k1][$k2][$k3] = Arr::flatten([$userIncentive[$k1][$k2], $weeks[$k1][$k2][$k3]]);
 				}
 			}
+			// $users[$k1] = [null, null, null, $pointsTotal];
 			$records[$k1] = $userIncentiveWeeks[$k1];
+			$records[$k1] += [null, null, null, $pointsTotal];
 		}
+		// dump($records);
 
-		dump($records);
-
-		// foreach ($records as $k1 => $v1) {
-		// 	// foreach ($v1 as $k2 => $v2) {
-		// 		fputcsv($handle, $v1);
-		// 	// }
-		// }
-		// fclose($handle);
+		foreach ($records as $k1 => $v1) {
+			foreach ($v1 as $k2 => $v2) {
+				foreach ($v2 as $k3 => $v3) {
+					fputcsv($handle, $v3);
+				}
+			}
+		}
+		fclose($handle);
 	}
 }
