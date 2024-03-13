@@ -106,13 +106,14 @@ class AttendancePayslipJob implements ShouldQueue
 			$ot05[$k1] = 0;
 			$ot[$k1] = [];
 			$tf[$k1] = [];
-			$latemerit[$k1] = 0;
-			$earlymerit[$k1] = 0;
 
 			// loop attendance foreach staff to find leave, absent, OT, lateness and early out
+			$timelates = 1;
 			foreach ($sattendances[$k1] as $k2 => $sattendance) {
 				$wh[$k1][$k2] = UnavailableDateTime::workinghourtime($sattendance->attend_date, $sattendance->staff_id)->first();
 
+				// find leave & leave type
+				// need to make sure if there are 2 leaves in 1 day
 				$leave[$k1][$k2] = HRLeave::where(function(Builder $query) use ($sattendance) {
 														$query->whereDate('date_time_start' , '>=', $sattendance->attend_date)
 															->whereDate('date_time_end' , '<=', $sattendance->attend_date);
@@ -124,9 +125,8 @@ class AttendancePayslipJob implements ShouldQueue
 													})
 													->get();
 													// ->dumpRawSql();
+				$overtime[$k1][$k2] = HROvertime::whereDate('ot_date', $sattendance->attend_date)->first();
 
-				// find leave & leave type
-				// need to make sure if there are 2 leaves in 1 day
 				if (!is_null($sattendance->leave_id)) {
 					foreach ($leave[$k1][$k2] as $k3 => $v3) {
 
@@ -211,148 +211,85 @@ class AttendancePayslipJob implements ShouldQueue
 
 				// checking on lateness and early out with no ecxeption when there is no leave, & outstation
 				if ( ($sattendance->exception != 1) ) {
+					// no outstation
 					if (is_null($sattendance->outstation_id)) {
-						// no leave
-						if (is_null($sattendance->leave_id)) {
-							// no overtime
-							if (is_null($sattendance->overtime_id)) {
 
-								// no exception | no outstation | no leave | no overtime
-								// morning
+						// no overtime
+						if (is_null($sattendance->overtime_id)) {
+
+							// no leave
+							if (is_null($sattendance->leave_id)) {
+
+								// normal late => no exception | no outstaion | no overtime | no leave
+								// late for in
 								if (($sattendance->in != '00:00:00') && (Carbon::parse($sattendance->in)->gt($wh[$k1][$k2]->time_start_am))) {
 									$late[$k1][$k2] = Carbon::parse($wh[$k1][$k2]->time_start_am)->addMinute()->toPeriod($sattendance->in, 1, 'minute', CarbonPeriod::EXCLUDE_START_DATE);
-									// $lateness += $late->count() - 1;
-									$lateness[$k1] += $late[$k1][$k2]->count();
+									// $lateness[$k1] += $late[$k1][$k2]->count();
+									$lateness[$k1] = $late[$k1][$k2]->count();
 
-									if ($late[$k1][$k2]->count() > 0 && $late[$k1][$k2]->count() <= 15) {
-										$latemerit[$k1] += HRAttendancePayslipSetting::find(1)->value;
-									}
 
-									if ($late[$k1][$k2]->count() > 15 && $late[$k1][$k2]->count() <= 30) {
-										$latemerit[$k1] += HRAttendancePayslipSetting::find(2)->value;
-									}
-
-									if ($late[$k1][$k2]->count() > 30 && $late[$k1][$k2]->count() <= 45) {
-										$latemerit[$k1] += HRAttendancePayslipSetting::find(3)->value;
-									}
-
-									if ($late[$k1][$k2]->count() > 45 && $late[$k1][$k2]->count() <= 60) {
-										$latemerit[$k1] += HRAttendancePayslipSetting::find(4)->value;
-									}
-
-									if ($late[$k1][$k2]->count() > 60) {
-										$latemerit[$k1] += (HRAttendancePayslipSetting::find(4)->value) + (($lateness[$k1] - 61) * HRAttendancePayslipSetting::find(5)->value);
-									}
+										if ($late[$k1][$k2]->count() > 0 && $late[$k1][$k2]->count() <= 15) {
+											$latemerit[$k1] += HRAttendancePayslipSetting::find(1)->value;
+											$laten[$k1] = $latemerit[$k1].' ('.$late[$k1][$k2]->count().' minutes)';
+										} elseif ($late[$k1][$k2]->count() > 15 && $late[$k1][$k2]->count() <= 30) {
+											$latemerit[$k1] += HRAttendancePayslipSetting::find(2)->value;
+											$laten[$k1] = $latemerit[$k1].' ('.$late[$k1][$k2]->count().' minutes)';
+										} elseif ($late[$k1][$k2]->count() > 30 && $late[$k1][$k2]->count() <= 45) {
+											$latemerit[$k1] += HRAttendancePayslipSetting::find(3)->value;
+											$laten[$k1] = $latemerit[$k1].' ('.$late[$k1][$k2]->count().' minutes)';
+										} elseif ($late[$k1][$k2]->count() > 45 && $late[$k1][$k2]->count() <= 60) {
+											$latemerit[$k1] += HRAttendancePayslipSetting::find(4)->value;
+											$laten[$k1] = $latemerit[$k1].' ('.$late[$k1][$k2]->count().' minutes)';
+										} elseif ($late[$k1][$k2]->count() > 60) {
+											$latemerit[$k1] += (HRAttendancePayslipSetting::find(4)->value) + (($late[$k1][$k2]->count() - 61) * HRAttendancePayslipSetting::find(5)->value);
+											$laten[$k1] = $latemerit[$k1].' ('.$late[$k1][$k2]->count().' minutes)';
+										}
 								}
-
+								// late on resume
 								if (($sattendance->resume != '00:00:00') && (Carbon::parse($sattendance->resume)->gt($wh[$k1][$k2]->time_start_pm))) {
 									$late[$k1][$k2] = Carbon::parse($wh[$k1][$k2]->time_start_pm)->addMinute()->toPeriod($sattendance->resume, 1, 'minute', CarbonPeriod::EXCLUDE_START_DATE);
 									// $lateness += $late->count() - 1;
-									$lateness[$k1] += $late[$k1][$k2]->count();
-
-									if ($late[$k1][$k2]->count() > 0 && $late[$k1][$k2]->count() <= 15) {
-										$latemerit[$k1] += HRAttendancePayslipSetting::find(1)->value;
-									}
-
-									if ($late[$k1][$k2]->count() > 15 && $late[$k1][$k2]->count() <= 30) {
-										$latemerit[$k1] += HRAttendancePayslipSetting::find(2)->value;
-									}
-
-									if ($late[$k1][$k2]->count() > 30 && $late[$k1][$k2]->count() <= 45) {
-										$latemerit[$k1] += HRAttendancePayslipSetting::find(3)->value;
-									}
-
-									if ($late[$k1][$k2]->count() > 45 && $late[$k1][$k2]->count() <= 60) {
-										$latemerit[$k1] += HRAttendancePayslipSetting::find(4)->value;
-									}
-
-									if ($late[$k1][$k2]->count() > 60) {
-										$latemerit[$k1] += (HRAttendancePayslipSetting::find(4)->value) + (($lateness[$k1] - 61) * HRAttendancePayslipSetting::find(5)->value);
-									}
+									$lateness[$k1] = $late[$k1][$k2]->count();
 								}
 
-								// early break with no overtime
-								if ((Carbon::parse($sattendance->break)->lt($wh[$k1][$k2]->time_end_am)) && ($sattendance->break != '00:00:00')) {
-									$early[$k1][$k2] = Carbon::parse($sattendance->break)->addMinute()->toPeriod($wh[$k1][$k2]->time_end_am, 1, 'minute', CarbonPeriod::EXCLUDE_START_DATE);
-									// $earlyout += $early->count() - 1;
-									$earlyout[$k1] += $early[$k1][$k2]->count();
-									if ($early[$k1][$k2]->count() > 0 && $early[$k1][$k2]->count() <= 15) {
-										$earlymerit[$k1] += HRAttendancePayslipSetting::find(1)->value;
-									}
-
-									if ($early[$k1][$k2]->count() > 15 && $early[$k1][$k2]->count() <= 30) {
-										$earlymerit[$k1] += HRAttendancePayslipSetting::find(2)->value;
-									}
-
-									if ($early[$k1][$k2]->count() > 30 && $early[$k1][$k2]->count() <= 45) {
-										$earlymerit[$k1] += HRAttendancePayslipSetting::find(3)->value;
-									}
-
-									if ($early[$k1][$k2]->count() > 45 && $early[$k1][$k2]->count() <= 60) {
-										$earlymerit[$k1] += HRAttendancePayslipSetting::find(4)->value;
-									}
-
-									if ($early[$k1][$k2]->count() > 60) {
-										$earlymerit[$k1] += (HRAttendancePayslipSetting::find(4)->value) + (($earlyout[$k1] - 61) * HRAttendancePayslipSetting::find(5)->value);
-									}
-								}
-
-								// early out with no overtime
-								if ((Carbon::parse($sattendance->out)->lt($wh[$k1][$k2]->time_end_pm)) && ($sattendance->out != '00:00:00')) {
-									$early[$k1][$k2] = Carbon::parse($sattendance->out)->addMinute()->toPeriod($wh[$k1][$k2]->time_end_pm, 1, 'minute', CarbonPeriod::EXCLUDE_START_DATE);
-									$earlyout[$k1] += $early[$k1][$k2]->count();
-
-									if ($early[$k1][$k2]->count() > 0 && $early[$k1][$k2]->count() <= 15) {
-										$earlymerit[$k1] += HRAttendancePayslipSetting::find(1)->value;
-									}
-
-									if ($early[$k1][$k2]->count() > 15 && $early[$k1][$k2]->count() <= 30) {
-										$earlymerit[$k1] += HRAttendancePayslipSetting::find(2)->value;
-									}
-
-									if ($early[$k1][$k2]->count() > 30 && $early[$k1][$k2]->count() <= 45) {
-										$earlymerit[$k1] += HRAttendancePayslipSetting::find(3)->value;
-									}
-
-									if ($early[$k1][$k2]->count() > 45 && $early[$k1][$k2]->count() <= 60) {
-										$earlymerit[$k1] += HRAttendancePayslipSetting::find(4)->value;
-									}
-
-									if ($early[$k1][$k2]->count() > 60) {
-										$earlymerit[$k1] += (HRAttendancePayslipSetting::find(4)->value) + (($earlyout[$k1] - 61) * HRAttendancePayslipSetting::find(5)->value);
-									}
-								}
 
 
 
 							} else {
-								// no exception | no outstation | no leave | overtime
+								// leave half day => if leave on morning, check on resume late. if leave on evening, check on morning late
+							}
+
+
+							// early out with no overtime
+							if ((Carbon::parse($sattendance->out)->lt($wh[$k1][$k2]->time_end_pm)) && ($sattendance->out != '00:00:00')) {
+								$early[$k1][$k2] = Carbon::parse($sattendance->out)->addMinute()->toPeriod($wh[$k1][$k2]->time_end_pm, 1, 'minute', CarbonPeriod::EXCLUDE_START_DATE);
+								// $earlyout += $early->count() - 1;
+								$earlyout[$k1] += $early[$k1][$k2]->count();
+							}
+
+						} else {
+							// early out on overtime
+						}
+
+
+
+
+
+
+					}
+
+							// with overtime
+							if(!is_null($sattendance->overtime_id)) {
 								// lateness with overtime with exception of morning overtime
 								if (($sattendance->in != '00:00:00') && (Carbon::parse($sattendance->in)->gt($wh[$k1][$k2]->time_start_am)) && (HROvertime::find($sattendance->overtime_id)->belongstoovertimerange->id == 26)) {
 									$late[$k1][$k2] = Carbon::parse(HROvertime::find($sattendance->overtime_id)->belongstoovertimerange->start)->addMinute()->toPeriod($sattendance->in, 1, 'minute', CarbonPeriod::EXCLUDE_START_DATE);
 									// $lateness += $late->count() - 1;
-									if ($late[$k1][$k2]->count() > 0 && $late[$k1][$k2]->count() <= 15) {
-										$latemerit[$k1] += HRAttendancePayslipSetting::find(1)->value;
-									}
-
-									if ($late[$k1][$k2]->count() > 15 && $late[$k1][$k2]->count() <= 30) {
-										$latemerit[$k1] += HRAttendancePayslipSetting::find(2)->value;
-									}
-
-									if ($late[$k1][$k2]->count() > 30 && $late[$k1][$k2]->count() <= 45) {
-										$latemerit[$k1] += HRAttendancePayslipSetting::find(3)->value;
-									}
-
-									if ($late[$k1][$k2]->count() > 45 && $late[$k1][$k2]->count() <= 60) {
-										$latemerit[$k1] += HRAttendancePayslipSetting::find(4)->value;
-									}
-
-									if ($late[$k1][$k2]->count() > 60) {
-										$latemerit[$k1] += (HRAttendancePayslipSetting::find(4)->value) + (($lateness[$k1] - 61) * HRAttendancePayslipSetting::find(5)->value);
-									}
+									$lateness[$k1] += $late[$k1][$k2]->count();
+								} else {
+									$late[$k1][$k2] = Carbon::parse($wh[$k1][$k2]->time_start_am)->addMinute()->toPeriod($sattendance->in, 1, 'minute', CarbonPeriod::EXCLUDE_START_DATE);
+									// $lateness += $late->count() - 1;
 									$lateness[$k1] += $late[$k1][$k2]->count();
 								}
-
 								// early out with overtime
 								// find overtime
 								$ota[$k1][$k2] = HROvertime::find($sattendance->overtime_id);
@@ -362,14 +299,10 @@ class AttendancePayslipJob implements ShouldQueue
 									// $earlyout += $early->count() - 1;
 									$earlyout[$k1][$k2] += $early[$k1][$k2]->count();
 								}
-							}
 
-						} else {
-							// no exception | no outstation | leave | no overtime
-							// check late when leave on half day leave
-							// if leave am, check on late resume, if leave pm, check on late in
 
-						}
+
+
 					}
 				}
 			}
@@ -429,47 +362,42 @@ class AttendancePayslipJob implements ShouldQueue
 
 			if ($lateness[$k1] < 1) {
 				$laten[$k1] = null;
-			} else {
+			} elseif ($lateness[$k1] > 0 && $lateness[$k1] <= 15) {
+				$latemerit[$k1] = HRAttendancePayslipSetting::find(1)->value;
+				$laten[$k1] = $latemerit[$k1].' ('.$lateness[$k1].' minutes)';
+			} elseif ($lateness[$k1] > 15 && $lateness[$k1] <= 30) {
+				$latemerit[$k1] = HRAttendancePayslipSetting::find(2)->value;
+				$laten[$k1] = $latemerit[$k1].' ('.$lateness[$k1].' minutes)';
+			} elseif ($lateness[$k1] > 30 && $lateness[$k1] <= 45) {
+				$latemerit[$k1] = HRAttendancePayslipSetting::find(3)->value;
+				$laten[$k1] = $latemerit[$k1].' ('.$lateness[$k1].' minutes)';
+			} elseif ($lateness[$k1] > 45 && $lateness[$k1] <= 60) {
+				$latemerit[$k1] = HRAttendancePayslipSetting::find(4)->value;
+				$laten[$k1] = $latemerit[$k1].' ('.$lateness[$k1].' minutes)';
+			} elseif ($lateness[$k1] > 60) {
+				$latemerit[$k1] = (HRAttendancePayslipSetting::find(4)->value) + (($lateness[$k1] - 61) * HRAttendancePayslipSetting::find(5)->value);
 				$laten[$k1] = $latemerit[$k1].' ('.$lateness[$k1].' minutes)';
 			}
-			// if ($lateness[$k1] < 1) {
-			// 	$laten[$k1] = null;
-			// } elseif ($lateness[$k1] > 0 && $lateness[$k1] <= 15) {
-			// 	$latemerit[$k1] = HRAttendancePayslipSetting::find(1)->value;
-			// 	$laten[$k1] = $latemerit[$k1].' ('.$lateness[$k1].' minutes)';
-			// } elseif ($lateness[$k1] > 15 && $lateness[$k1] <= 30) {
-			// 	$latemerit[$k1] = HRAttendancePayslipSetting::find(2)->value;
-			// 	$laten[$k1] = $latemerit[$k1].' ('.$lateness[$k1].' minutes)';
-			// } elseif ($lateness[$k1] > 30 && $lateness[$k1] <= 45) {
-			// 	$latemerit[$k1] = HRAttendancePayslipSetting::find(3)->value;
-			// 	$laten[$k1] = $latemerit[$k1].' ('.$lateness[$k1].' minutes)';
-			// } elseif ($lateness[$k1] > 45 && $lateness[$k1] <= 60) {
-			// 	$latemerit[$k1] = HRAttendancePayslipSetting::find(4)->value;
-			// 	$laten[$k1] = $latemerit[$k1].' ('.$lateness[$k1].' minutes)';
-			// } elseif ($lateness[$k1] > 60) {
-			// 	$latemerit[$k1] = (HRAttendancePayslipSetting::find(4)->value) + (($lateness[$k1] - 61) * HRAttendancePayslipSetting::find(5)->value);
-			// 	$laten[$k1] = $latemerit[$k1].' ('.$lateness[$k1].' minutes)';
-			// }
 
 
-			// if ($earlyout[$k1] < 1) {
-			// 	$earl[$k1] = null;
-			// } elseif ($earlyout[$k1] > 0 && $earlyout[$k1] <= 15) {
-			// 	$latemerit[$k1] = HRAttendancePayslipSetting::find(1)->value;
-			// 	$earl[$k1] = $latemerit[$k1].' ('.$earlyout[$k1].' minutes)';
-			// } elseif ($earlyout[$k1] > 15 && $earlyout[$k1] <= 30) {
-			// 	$latemerit[$k1] = HRAttendancePayslipSetting::find(2)->value;
-			// 	$earl[$k1] = $latemerit[$k1].' ('.$earlyout[$k1].' minutes)';
-			// } elseif ($earlyout[$k1] > 30 && $earlyout[$k1] <= 45) {
-			// 	$latemerit[$k1] = HRAttendancePayslipSetting::find(3)->value;
-			// 	$earl[$k1] = $latemerit[$k1].' ('.$earlyout[$k1].' minutes)';
-			// } elseif ($earlyout[$k1] > 45 && $earlyout[$k1] <= 60) {
-			// 	$latemerit[$k1] = HRAttendancePayslipSetting::find(4)->value;
-			// 	$earl[$k1] = $latemerit[$k1].' ('.$earlyout[$k1].' minutes)';
-			// } elseif ($earlyout[$k1] > 60) {
-			// 	$latemerit[$k1] = (HRAttendancePayslipSetting::find(4)->value) + (($earlyout[$k1] - 61) * HRAttendancePayslipSetting::find(5)->value);
-			// 	$earl[$k1] = $latemerit[$k1].' ('.$earlyout[$k1].' minutes)';
-			// }
+			if ($earlyout[$k1] < 1) {
+				$earl[$k1] = null;
+			} elseif ($earlyout[$k1] > 0 && $earlyout[$k1] <= 15) {
+				$latemerit[$k1] = HRAttendancePayslipSetting::find(1)->value;
+				$earl[$k1] = $latemerit[$k1].' ('.$earlyout[$k1].' minutes)';
+			} elseif ($earlyout[$k1] > 15 && $earlyout[$k1] <= 30) {
+				$latemerit[$k1] = HRAttendancePayslipSetting::find(2)->value;
+				$earl[$k1] = $latemerit[$k1].' ('.$earlyout[$k1].' minutes)';
+			} elseif ($earlyout[$k1] > 30 && $earlyout[$k1] <= 45) {
+				$latemerit[$k1] = HRAttendancePayslipSetting::find(3)->value;
+				$earl[$k1] = $latemerit[$k1].' ('.$earlyout[$k1].' minutes)';
+			} elseif ($earlyout[$k1] > 45 && $earlyout[$k1] <= 60) {
+				$latemerit[$k1] = HRAttendancePayslipSetting::find(4)->value;
+				$earl[$k1] = $latemerit[$k1].' ('.$earlyout[$k1].' minutes)';
+			} elseif ($earlyout[$k1] > 60) {
+				$latemerit[$k1] = (HRAttendancePayslipSetting::find(4)->value) + (($earlyout[$k1] - 61) * HRAttendancePayslipSetting::find(5)->value);
+				$earl[$k1] = $latemerit[$k1].' ('.$earlyout[$k1].' minutes)';
+			}
 
 			if ($nopayhour[$k1] < 0.5) {
 				$nopayhour[$k1] = null;
