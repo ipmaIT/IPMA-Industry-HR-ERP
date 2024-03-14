@@ -114,8 +114,8 @@ class AttendancePayslipJob implements ShouldQueue
 				$wh[$k1][$k2] = UnavailableDateTime::workinghourtime($sattendance->attend_date, $sattendance->staff_id)->first();
 
 				$leave[$k1][$k2] = HRLeave::where(function(Builder $query) use ($sattendance) {
-														$query->whereDate('date_time_start' , '>=', $sattendance->attend_date)
-															->whereDate('date_time_end' , '<=', $sattendance->attend_date);
+														$query->whereDate('date_time_start' , '<=', $sattendance->attend_date)
+															->whereDate('date_time_end' , '>=', $sattendance->attend_date);
 													})
 													->where('staff_id', $sattendance->staff_id)
 													->where(function(Builder $query) {
@@ -539,44 +539,6 @@ class AttendancePayslipJob implements ShouldQueue
 			} else {
 				$earl[$k1] = $earlymerit[$k1].' ('.$earlyout[$k1].' minutes)';
 			}
-			// if ($lateness[$k1] < 1) {
-			// 	$laten[$k1] = null;
-			// } elseif ($lateness[$k1] > 0 && $lateness[$k1] <= 15) {
-			// 	$latemerit[$k1] = HRAttendancePayslipSetting::find(1)->value;
-			// 	$laten[$k1] = $latemerit[$k1].' ('.$lateness[$k1].' minutes)';
-			// } elseif ($lateness[$k1] > 15 && $lateness[$k1] <= 30) {
-			// 	$latemerit[$k1] = HRAttendancePayslipSetting::find(2)->value;
-			// 	$laten[$k1] = $latemerit[$k1].' ('.$lateness[$k1].' minutes)';
-			// } elseif ($lateness[$k1] > 30 && $lateness[$k1] <= 45) {
-			// 	$latemerit[$k1] = HRAttendancePayslipSetting::find(3)->value;
-			// 	$laten[$k1] = $latemerit[$k1].' ('.$lateness[$k1].' minutes)';
-			// } elseif ($lateness[$k1] > 45 && $lateness[$k1] <= 60) {
-			// 	$latemerit[$k1] = HRAttendancePayslipSetting::find(4)->value;
-			// 	$laten[$k1] = $latemerit[$k1].' ('.$lateness[$k1].' minutes)';
-			// } elseif ($lateness[$k1] > 60) {
-			// 	$latemerit[$k1] = (HRAttendancePayslipSetting::find(4)->value) + (($lateness[$k1] - 61) * HRAttendancePayslipSetting::find(5)->value);
-			// 	$laten[$k1] = $latemerit[$k1].' ('.$lateness[$k1].' minutes)';
-			// }
-
-
-			// if ($earlyout[$k1] < 1) {
-			// 	$earl[$k1] = null;
-			// } elseif ($earlyout[$k1] > 0 && $earlyout[$k1] <= 15) {
-			// 	$latemerit[$k1] = HRAttendancePayslipSetting::find(1)->value;
-			// 	$earl[$k1] = $latemerit[$k1].' ('.$earlyout[$k1].' minutes)';
-			// } elseif ($earlyout[$k1] > 15 && $earlyout[$k1] <= 30) {
-			// 	$latemerit[$k1] = HRAttendancePayslipSetting::find(2)->value;
-			// 	$earl[$k1] = $latemerit[$k1].' ('.$earlyout[$k1].' minutes)';
-			// } elseif ($earlyout[$k1] > 30 && $earlyout[$k1] <= 45) {
-			// 	$latemerit[$k1] = HRAttendancePayslipSetting::find(3)->value;
-			// 	$earl[$k1] = $latemerit[$k1].' ('.$earlyout[$k1].' minutes)';
-			// } elseif ($earlyout[$k1] > 45 && $earlyout[$k1] <= 60) {
-			// 	$latemerit[$k1] = HRAttendancePayslipSetting::find(4)->value;
-			// 	$earl[$k1] = $latemerit[$k1].' ('.$earlyout[$k1].' minutes)';
-			// } elseif ($earlyout[$k1] > 60) {
-			// 	$latemerit[$k1] = (HRAttendancePayslipSetting::find(4)->value) + (($earlyout[$k1] - 61) * HRAttendancePayslipSetting::find(5)->value);
-			// 	$earl[$k1] = $latemerit[$k1].' ('.$earlyout[$k1].' minutes)';
-			// }
 
 			if ($nopayhour[$k1] < 0.5) {
 				$nopayhour[$k1] = null;
