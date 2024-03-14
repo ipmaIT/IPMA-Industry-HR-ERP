@@ -1,20 +1,20 @@
 <?php
 namespace App\Http\Controllers\HumanResources\HRDept;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 // for controller output
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 
 // models
 use App\Models\Staff;
 // use App\Models\HumanResources\OptWeekDates;
-use App\Models\HumanResources\ConditionalIncentiveCategoryItem;
 // use App\Models\HumanResources\ConditionalIncentiveCategory;
+use App\Models\HumanResources\ConditionalIncentiveCategoryItem;
 
 // load db facade
 use Illuminate\Support\Facades\DB;
@@ -25,18 +25,19 @@ use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
 use App\Jobs\ConditionalIncentiveJob;
 
+
 // load array helper
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Http;
 
 use \Carbon\Carbon;
 use \Carbon\CarbonImmutable;
-use Throwable;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 use Log;
 use Session;
 use Exception;
+use Throwable;
 
 class ConditionalIncentiveStaffCheckingReportController extends Controller
 {
@@ -51,53 +52,51 @@ class ConditionalIncentiveStaffCheckingReportController extends Controller
 	// {
 	// }
 
-	public function create(): View
+	public function create(Request $request): View
 	{
-		// $from = Carbon::parse(session()->get('from'))->format('j_M_Y');
-		// $to = Carbon::parse(session()->get('to'))->format('j_M_Y');
-		// if (!$request->id) {
-		// 	if (session()->exists('lastBatchIdPay')) {
-		// 		$bid = session()->get('lastBatchIdPay');
-		// 	} else {
-		// 		$bid = 1;
-		// 	}
-		// } else {
-		// 	$bid = $request->id;
-		// }
-		// $batch = Bus::findBatch($bid);
+		$from = Carbon::parse(session()->get('date_from'))->format('j_M_Y');
+		$to = Carbon::parse(session()->get('date_to'))->format('j_M_Y');
+		if (!$request->id) {
+			if (session()->exists('lastBatchIdPay')) {
+				$bid = session()->get('lastBatchIdPay');
+			} else {
+				$bid = 1;
+			}
+		} else {
+			$bid = $request->id;
+		}
+		$batch = Bus::findBatch($bid);
 
-		// if (Storage::exists('public/excel/payslip.csv')) {
+		if (Storage::exists('public/excel/cistaff.csv')) {
+			$header[-1] = ['Staff', 'Incentive Description', 'Weeks', 'Incentive Deduction (RM)'];
 
-		// 	$header[-1] = ['Emp No', 'Name', 'Category', 'AL', 'NRL', 'MC', 'UPL', 'Absent', 'UPMC', 'Lateness(minute)', 'Early Out(minute)', 'No Pay Hour', 'Maternity', 'Hospitalization', 'Other Leave', 'Compassionate Leave', 'Marriage Leave', 'Day Work', '1.0 OT', '1.5 OT', 'OT', 'TF'];
+			// (A) READ EXISTING CSV FILE INTO ARRAY
+			$csv = fopen(storage_path('app/public/excel/cistaff.csv'), 'r');
+			while (($r=fgetcsv($csv)) !== false) {
+				$rows[] = $r;
+			}
+			fclose($csv);
 
-		// 	// (A) READ EXISTING CSV FILE INTO ARRAY
-		// 	$csv = fopen(storage_path('app/public/excel/payslip.csv'), 'r');
-		// 	while (($r=fgetcsv($csv)) !== false) {
-		// 		$rows[] = $r;
-		// 	}
-		// 	fclose($csv);
+			// (B) PREPEND NEW ROWS
+			$rows = array_merge($header, $rows);
+			// dd($rows);
 
-		// 	// (B) PREPEND NEW ROWS
-		// 	$rows = array_merge($header, $rows);
-		// 	// dd($rows);
+			// (C) SAVE UPDATED CSV
+			// $csv = fopen(storage_path('app/public/excel/payslip.csv'), 'w');
+			$filename = 'Staff_Conditional_Incentive_'.$from.'_-_'.$to.'.csv';
+			$file = fopen(storage_path('app/public/excel/'.$filename), 'w');
+			foreach ($rows as $r) {
+				fputcsv($file, $r);
+			}
+			fclose($file);
+			Storage::delete('public/excel/cistaff.csv');
+			$url = Storage::url('public/excel/'.$filename);
+			// return redirect($url);
+			session()->forget('date_from');
+			session()->forget('date_to');
+			return Storage::download('public/excel/'.$filename);
+		}
 
-		// 	// (C) SAVE UPDATED CSV
-		// 	// $csv = fopen(storage_path('app/public/excel/payslip.csv'), 'w');
-		// 	$filename = 'Staff_Attendance_Payslip_'.$from.'_-_'.$to.'.csv';
-		// 	$file = fopen(storage_path('app/public/excel/'.$filename), 'w');
-		// 	foreach ($rows as $r) {
-		// 		fputcsv($file, $r);
-		// 	}
-		// 	fclose($file);
-		// 	Storage::delete('public/excel/payslip.csv');
-		// 	$url = Storage::url('public/excel/'.$filename);
-		// 	// return redirect($url);
-		// 	session()->forget('from');
-		// 	session()->forget('to');
-		// 	return Storage::download('public/excel/'.$filename);
-		// }
-
-		$batch = null;
 		return view('humanresources.hrdept.conditionalincentive.staffcheckreport.create', ['batch' => $batch]);
 		// return view('humanresources.hrdept.conditionalincentive.staffcheckreport.create');
 	}
@@ -159,9 +158,9 @@ class ConditionalIncentiveStaffCheckingReportController extends Controller
 		// 			// 	// The batch has finished executing...
 		// 			// })
 					->dispatch();
-		// session(['lastBatchIdPay' => $batch->id]);
-		// session(['date_from' => $request->from]);
-		// session(['date_to' => $request->to]);
+		session(['lastBatchIdPay' => $batch->id]);
+		session(['date_from' => $request->date_from]);
+		session(['date_to' => $request->date_to]);
 		return redirect()->route('cicategorystaffcheckreport.create', ['id' => $batch->id]);
 		// return redirect()->route('cicategorystaffcheckreport.create', ['incentivestaffs' => $incentivestaffs, 'date_from' => $request->date_from, 'date_to' => $request->date_to]);
 	}
