@@ -7,7 +7,7 @@
 
 	<div class="hstack align-items-start justify-content-between">
 		<div class="col-sm-12">
-			{{ Form::open(['route' => ['cicategorystaffcheckreport.store'], 'method' => 'POST', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) }}
+			{{ Form::open(['route' => ['cicategorystaffcheckreport.store'], 'method' => 'POST', 'id' => 'form', 'files' => true]) }}
 
 			<div class="form-group hstack @error('date_from') has-error is-invalid @enderror">
 				{{ Form::label( 'week1', 'From Week : ', ['class' => 'col-sm-2 col-form-label'] ) }}
@@ -32,6 +32,21 @@
 			{{ Form::close() }}
 		</div>
 	</div>
+
+<?php
+use Illuminate\Http\Request;
+?>
+@if( request()->id || session()->exists('lastBatchIdPay') )
+	<p>&nbsp</p>
+	<div id="processcsv" class="row col-sm-12">
+		<div class="progress col-sm-12" role="progressbar" aria-label="CSV Processing" aria-valuenow="{{ $batch->progress() }}" aria-valuemin="0" aria-valuemax="100">
+			<div class="col-sm-auto progress-bar csvprogress" style="width: 0%">0% CSV Processing</div>
+		</div>
+	</div>
+	<div id="uploadStatus" class="col-sm-auto ">
+		<span id="processedJobs">{{ $batch->processedJobs() }}</span> completed out of {{ $batch->totalJobs }} process
+	</div>
+@endif
 </div>
 @endsection
 
@@ -56,6 +71,39 @@ $('#week1,#week2').select2({
 	},
 });
 
+/////////////////////////////////////////////////////////////////////////////////////////
+@if( request()->id || session()->exists('lastBatchIdPay') )
+	<?php
+	$batchId = $request->id ?? session()->get('lastBatchIdPay');
+	?>
+	setInterval(percent, 500);
+	function percent() {
+		$.ajax({
+			url: '{{ route('progress', ['id' => $batchId]) }}',
+			type: "GET",
+			data: { _token: '{{ csrf_token() }}'},
+			dataType: 'json',
+			success: function (response) {
+				window.percentbar = response.progress;
+				$('.progress').attr('aria-valuenow', percentbar).css('width', percentbar + '%');
+				$(".csvprogress").width(percentbar + '%');
+				$(".csvprogress").html(percentbar +'%');
+				$('#processedJobs').html(response.processedJobs);
+				console.log(percentbar);
+				if (percentbar == 100) {
+					clearInterval(percent);
+					window.location.replace('{{ route('cicategorystaffcheckreport.create') }}');
+					<?php
+					session()->forget('lastBatchIdPay');
+					?>
+				}
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				console.log(textStatus, errorThrown);
+			}
+		})
+	}
+@endif
 /////////////////////////////////////////////////////////////////////////////////////////
 // bootstrap validator
 $('#form').bootstrapValidator({
