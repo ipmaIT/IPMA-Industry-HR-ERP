@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Redirect;
 
 // models
 use App\Models\Staff;
-// use App\Models\HumanResources\OptWeekDates;
+use App\Models\HumanResources\OptWeekDates;
 // use App\Models\HumanResources\ConditionalIncentiveCategory;
 use App\Models\HumanResources\ConditionalIncentiveCategoryItem;
 
@@ -52,20 +52,28 @@ class ConditionalIncentiveStaffCheckingReportController extends Controller
 	// {
 	// }
 
-	public function create(Request $request): View
+	public function create(Request $request)//: View
 	{
-		$from = Carbon::parse(session()->get('date_from'))->format('j_M_Y');
-		$to = Carbon::parse(session()->get('date_to'))->format('j_M_Y');
 		if (!$request->id) {
 			if (session()->exists('lastBatchIdPay')) {
 				$bid = session()->get('lastBatchIdPay');
+				$from1 = session()->get('date_from');
+				$to1 = session()->get('date_to');
 			} else {
 				$bid = 1;
+				session()->forget('date_from');
+				session()->forget('date_to');
+				$from1 = null;
+				$to1 = null;
 			}
 		} else {
 			$bid = $request->id;
+			$from1 = null;
+			$to1 = null;
 		}
 		$batch = Bus::findBatch($bid);
+		$from = OptWeekDates::find($from1)?->week;
+		$to = OptWeekDates::find($to1)?->week;
 
 		if (Storage::exists('public/excel/cistaff.csv')) {
 			$header[-1] = ['Staff', 'Incentive Description', 'Weeks', 'Incentive Deduction (RM)'];
@@ -161,7 +169,7 @@ class ConditionalIncentiveStaffCheckingReportController extends Controller
 		session(['lastBatchIdPay' => $batch->id]);
 		session(['date_from' => $request->date_from]);
 		session(['date_to' => $request->date_to]);
-		return redirect()->route('cicategorystaffcheckreport.create', ['id' => $batch->id]);
+		return redirect()->route('cicategorystaffcheckreport.create', ['id' => $batch->id, 'date_from' => $request->date_from, 'date_to' => $request->date_to]);
 		// return redirect()->route('cicategorystaffcheckreport.create', ['incentivestaffs' => $incentivestaffs, 'date_from' => $request->date_from, 'date_to' => $request->date_to]);
 	}
 
