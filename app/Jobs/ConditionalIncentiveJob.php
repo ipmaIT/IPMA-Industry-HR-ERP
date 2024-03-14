@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\DB;
 
 // load models
 use App\Models\Staff;
+use App\Models\HumanResources\OptWeekDates;
+use App\Models\HumanResources\ConditionalIncentiveStaffItemWeek;
 
 
 // load helper
@@ -58,20 +60,44 @@ class ConditionalIncentiveJob implements ShouldQueue
 		$staffs = $this->staffs;
 		$request = $this->request;
 
+		for ($i=$request['date_from']; $i <= $request['date_to']; $i++) {
+			// $week_id[] = OptWeekDates::select('id', 'date_from', 'date_to', 'week')->where('id', $i)->get();
+			$week_id[] = $i;
+		}
+
 		$handle = fopen(storage_path('app/public/excel/cistaff.csv'), 'a+') or die();
-		// $handle = fopen(storage_path('app/public/excel/Staff_Appraisal_'.$year.'_'.now()->format('j F Y g.i').'.csv'), 'a+') or die();
 
 		$incentivestaffs = Staff::select('staffs.id', 'logins.username', 'staffs.name')->join('logins', 'staffs.id', '=', 'logins.staff_id')->orderBy('logins.username')->whereIn('staffs.id', $staffs)->where('logins.active', 1)->get();
 
 		foreach ($incentivestaffs as $k1 => $v1) {
-			$records[$k1] = [$v1->username, $v1->name];
+			$users[$k1] = $v1->username.' - '.$v1->name;
 			foreach ($v1->belongstomanycicategoryitem()?->get() as $k2 => $v2) {
-				$records[$k1][$k2] = nl2br($v2->description);
-			}
-		}
+				$desc[$k1][$k2] = $v2->description;
+				$pid[$k1][$k2] = $v2->pivot->id;
+				$points[$k1][$k2] = $v2->point;
+				$userIncentive[$k1][$k2] = Arr::flatten([$users[$k1], $desc[$k1][$k2]]);
 
-		foreach ($records as $value) {
-			fputcsv($handle, $value);
+				$checked[$k1][$k2] = ConditionalIncentiveStaffItemWeek::where('pivot_staff_item_id', $pid[$k1][$k2])->first();
+				foreach (OptWeekDates::whereIn('id', $week_id)->get() as $k3 => $v3) {
+					if ($v3->id == $checked[$k1][$k2]?->week_id) {
+						$weeks[$k1][$k2][$k3] = [$v3->week.' ('.Carbon::parse($v3->date_from)->format('j M Y').' - '.Carbon::parse($v3->date_to)->format('j M Y').')', $points[$k1][$k2]];
+					} else {
+						$weeks[$k1][$k2][$k3] = $v3->week.' ('.Carbon::parse($v3->date_from)->format('j M Y').' - '.Carbon::parse($v3->date_to)->format('j M Y').')';
+					}
+					$userIncentiveWeeks[$k1][$k2][$k3] = Arr::flatten([$userIncentive[$k1][$k2], $weeks[$k1][$k2][$k3]]);
+				}
+			}
+			// $users[$k1] = [null, null, null, $pointsTotal];
+			$records[$k1] = $userIncentiveWeeks[$k1];
+		}
+		// dump($records);
+
+		foreach ($records as $k1 => $v1) {
+			foreach ($v1 as $k2 => $v2) {
+				foreach ($v2 as $k3 => $v3) {
+					fputcsv($handle, $v3);
+				}
+			}
 		}
 		fclose($handle);
 	}
