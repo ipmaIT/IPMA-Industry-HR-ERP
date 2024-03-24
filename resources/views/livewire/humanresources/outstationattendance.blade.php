@@ -1,12 +1,19 @@
 <div>
 	<h4>Outstation Attendance</h4>
-
-
-
-
 	<form wire:submit.prevent="store">
+		<div class="col-sm-12">
+
+			<dl class="row">
+				<dt class="col-sm-3">Latitude :</dt>
+				<dd class="col-sm-9">{{ $latitude }}</dd>
+
+				<dt class="col-sm-3">Longitude :</dt>
+				<dd class="col-sm-9">{{ $longitude }}</dd>
+			</dl>
+
+		</div>
 		<p>Click button below to mark your attendance</p>
-		<div class="row my-2 @error('outstation_id') is-invalid @enderror">
+		<div class="row my-2 @error('outstation_id') has-error @enderror">
 			<label for="outstation" class="col-sm-4 form-label @error('outstation_id') is-invalid @enderror">Location :</label>
 			<div class="col-sm-8">
 				<select wire:model="outstation_id" id="outstation" class="form-select form-select-sm col-sm-auto @error('outstation_id') is-invalid @enderror" aria-describedby="in1">
@@ -18,33 +25,30 @@
 				@error('outstation_id') <div id="in1" class="invalid-feedback">{{ $message }}</div> @enderror
 			</div>
 		</div>
-		<div class="offset-sm-4 col-sm-8">
-			{{ Form::submit('Mark Attendance', ['class' => 'btn btn-sm btn-primary']) }}
+		<div class="row offset-sm-4 col-sm-8">
+
+			<button wire:model="in" class="mx-2 col-sm-auto btn btn-sm btn-success">Mark Attendance In</button>
+			<button wire:model="out" class="mx-2 col-sm-auto btn btn-sm btn-danger @if($inouts->isEmpty()) disabled @endif">Mark Attendance Out</button>
 		</div>
 	</form>
 
 </div>
-
 @script
 <script>
 	jQuery.noConflict ();
 	(function($){
 		$(document).ready(function(){
-			$.getJSON("https://ipgeolocation.abstractapi.com/v1/?api_key={{ env('API_GEOLOCATION_KEY') }}", function(data) {
-				console.log(data);
-			})
 
-			let api_key = "{!! env('API_GEOLOCATION_KEY') !!}";
-			$.getJSON("https://ipgeolocation.abstractapi.com/v1/?api_key=" + api_key, function(data) {
-				var loc_info = "Your location details :\n";
-				loc_info += "Latitude: "+data.latitude +"\n";
-				loc_info += "Longitude: "+data.longitude+"\n";
-				loc_info += "Timezone: GMT"+data.gmt_offset+"\n";
-				loc_info += "Country: "+data.country+"\n";
-				loc_info += "Region: "+data.region+"\n";
-				loc_info += "City: "+data.city+"\n";
-				console.log(loc_info);
-			})
+			navigator.geolocation.getCurrentPosition(function(location) {
+				console.log(location.coords.latitude);
+				// Livewire.emit('getLatitude', location.coords.latitude);
+				$wire.$set('getLatitude', location.coords.latitude)
+				console.log(location.coords.longitude);
+				// Livewire.emit('getLongitude', location.coords.longitude);
+				console.log(location.coords.accuracy);
+				// Livewire.emit('getAccuracy', location.coords.accuracy);
+			});
+
 		});
 	})(jQuery);
 </script>
