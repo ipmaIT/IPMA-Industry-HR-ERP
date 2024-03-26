@@ -139,9 +139,6 @@ class OutstationAttendanceController extends Controller
 							'in_longitude' => $request->longitude,
 					]);
 			}
-
-
-
 		return redirect()->back()->with('flash_message', 'Successfully Mark Attendance');
 	}
 
