@@ -216,9 +216,24 @@ class AttendanceDailyReportController extends Controller
 
     $saturday = HRRestdayCalendar::where('saturday_date', '=', $selected_date)->select('restday_group_id')->first();
 
+    $update_remarks = HRAttendance::whereNotNull('leave_id')->where('attend_date', $selected_date)->get();
+
+    foreach ($update_remarks as $loop_absent) {
+      if ($loop_absent->leave_id != NULL && $loop_absent->remarks == NULL) {
+
+        $leave = HRLeave::where('hr_leaves.id', $loop_absent->leave_id)->select('hr_leaves.reason')->first();
+
+        HRAttendance::where('id', $loop_absent->id)
+          ->update([
+            'remarks' => $leave->reason,
+          ]);
+      }
+    }
+
+
     ////////////////////////////////////////////////////////////////////////////////////
     $dailyreport_absent = NULL;
-    
+
     if (isset($saturday)) {
       $dailyreport_absent = HRAttendance::join('staffs', 'staffs.id', '=', 'hr_attendances.staff_id')
         ->join('logins', 'hr_attendances.staff_id', '=', 'logins.staff_id')
