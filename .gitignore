@@ -23,3 +23,4 @@ yarn-error.log
 /*.log
 /app/Http/Requests/HumanResources/Profile/ProfileRequestUpdate - emergency_spouse_children.php
 /.env
+* - Copy.php

@@ -1066,13 +1066,13 @@ if($l) {
 							<td>{!! $lea !!}</td>
 							<td>{{ Carbon::parse($v1->attend_date)->format('j M Y') }}</td>
 							<td>
-								<span class="{{ ($in)?'text-info':((Carbon::parse($v1->in)->gt($wh?->time_start_am))?'text-danger':'') }}">{{ ($in)?'':Carbon::parse($v1->in)->format('g:i a') }}</span>
+								<span class="{{ ($in)?'text-info':((Carbon::parse($v1->in)->gt($wh?->time_start_am))?'text-danger fw-bold fst-italic':'') }}">{{ ($in)?'':Carbon::parse($v1->in)->format('g:i a') }}</span>
 							</td>
 							<td>
-								<span class="{{ ($break)?'text-info':((Carbon::parse($v1->break)->lt($wh?->time_end_am))?'text-danger':'') }}">{{ ($break)?'':Carbon::parse($v1->break)->format('g:i a') }}</span>
+								<span class="{{ ($break)?'text-info':((Carbon::parse($v1->break)->lt($wh?->time_end_am))?'text-danger fw-bold fst-italic':'') }}">{{ ($break)?'':Carbon::parse($v1->break)->format('g:i a') }}</span>
 							</td>
 							<td>
-								<span class="{{ ($resume)?'text-info':((Carbon::parse($v1->resume)->gt($wh?->time_start_pm))?'text-danger':'') }}">{{ ($resume)?'':Carbon::parse($v1->resume)->format('g:i a') }}</span>
+								<span class="{{ ($resume)?'text-info':((Carbon::parse($v1->resume)->gt($wh?->time_start_pm))?'text-danger fw-bold fst-italic':'') }}">{{ ($resume)?'':Carbon::parse($v1->resume)->format('g:i a') }}</span>
 							</td>
 							<td><span class="
 									<?php
