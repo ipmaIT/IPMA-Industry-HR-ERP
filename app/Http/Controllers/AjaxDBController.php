@@ -514,11 +514,12 @@ class AjaxDBController extends Controller
 						$query->where('logins.username','LIKE','%'.$request->search.'%')
 						->orWhere('staffs.name', 'LIKE', '%'.$request->search.'%');
 					})
+					->select('staffs.id as staffid', 'staffs.name', 'logins.username')
 					->orderBy('username')
 					->get();
 		foreach ($s as $v) {
 				$ls['results'][] = [
-										'id' => $v->id,
+										'id' => $v->staffid,
 										'text' => $v->username.'  '.$v->name
 									];
 		}
