@@ -1095,7 +1095,7 @@ $mcupl = $staff->hasmanyleave()?->get();
 				</tr>
 			</thead>
 			<tbody>
-				@foreach($staff->hasmanyhrdisciplinary()->orderBy('date', 'DESC')->get() as $al)
+				@foreach($staff->hasmanyhrdisciplinary()->orderBy('misconduct_date', 'DESC')->get() as $al)
 				<tr>
 					<td>{{ $al->belongstooptdisciplinaryaction->disciplinary_action }}</td>
 					<td>{{ $al->belongstooptviolation->violation }}</td>
