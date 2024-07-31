@@ -28,25 +28,25 @@ $no = 1;
 			<tbody>
 				@foreach(Customer::orderBy('customer', 'ASC')->get() as $key => $customer)
 				<tr>
-					<td>
+					<td style="max-width: 30px; overflow: hidden;">
 						{{ $no++ }}
 					</td>
-					<td>
+					<td style="min-width: 215px; max-width: 220px; overflow: hidden;">
 						{{ $customer->customer }}
 					</td>
-					<td>
+					<td style="min-width: 175px; max-width: 180px; overflow: hidden;">
 						{{ $customer->contact }}
 					</td>
-					<td>
+					<td style="overflow: hidden;">
 						{{ $customer->address }}
 					</td>
-					<td>
+					<td style="min-width: 95px; max-width: 100px; overflow: hidden;">
 						{{ $customer->phone }}
 					</td>
-					<td>
+					<td style="min-width: 95px; max-width: 100px; overflow: hidden;">
 						{{ $customer->fax }}
 					</td>
-					<td>
+					<td style="min-width: 75px; max-width: 80px; overflow: hidden;">
 						<a href="{{ route('outstationcustomer.edit', $customer->id) }}" class="btn btn-sm btn-outline-secondary"><i class="fa-regular fa-pen-to-square"></i></a>
 						<button type="button" id="out" class="btn btn-sm btn-outline-secondary text-danger delete_button" data-id="{{ $customer->id }}"><i class="fa-regular fa-trash-can"></i></button>
 					</td>
