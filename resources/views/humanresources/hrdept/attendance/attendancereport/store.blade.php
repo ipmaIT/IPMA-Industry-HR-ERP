@@ -1065,7 +1065,7 @@ if($l) {
 							<td>{{ $dayt }}</td>
 							<td>{!! $ll !!}</td>
 							<td>{!! $lea !!}</td>
-							<td>{{ Carbon::parse($v1->attend_date)->format('j M Y') }}</td>
+							<td>{{ Carbon::parse($v1->attend_date)->format('Y-m-d D') }}</td>
 							<td>
 								<span class="{{ ($in)?'text-info':((Carbon::parse($v1->in)->gt($wh?->time_start_am))?'text-danger':'') }}">{{ ($in)?'':Carbon::parse($v1->in)->format('g:i a') }}</span>
 							</td>
