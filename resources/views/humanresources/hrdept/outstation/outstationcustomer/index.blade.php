@@ -81,4 +81,58 @@ $('#nowoutstation,#lastoutstation').DataTable({
 		$('[data-bs-toggle="tooltip"]').tooltip();
 	});}
 );
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// ajax post delete row
+$(document).on('click', '.delete_button', function(e){
+
+	var outId = $(this).data('id');
+	SwalDelete(outId);
+	e.preventDefault();
+});
+
+function SwalDelete(outId){
+	swal.fire({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					url: '{{ url('outstationcustomer') }}' + '/' + outId,
+					type: 'DELETE',
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							id: outId,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal.fire('Deleted!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#delete_product_' + outId).parent().parent().remove();
+				})
+				.fail(function(){
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal.fire('Cancelled', 'Your data is safe from delete', 'info')
+		}
+	});
+}
 @endsection

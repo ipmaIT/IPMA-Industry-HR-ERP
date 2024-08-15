@@ -27,101 +27,98 @@ use Session;
 
 class OutstationCustomerController extends Controller
 {
-	function __construct()
-	{
-		$this->middleware(['auth']);
-		$this->middleware('highMgmtAccess:1|2|5,6|14', ['only' => ['create', 'store', 'index', 'show', 'edit', 'update']]);                                  // all high management
-		$this->middleware('highMgmtAccessLevel1:1|5,14', ['only' => ['destroy']]);       // only hod and asst hod HR can access
-	}
+  function __construct()
+  {
+    $this->middleware(['auth']);
+    $this->middleware('highMgmtAccess:1|2|5,6|14', ['only' => ['create', 'store', 'index', 'show', 'edit', 'update']]);                                  // all high management
+    $this->middleware('highMgmtAccessLevel1:1|5,14', ['only' => ['destroy']]);       // only hod and asst hod HR can access
+  }
 
-	/**
-	 * Display a listing of the resource.
-	 */
-	public function index(): View
-	{
-		return view('humanresources.hrdept.outstation.outstationcustomer.index');
-	}
+  /**
+   * Display a listing of the resource.
+   */
+  public function index(): View
+  {
+    return view('humanresources.hrdept.outstation.outstationcustomer.index');
+  }
 
-	/**
-	 * Show the form for creating a new resource.
-	 */
-	public function create(): View
-	{
-		return view('humanresources.hrdept.outstation.outstationcustomer.create');
-	}
+  /**
+   * Show the form for creating a new resource.
+   */
+  public function create(): View
+  {
+    return view('humanresources.hrdept.outstation.outstationcustomer.create');
+  }
 
-	/**
-	 * Store a newly created resource in storage.
-	 */
-	public function store(Request $request): RedirectResponse
-	{
-		// dd($request->all());
-		foreach ($request->staff_id as $s) {
-			HROutstation::create([
-				'staff_id' => $s,
-				'customer_id' => $request->customer_id,
-				'date_from' => $request->date_from,
-				'date_to' => $request->date_to,
-				'remarks' => $request->remarks,
-				'active' => 1,
-			]);
-		}
-		Session::flash('flash_message', 'Successfully add staff for outstation');
-		return redirect()->route('outstationcustomer.index');
-	}
+  /**
+   * Store a newly created resource in storage.
+   */
+  public function store(Request $request): RedirectResponse
+  {
+    // dd($request->all());
+    Customer::create([
+      'customer' => $request->customer,
+      'contact' => $request->contact,
+      'phone' => $request->phone,
+      'fax' => $request->fax,
+      'address' => $request->address,
+      'latitude' => $request->latitude,
+      'longitude' => $request->longitude,
+    ]);
+    Session::flash('flash_message', 'Successfully add customer');
+    return redirect()->route('outstationcustomer.index');
+  }
 
-	/**
-	 * Display the specified resource.
-	 */
-	public function show(HROutstation $outstation): View
-	{
-		//
-	}
+  /**
+   * Display the specified resource.
+   */
+  public function show(): View
+  {
+    //
+  }
 
-	/**
-	 * Show the form for editing the specified resource.
-	 */
-	public function edit(HROutstation $outstation): View
-	{
-		return view('humanresources.hrdept.outstation.outstationcustomer.edit', ['outstation' => $outstation]);
-	}
+  /**
+   * Show the form for editing the specified resource.
+   */
+  public function edit(Customer $outstationcustomer): View
+{
+    // Return the view with the Customer instance
+    return view('humanresources.hrdept.outstation.outstationcustomer.edit', ['outstationcustomer' => $outstationcustomer]);
+}
 
-	/**
-	 * Update the specified resource in storage.
-	 */
-	public function update(Request $request, HROutstation $outstation): RedirectResponse
-	{
-		// dd($request->all());
-		// $outstation->update($request->only(['customer_id', 'date_from', 'date_to', 'remarks']));
-		$outstation->update( Arr::add( $request->only(['customer_id', 'date_from', 'date_to']), 'remarks', ucwords(Str::lower($request->remarks))) );
 
-		// DELETE FROM TABLE ATTENDANCE
-		$r = HRAttendance::where('outstation_id', $outstation->id)->get();
-		foreach ($r as $c) {
-			HRAttendance::where('id', $c->id)->update(['outstation_id' => NULL]);
-		}
-		return redirect()->route('outstationcustomer.index')->with('flash_message', 'Successfully edit staff for outstation');
-	}
+  /**
+   * Update the specified resource in storage.
+   */
+  public function update(Request $request, Customer $outstationcustomer): RedirectResponse
+  {
+    $outstationcustomer->update([
+      'customer' => $request->customer,
+      'contact' => $request->contact,
+      'phone' => $request->phone,
+      'fax' => $request->fax,
+      'address' => $request->address,
+      'latitude' => $request->latitude,
+      'longitude' => $request->longitude,
+    ]);
 
-	/**
-	 * Remove the specified resource from storage.
-	 */
-	public function destroy(HROutstation $outstation): JsonResponse
-	{
-		// // DELETE FROM TABLE ATTENDANCE
-		// $r = HRAttendance::where('outstation_id', $outstation->id)->get();
+    return redirect()->route('outstationcustomer.index')->with('flash_message', 'Successfully edit customer');
+  }
 
-		// foreach ($r as $c) {
-		// 	HRAttendance::where('id', $c->id)->update(['outstation_id' => NULL]);
-		// }
+  /**
+   * Remove the specified resource from storage.
+   */
+  public function destroy(Customer $outstationcustomer): JsonResponse
+  {
+    // DELETE FROM TABLE ATTENDANCE
+    Customer::destroy([
+      'id' => $outstationcustomer['id']
+    ]);
 
-		// // DELETE AT TABLE OUTSTATION
-		// $outstation->update(['active' => NULL]);
-
-		// // RETURN MESSAGE
-		// return response()->json([
-		// 	'message' => 'Data deleted',
-		// 	'status' => 'success'
-		// ]);
-	}
+    // RETURN MESSAGE
+    return response()->json([
+    	'message' => 'Customer deleted',
+    	'status' => 'success'
+    ]);
+  }
 }
