@@ -104,8 +104,6 @@ $evaluatees = Staff::join('logins', 'staffs.id', '=', 'logins.staff_id')
           @foreach($staffs as $staff)
 
           <?php
-
-
           $markers = Staff::join('logins', 'staffs.id', '=', 'logins.staff_id')
             ->join('pivot_apoint_appraisals', 'staffs.id', '=', 'evaluator_id')
             ->select('logins.username', 'staffs.name', 'pivot_apoint_appraisals.id')
@@ -114,7 +112,7 @@ $evaluatees = Staff::join('logins', 'staffs.id', '=', 'logins.staff_id')
             ->whereNull('pivot_apoint_appraisals.deleted_at')
             ->where('pivot_apoint_appraisals.evaluatee_id', $staff->id)
             ->where('pivot_apoint_appraisals.year', $newest_year->year)
-            ->whereNull('pivot_apoint_appraisals.finalise_date')
+            //->whereNull('pivot_apoint_appraisals.finalise_date')
             ->orderBy('logins.username', 'ASC')
             ->get();
           ?>

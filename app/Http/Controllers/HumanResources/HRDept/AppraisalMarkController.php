@@ -159,10 +159,13 @@ class AppraisalMarkController extends Controller
           'total_mark' => $total_mark,
           'finalise_date' => $currentDate,
         ]);
-    }
 
-    Session::flash('flash_message', 'Successfully Submit Appraisal Form.');
-    return redirect()->route('appraisalmark.index');
+      Session::flash('flash_message', 'Successfully Submit Appraisal Form.');
+      return redirect()->route('appraisalmark.index');
+    } else {
+      Session::flash('flash_message', 'Successfully Submit Draft.');
+      return redirect()->route('appraisalmark.index');
+    }
   }
 
   /**
