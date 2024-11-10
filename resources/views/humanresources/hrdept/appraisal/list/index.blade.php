@@ -10,13 +10,15 @@
   div {
     border: 1px solid black;
   } */
-
 </style>
 
 <?php
 
 use \App\Models\Staff;
 use \App\Models\HumanResources\OptAppraisalCategories;
+use \App\Models\HumanResources\AppraisalPivot;
+
+$newest_year = AppraisalPivot::orderBy('year', 'desc')->first();
 
 $staffs = Staff::join('logins', 'staffs.id', '=', 'logins.staff_id')
   ->select('logins.username', 'staffs.name', 'staffs.id')
@@ -34,7 +36,7 @@ $staffs = Staff::join('logins', 'staffs.id', '=', 'logins.staff_id')
       <h4>Appraisal List</h4>
     </div>
     <div class="col-md-10">
-  
+
     </div>
   </div>
 
@@ -60,11 +62,13 @@ $staffs = Staff::join('logins', 'staffs.id', '=', 'logins.staff_id')
         <?php
         $markers = Staff::join('logins', 'staffs.id', '=', 'logins.staff_id')
           ->join('pivot_apoint_appraisals', 'staffs.id', '=', 'evaluator_id')
-          ->select('staffs.name')
+          ->select('logins.username', 'staffs.name', 'pivot_apoint_appraisals.id', 'pivot_apoint_appraisals.appraisal_category_id')
           ->where('staffs.active', 1)
           ->where('logins.active', 1)
           ->whereNull('pivot_apoint_appraisals.deleted_at')
           ->where('pivot_apoint_appraisals.evaluatee_id', $staff->id)
+          ->where('pivot_apoint_appraisals.year', $newest_year->year)
+          //->whereNull('pivot_apoint_appraisals.finalise_date')
           ->orderBy('logins.username', 'ASC')
           ->get();
         ?>
@@ -85,13 +89,18 @@ $staffs = Staff::join('logins', 'staffs.id', '=', 'logins.staff_id')
 
           @foreach ($markers as $marker)
           <td data-toggle="tooltip" title="{{ $marker->name }}">
+            @if(is_null($marker->appraisal_category_id))
+            <input type="text" readonly value="{{ $marker->name }}" style="border-style:none; outline:none; background-color:transparent; width:95%; height:100%;" disabled />
+            @else
             <input type="text" readonly value="{{ $marker->name }}" style="border-style:none; outline:none; background-color:transparent; width:95%; height:100%;" />
+            @endif
           </td>
           @endforeach
 
           @for ($a=count($markers); $a<'4'; $a++)
-          <td></td>
-          @endfor
+            <td>
+            </td>
+            @endfor
         </tr>
 
         @endforeach
@@ -108,13 +117,13 @@ $staffs = Staff::join('logins', 'staffs.id', '=', 'logins.staff_id')
 $.fn.dataTable.moment( 'D MMM YYYY' );
 $.fn.dataTable.moment( 'h:mm a' );
 $('#staff').DataTable({
-  "paging": false,
-  "order": [ 0, 'asc' ],
-  responsive: true
+"paging": false,
+"order": [ 0, 'asc' ],
+responsive: true
 });
 
 $(function () {
-  $('[data-toggle="tooltip"]').tooltip()
+$('[data-toggle="tooltip"]').tooltip()
 });
 
 
@@ -122,44 +131,44 @@ $(function () {
 // DISTRIBUTE APPRAISAL
 $(document).on('click', '.distribute', function(e){
 
-  e.preventDefault();
-  swal.fire({
-    title: 'DISTRIBUTE',
-    text: "Do you want to distribute current year appraisal?",
-    icon: 'info',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes',
-    showLoaderOnConfirm: true,
+e.preventDefault();
+swal.fire({
+title: 'DISTRIBUTE',
+text: "Do you want to distribute current year appraisal?",
+icon: 'info',
+showCancelButton: true,
+confirmButtonColor: '#3085d6',
+cancelButtonColor: '#d33',
+confirmButtonText: 'Yes',
+showLoaderOnConfirm: true,
 
-    preConfirm: function() {
-      return new Promise(function(resolve) {
-        $.ajax({
-          type: 'PATCH',
-          url: '{{ url('appraisallist/update') }}',
-          data: {
-            _token : $('meta[name=csrf-token]').attr('content'),
-          },
-          dataType: 'json'
-        })
-        .done(function(response){
-          swal.fire('Distributed', response.message, response.status)
-          .then(function(){
-            window.location.reload(true);
-          });
-        })
-        .fail(function(){
-          swal.fire('Error', 'Something wrong with ajax!', 'error');
-        })
-      });
-    },
-    allowOutsideClick: false
-  })
-  .then((result) => {
-    if (result.dismiss === swal.DismissReason.cancel) {
-      swal.fire('Cancelled', 'Process has been cancelled', 'info')
-    }
-  });
+preConfirm: function() {
+return new Promise(function(resolve) {
+$.ajax({
+type: 'PATCH',
+url: '{{ url('appraisallist/update') }}',
+data: {
+_token : $('meta[name=csrf-token]').attr('content'),
+},
+dataType: 'json'
+})
+.done(function(response){
+swal.fire('Distributed', response.message, response.status)
+.then(function(){
+window.location.reload(true);
+});
+})
+.fail(function(){
+swal.fire('Error', 'Something wrong with ajax!', 'error');
+})
+});
+},
+allowOutsideClick: false
+})
+.then((result) => {
+if (result.dismiss === swal.DismissReason.cancel) {
+swal.fire('Cancelled', 'Process has been cancelled', 'info')
+}
+});
 });
 @endsection
