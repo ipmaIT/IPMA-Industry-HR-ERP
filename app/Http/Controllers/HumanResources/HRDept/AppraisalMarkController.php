@@ -49,7 +49,6 @@ class AppraisalMarkController extends Controller
   function __construct()
   {
     $this->middleware(['auth']);
-    $this->middleware('profileaccess', ['only' => ['show', 'edit', 'update']]);
   }
 
   /**
@@ -170,9 +169,9 @@ class AppraisalMarkController extends Controller
   /**
    * Display the specified resource.
    */
-  public function show(): View
+  public function show($id): View
   {
-    // return view('humanresources.hrdept.appraisal.mark.show', ['id' => $appraisalform]);
+    return view('humanresources.hrdept.appraisal.mark.show', ['id' => $id]);
   }
 
   /**

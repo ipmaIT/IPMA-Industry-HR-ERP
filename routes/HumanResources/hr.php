@@ -153,6 +153,7 @@ Route::patch('/attendancepayslipexcelsetting/update/{attendancepayslipexcelsetti
 Route::get('/attendanceabsentindicator/index', [AttendanceAbsentIndicatorController::class, 'index'])->name('attendanceabsentindicator.index');
 
 Route::get('/appraisalmark/create/{id}', [AppraisalMarkController::class, 'create'])->name('appraisalmark.create');
+Route::get('/appraisalmark/show/{id}', [AppraisalMarkController::class, 'show'])->name('appraisalmark.show');
 
 Route::get('/cicategorystaffcheckreport/create', [ConditionalIncentiveStaffCheckingReportController::class, 'create'])->name('cicategorystaffcheckreport.create');
 Route::post('/cicategorystaffcheckreport/store', [ConditionalIncentiveStaffCheckingReportController::class, 'store'])->name('cicategorystaffcheckreport.store');

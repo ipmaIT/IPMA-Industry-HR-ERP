@@ -62,7 +62,7 @@ $staffs = Staff::join('logins', 'staffs.id', '=', 'logins.staff_id')
         <?php
         $markers = Staff::join('logins', 'staffs.id', '=', 'logins.staff_id')
           ->join('pivot_apoint_appraisals', 'staffs.id', '=', 'evaluator_id')
-          ->select('logins.username', 'staffs.name', 'pivot_apoint_appraisals.id', 'pivot_apoint_appraisals.appraisal_category_id')
+          ->select('logins.username', 'staffs.name', 'pivot_apoint_appraisals.id', 'pivot_apoint_appraisals.appraisal_category_id', 'pivot_apoint_appraisals.finalise_date')
           ->where('staffs.active', 1)
           ->where('logins.active', 1)
           ->whereNull('pivot_apoint_appraisals.deleted_at')
@@ -89,10 +89,10 @@ $staffs = Staff::join('logins', 'staffs.id', '=', 'logins.staff_id')
 
           @foreach ($markers as $marker)
           <td data-toggle="tooltip" title="{{ $marker->name }}">
-            @if(is_null($marker->appraisal_category_id))
-            <input type="text" readonly value="{{ $marker->name }}" style="border-style:none; outline:none; background-color:transparent; width:95%; height:100%;" disabled />
+            @if(is_null($marker->finalise_date))
+            <input type="text" readonly value="{{ $marker->name }}" style="border-style:none; outline:none; background-color:transparent; width:95%; height:100%; color:red;" />
             @else
-            <input type="text" readonly value="{{ $marker->name }}" style="border-style:none; outline:none; background-color:transparent; width:95%; height:100%;" />
+            <input type="text" readonly value="{{ $marker->name }}" style="border-style:none; outline:none; background-color:transparent; width:95%; height:100%; color:green;" />
             @endif
           </td>
           @endforeach
