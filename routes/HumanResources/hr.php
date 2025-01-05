@@ -41,6 +41,7 @@ use App\Http\Controllers\HumanResources\HRDept\HRReplacementLeaveController;
 use App\Http\Controllers\HumanResources\HRDept\OutstationDurationController;
 use App\Http\Controllers\HumanResources\HRDept\AttendanceReportPDFController;
 use App\Http\Controllers\HumanResources\HRDept\AppraisalExcelReportController;
+use App\Http\Controllers\HumanResources\HRDept\AppraisalExcelMarkReportController;
 use App\Http\Controllers\HumanResources\HRDept\AttendanceDailyReportController;
 use App\Http\Controllers\HumanResources\HRDept\AttendanceExcelReportController;
 use App\Http\Controllers\HumanResources\HRDept\HROutstationAttendanceController;
@@ -94,6 +95,7 @@ Route::resources([
 	'outstationattendance' => OutstationAttendanceController::class,
 	'hroutstationattendance' => HROutstationAttendanceController::class,
 	'appraisalexcelreport' => AppraisalExcelReportController::class,
+	'appraisalexcelmarkreport' => AppraisalExcelMarkReportController::class,
 	'attendanceremark' => AttendanceRemarkController::class,
 	'appraisalform' => AppraisalFormController::class,
 	'appraisalapoint' => AppraisalApointController::class,
