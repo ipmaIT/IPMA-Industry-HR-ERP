@@ -83,7 +83,8 @@ class AppraisalExcelMarkReportController extends Controller
 				'Staff Name',
 				'Appraisal Staff',
 				'Full Mark',
-				'Total Mark'
+				'Total Mark',
+				'Average Mark'
 			];
 
 			// (A) READ EXISTING CSV FILE INTO ARRAY

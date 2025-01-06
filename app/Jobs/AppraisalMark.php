@@ -101,6 +101,12 @@ class AppraisalMark implements ShouldQueue
 						$total_mark = ''; // If no total_mark was found
 					}
 
+					if ($total_mark != '' && $full_mark != '') {
+						$average = round(($total_mark * 100) / $full_mark, 2);
+					} else {
+						$average = '';
+					}
+
 					// Check if an remark was found
 					$remarks = HRAppraisalMark::where('pivot_apoint_id', $evaluatee->id)->whereNotNull('remark')->get();
 					$remarksQuestion = [];
@@ -114,6 +120,7 @@ class AppraisalMark implements ShouldQueue
 					$appraisal_staff = ''; // If no evaluatee or evaluator_id is null
 					$full_mark = '';
 					$total_mark = '';
+					$average = '';
 				}
 
 				if ($loop == 1) {
@@ -123,6 +130,7 @@ class AppraisalMark implements ShouldQueue
 						$appraisal_staff,
 						$full_mark,
 						$total_mark,
+						$average,
 						(string) (($remarksQuestion[0] ?? '') . "\n" . ($remarksList[0] ?? '')),
 						(string) (($remarksQuestion[1] ?? '') . "\n" . ($remarksList[1] ?? '')),
 						(string) (($remarksQuestion[2] ?? '') . "\n" . ($remarksList[2] ?? '')),
@@ -137,6 +145,7 @@ class AppraisalMark implements ShouldQueue
 						$appraisal_staff,
 						$full_mark,
 						$total_mark,
+						$average,
 						(string) (($remarksQuestion[0] ?? '') . "\n" . ($remarksList[0] ?? '')),
 						(string) (($remarksQuestion[1] ?? '') . "\n" . ($remarksList[1] ?? '')),
 						(string) (($remarksQuestion[2] ?? '') . "\n" . ($remarksList[2] ?? '')),
