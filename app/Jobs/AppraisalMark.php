@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Staff;
 use App\Models\Login;
 use App\Models\HumanResources\AppraisalPivot;
+use App\Models\HumanResources\HRAppraisalMark;
+use App\Models\HumanResources\HRAppraisalSectionSub;
 
 // load helper
 use App\Helpers\UnavailableDateTime;
@@ -70,16 +72,13 @@ class AppraisalMark implements ShouldQueue
 			$username = $v->hasmanylogin()->where('active', 1)->first()->username;
 			$name = $v->name;
 
-
-
-
 			$evaluatees = AppraisalPivot::where('evaluatee_id', $v->id)->get();
 			$loop = 1;
 			foreach ($evaluatees as $evaluatee) {
 
 				if ($evaluatee && $evaluatee->evaluator_id != NULL) {
 
-					$evaluator = Staff::where('id', $evaluatee->evaluator_id)->first(); // Use first() instead of get()
+					$evaluator = Staff::where('id', $evaluatee->evaluator_id)->first();
 
 					// Check if an evaluator was found
 					if ($evaluator) {
@@ -101,18 +100,48 @@ class AppraisalMark implements ShouldQueue
 					} else {
 						$total_mark = ''; // If no total_mark was found
 					}
+
+					// Check if an remark was found
+					$remarks = HRAppraisalMark::where('pivot_apoint_id', $evaluatee->id)->whereNotNull('remark')->get();
+					$remarksQuestion = [];
+					$remarksList = [];
+					foreach ($remarks as $remark) {
+						$question = HRAppraisalSectionSub::where('id', $remark->section_sub_id)->first();
+						$remarksQuestion[] = $question->section_sub;
+						$remarksList[] = $remark->remark; // Append each remark to the list
+					}
 				} else {
 					$appraisal_staff = ''; // If no evaluatee or evaluator_id is null
 					$full_mark = '';
-					$total_mark ='';
+					$total_mark = '';
 				}
 
 				if ($loop == 1) {
-					$records[$i] = [$username, $name, $appraisal_staff, $full_mark, $total_mark];
+					$records[$i] = [
+						$username,
+						$name,
+						$appraisal_staff,
+						$full_mark,
+						$total_mark,
+						(string) (($remarksQuestion[0] ?? '') . "\n" . ($remarksList[0] ?? '')),
+						(string) (($remarksQuestion[1] ?? '') . "\n" . ($remarksList[1] ?? '')),
+						(string) (($remarksQuestion[2] ?? '') . "\n" . ($remarksList[2] ?? '')),
+						(string) (($remarksQuestion[3] ?? '') . "\n" . ($remarksList[3] ?? ''))
+					];
 					$i++;
 					$loop++;
 				} else {
-					$records[$i] = ['', '', $appraisal_staff, $full_mark, $total_mark];
+					$records[$i] = [
+						'',
+						'',
+						$appraisal_staff,
+						$full_mark,
+						$total_mark,
+						(string) (($remarksQuestion[0] ?? '') . "\n" . ($remarksList[0] ?? '')),
+						(string) (($remarksQuestion[1] ?? '') . "\n" . ($remarksList[1] ?? '')),
+						(string) (($remarksQuestion[2] ?? '') . "\n" . ($remarksList[2] ?? '')),
+						(string) (($remarksQuestion[3] ?? '') . "\n" . ($remarksList[3] ?? ''))
+					];
 					$i++;
 					$loop++;
 				}
