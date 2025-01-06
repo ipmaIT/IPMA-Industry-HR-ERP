@@ -87,16 +87,32 @@ class AppraisalMark implements ShouldQueue
 					} else {
 						$appraisal_staff = ''; // If no evaluator was found
 					}
+
+					// Check if an full mark was found
+					if ($evaluatee->full_mark != NULL) {
+						$full_mark = $evaluatee->full_mark;
+					} else {
+						$full_mark = ''; // If no full_mark was found
+					}
+
+					// Check if an total mark was found
+					if ($evaluatee->total_mark != NULL) {
+						$total_mark = $evaluatee->total_mark;
+					} else {
+						$total_mark = ''; // If no total_mark was found
+					}
 				} else {
 					$appraisal_staff = ''; // If no evaluatee or evaluator_id is null
+					$full_mark = '';
+					$total_mark ='';
 				}
 
 				if ($loop == 1) {
-					$records[$i] = [$username, $name, $appraisal_staff];
+					$records[$i] = [$username, $name, $appraisal_staff, $full_mark, $total_mark];
 					$i++;
 					$loop++;
 				} else {
-					$records[$i] = ['', '', $appraisal_staff];
+					$records[$i] = ['', '', $appraisal_staff, $full_mark, $total_mark];
 					$i++;
 					$loop++;
 				}
