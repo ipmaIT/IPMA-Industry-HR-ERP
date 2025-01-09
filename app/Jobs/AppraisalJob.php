@@ -97,14 +97,15 @@ class AppraisalJob implements ShouldQueue
 						'Absent',
 						'Late Frequency ('.HRAppraisalSetting::find(1)->value1.'m per time)',
 						'UPL Frequency (1day-5day='.HRAppraisalSetting::find(2)->value1.'m, 6day-10day='.HRAppraisalSetting::find(2)->value2.'m, >11day='.HRAppraisalSetting::find(2)->value3.'m)',
-						'MC Frequency (9day-10day='.HRAppraisalSetting::find(3)->value1.'m, 11day-14day='.HRAppraisalSetting::find(3)->value2.'m, >15='.HRAppraisalSetting::find(3)->value3.'m)',
+						'MC Days (9day-10day='.HRAppraisalSetting::find(3)->value1.'m, 11day-14day='.HRAppraisalSetting::find(3)->value2.'m, >15='.HRAppraisalSetting::find(3)->value3.'m)',
 						'EL w/o Supporting Doc ('.HRAppraisalSetting::find(4)->value1.'m per time)',
 						'Absent w/o Notice or didn\'t Refill Form ('.HRAppraisalSetting::find(5)->value1.'m per day)',
 						'Absent As Reject By HR ('.HRAppraisalSetting::find(6)->value1.'m per day)',
 						'Apply Leave 3 Days Not In Advance ('.HRAppraisalSetting::find(7)->value1.'m per time)',
 						'UPL (Quarantine)',
 						'Verbal Warning ('.HRAppraisalSetting::find(8)->value1.'m per time)',
-						'Warning Letter Frequency ('.HRAppraisalSetting::find(9)->value1.'m per time)'
+						'Warning Letter Frequency ('.HRAppraisalSetting::find(9)->value1.'m per time)',
+						'EL-NRL'
 					];
 
 		$i = 1;
@@ -204,15 +205,17 @@ class AppraisalJob implements ShouldQueue
 			// MC Frequency
 			$mcfrequency = 0;
 			$mcfrequency += $mcupl->count();
-			$mcfrequency += HRLeave::where('staff_id', $v->id)->where('leave_year', $short_year)->where('leave_type_id', 2)->where(function(Builder $query){ $query->where('leave_status_id', 5)->orWhereNull('leave_status_id'); })->count();
+			// $mcfrequency += HRLeave::where('staff_id', $v->id)->where('leave_year', $short_year)->where('leave_type_id', 2)->where(function(Builder $query){ $query->where('leave_status_id', 5)->orWhereNull('leave_status_id'); })->count();
+			$mcfrequency += HRLeave::where('staff_id', $v->id)->where('leave_year', $short_year)->where('leave_type_id', 2)->where(function(Builder $query){ $query->where('leave_status_id', 5)->orWhereNull('leave_status_id'); })->sum('period_day');;
+
 			if ($mcfrequency < 9) {
-				$mcfrequencym = $mcfrequency.' times (0m)';
+				$mcfrequencym = $mcfrequency.' days (0m)';
 			} elseif ($mcfrequency >= 9 && $mcfrequency <= 10) {
-				$mcfrequencym = $mcfrequency.' times ('.HRAppraisalSetting::find(3)->value1.'m)';
+				$mcfrequencym = $mcfrequency.' days ('.HRAppraisalSetting::find(3)->value1.'m)';
 			} elseif ($mcfrequency >= 11 && $mcfrequency <= 14) {
-				$mcfrequencym = $mcfrequency.' times ('.HRAppraisalSetting::find(3)->value2.'m)';
+				$mcfrequencym = $mcfrequency.' days ('.HRAppraisalSetting::find(3)->value2.'m)';
 			} elseif ($mcfrequency >= 15) {
-				$mcfrequencym = $mcfrequency.' times ('.HRAppraisalSetting::find(3)->value3.'m)';
+				$mcfrequencym = $mcfrequency.' days ('.HRAppraisalSetting::find(3)->value3.'m)';
 			}
 
 
@@ -287,7 +290,18 @@ class AppraisalJob implements ShouldQueue
 			$pointwarningletterfrequency = HRAppraisalSetting::find(9)->value1 * $warningletterfrequency;
 			$warningletterfrequencym = $warningletterfrequency.' times ('.$pointwarningletterfrequency.'m)';
 
-			$records[$i] = [/*$i, */$username, $name, $location, $department, /*$age,*/ $datejoined, $dateconfirmed, $altotal, $alutilize, $albalance, $mctotal, $mcutilize, $mcbalance, $nrlbalance, $utilizeupl, $utilizemcupl, $absent, $freqlatem, $uplfrequencym, $mcfrequencym, $elwosupportingdocm, $absentwonoticem, $absentasrejectm, $notapplyleave3m, $supl, $verbalwarningm, $warningletterfrequencym];
+			// Apply NRL 3 Days Not In Advance
+			$notapplyNRL3 = HRLeave::where('staff_id', $v->id)->where('leave_year', $short_year)
+										->where(function(Builder $query){
+												$query->where('leave_status_id', 5)
+												->orWhereNull('leave_status_id');
+										})
+										->where('leave_type_id', 10)
+										->get()
+										->count();
+			$notapplyNRL3m = $notapplyNRL3.' times';
+
+			$records[$i] = [$username, $name, $location, $department, $datejoined, $dateconfirmed, $altotal, $alutilize, $albalance, $mctotal, $mcutilize, $mcbalance, $nrlbalance, $utilizeupl, $utilizemcupl, $absent, $freqlatem, $uplfrequencym, $mcfrequencym, $elwosupportingdocm, $absentwonoticem, $absentasrejectm, $notapplyleave3m, $supl, $verbalwarningm, $warningletterfrequencym, $notapplyNRL3m];
 			$i++;
 		}
 		// $combine = $header + $records;
