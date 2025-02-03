@@ -24,3 +24,12 @@ yarn-error.log
 /app/Http/Requests/HumanResources/Profile/ProfileRequestUpdate - emergency_spouse_children.php
 /.env
 * - Copy.php
+/public/js/chart.js
+/public/js/fullcalendar
+/public/js/app.js
+/public/js/app.js.map
+/public/js/app.js.LICENSE.txt
+/public/images/vendor
+/public/fonts
+/public/css
+/public/mix-manifest.json
