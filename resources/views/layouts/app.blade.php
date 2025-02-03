@@ -19,28 +19,30 @@ $currentYear = Carbon::now()->year;
 	<link href="{{ URL::asset('css/app.css') }}" rel="stylesheet">
 	@stack('styles')
 </head>
-	<body class="min-vh-100 flex justify-content-center align-items-center mx-auto bg-secondary bg-opacity-10">
-		<header class="row align-self-start justify-content-center m-0">
-			@include('layouts.navigation')
-			<div class="col-sm-12 row align-self-start justify-content-center m-0">
-				<div class="col-sm-4 text-center m-0">
-					<a class="blog-header-logo text-body-emphasis text-decoration-none" href="{{ url('/') }}">{!! config('app.name') !!}</a>
+	<body class="bg-secondary bg-opacity-10">
+		<div class="container-fluid row min-vh-100 align-items-center justify-content-center mx-auto">
+			<header class="row align-self-start justify-content-center m-0">
+				@include('layouts.navigation')
+				<div class="col-sm-12 row align-self-start justify-content-center m-0">
+					<div class="col-sm-4 text-center m-0">
+						<a class="blog-header-logo text-body-emphasis text-decoration-none" href="{{ url('/') }}">{!! config('app.name') !!}</a>
+					</div>
+					<div class="col-sm-12 align-items-start justify-content-center m-0">
+						@include('layouts.nav')
+					</div>
+					<div class="col-sm-12 align-items-start justify-content-center m-0">
+						@include('layouts.messages')
+					</div>
 				</div>
-				<div class="col-sm-12 align-items-start justify-content-center m-0">
-					@include('layouts.nav')
-				</div>
-				<div class="col-sm-12 align-items-start justify-content-center m-0">
-					@include('layouts.messages')
-				</div>
+			</header>
+			<main class="col-sm-8 row justify-content-center m-0">
+				<article class="blog-post d-flex justify-content-center align-items-center">
+					@yield('content')
+				</article>
+			</main>
+			<div class="container py-3 align-self-end text-center text-body-secondary bg-body-tertiary mx-auto m-0" >
+				<p>{{ config('app.name') }} made from <a href="">Bootstrap</a> & <a href="">Laravel v.{{ app()->version() }}</a> by <a href="{{ url('/') }}">IPMA Industry Sdn Bhd</a>.</p>
 			</div>
-		</header>
-		<main class="row align-items-center justify-content-center m-0">
-			<article class="blog-post d-flex justify-content-center align-items-center">
-				@yield('content')
-			</article>
-		</main>
-		<div class="container py-3 align-self-end text-center text-body-secondary bg-body-tertiary m-0">
-			<p>{{ config('app.name') }} made from <a href="">Bootstrap</a> & <a href="">Laravel v.{{ app()->version() }}</a> by <a href="{{ url('/') }}">IPMA Industry Sdn Bhd</a>.</p>
 		</div>
 	</body>
 
