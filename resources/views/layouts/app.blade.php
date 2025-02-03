@@ -19,7 +19,7 @@ $currentYear = Carbon::now()->year;
 	<link href="{{ URL::asset('css/app.css') }}" rel="stylesheet">
 	@stack('styles')
 </head>
-	<body class="min-vh-100 row justify-content-center align-items-center mx-auto bg-secondary bg-opacity-10">
+	<body class="min-vh-100 flex justify-content-center align-items-center mx-auto bg-secondary bg-opacity-10">
 		<header class="row align-self-start justify-content-center m-0">
 			@include('layouts.navigation')
 			<div class="col-sm-12 row align-self-start justify-content-center m-0">
