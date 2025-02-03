@@ -12,18 +12,14 @@
 // @import "../../node_modules/@fortawesome/fontawesome-free/scss/brands.scss";
 // @import "../../node_modules/@fortawesome/fontawesome-free/scss/regular.scss";
 
-// material design font mdi/font
-@import "../../node_modules/@mdi/font/scss/materialdesignicons.scss";
-
 // pretty checkbox
-@import "../../node_modules/pretty-checkbox/src/pretty-checkbox.scss";
+// @use "../../node_modules/pretty-checkbox/src/pretty-checkbox.scss";
 
 
-@import "../../node_modules/sweetalert2/src/sweetalert2.scss";
-@import "../../node_modules/sweetalert2/src/variables.scss";
+// @use "../../node_modules/sweetalert2/src/sweetalert2.scss";
 
 // select2 bootstrap5 theme
-@import "../../node_modules/select2/src/scss/core.scss";
-@import "../../node_modules/select2/src/scss/theme/default/layout.scss";
+// @use "../../node_modules/select2/src/scss/core.scss";
+// @use "../../node_modules/select2/src/scss/theme/default/layout.scss";
 // @import "../../node_modules/select2-bootstrap-5-theme/src/select2-bootstrap-5-theme.scss";
 // @import "../../node_modules/select2-theme-bootstrap5/src/select2-bootstrap.scss"

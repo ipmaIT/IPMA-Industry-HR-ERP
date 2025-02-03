@@ -1,16 +1,16 @@
 {
   "name": "fullcalendar",
-  "version": "6.1.8",
+  "version": "6.1.15",
   "title": "FullCalendar Standard Bundle",
   "description": "Easily render a full-sized drag & drop calendar with a combination of standard plugins",
   "homepage": "https://fullcalendar.io/docs/initialize-globals",
   "dependencies": {
-    "@fullcalendar/core": "~6.1.8",
-    "@fullcalendar/daygrid": "~6.1.8",
-    "@fullcalendar/interaction": "~6.1.8",
-    "@fullcalendar/list": "~6.1.8",
-    "@fullcalendar/multimonth": "~6.1.8",
-    "@fullcalendar/timegrid": "~6.1.8"
+    "@fullcalendar/core": "~6.1.15",
+    "@fullcalendar/daygrid": "~6.1.15",
+    "@fullcalendar/interaction": "~6.1.15",
+    "@fullcalendar/list": "~6.1.15",
+    "@fullcalendar/multimonth": "~6.1.15",
+    "@fullcalendar/timegrid": "~6.1.15"
   },
   "type": "module",
   "keywords": [
@@ -31,7 +31,7 @@
     "email": "arshaw@arshaw.com",
     "url": "http://arshaw.com/"
   },
-  "copyright": "2023 Adam Shaw",
+  "copyright": "2024 Adam Shaw",
   "types": "./index.d.ts",
   "main": "./index.cjs",
   "module": "./index.js",
