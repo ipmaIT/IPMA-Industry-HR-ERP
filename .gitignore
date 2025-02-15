@@ -33,3 +33,5 @@ yarn-error.log
 /public/fonts
 /public/css
 /public/mix-manifest.json
+/public/vendor
+/public/main.js

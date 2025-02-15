@@ -42,6 +42,7 @@ $currentYear = Carbon::now()->year;
 			</main>
 			<div class="container py-3 align-self-end text-center text-body-secondary bg-body-tertiary mx-auto m-0" >
 				<p>{{ config('app.name') }} made from <a href="">Bootstrap</a> & <a href="">Laravel v.{{ app()->version() }}</a> by <a href="{{ url('/') }}">IPMA Industry Sdn Bhd</a>.</p>
+				<p class="fw-lighter fs-6 text-body-secondary">Made with love by Dhiauddin and Tan</p>
 			</div>
 		</div>
 	</body>
@@ -59,10 +60,6 @@ $currentYear = Carbon::now()->year;
 				@show
 			});
 		})(jQuery);
-	</script>
-	<script>
-		@section('nonjquery')
-		@show
 	</script>
 	@stack('scripts')
 </html>
