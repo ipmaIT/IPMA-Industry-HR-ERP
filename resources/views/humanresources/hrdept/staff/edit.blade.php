@@ -159,6 +159,13 @@ use App\Models\HumanResources\HRLeaveApprovalFlow;
 				</div>
 			</div>
 
+			<div class="form-group row m-2 {{ $errors->has('confirmed') ? 'has-error' : '' }}">
+				{{ form::label( 'jpo', 'Date Confirm : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<div class="col-sm-7">
+					{{ form::text('confirmed', @$value, ['class' => 'form-control form-control-sm', 'id' => 'jpo', 'placeholder' => 'Date Confirm', 'autocomplete' => 'off']) }}
+				</div>
+			</div>
+
 			<div class="form-group row m-2 {{ $errors->has('image') ? 'has-error' : '' }}">
 				{{ Form::label( 'ima', 'Image : ', ['class' => 'col-sm-4 col-form-label'] ) }}
 				<div class="col-sm-7 supportdoc">
@@ -1645,9 +1652,13 @@ $('#form').bootstrapValidator({
 				// notEmpty: {
 				// 	message: 'Please insert phone. '
 				// },
+				date: {
+					format: 'YYYY-MM-DD',
+					message: 'The value is not a valid date. '
+				},
 			}
 		},
-		join: {
+		confirmed: {
 			validators: {
 				// notEmpty: {
 				// 	message: 'Please insert phone. '

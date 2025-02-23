@@ -49,8 +49,6 @@ class AppraisalMarkController extends Controller
   function __construct()
   {
     $this->middleware(['auth']);
-    $this->middleware('highMgmtAccess:1|2|4|5,NULL', ['only' => ['index', 'show']]);
-    $this->middleware('highMgmtAccessLevel1:1|5,14', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
   }
 
   /**
@@ -159,18 +157,21 @@ class AppraisalMarkController extends Controller
           'total_mark' => $total_mark,
           'finalise_date' => $currentDate,
         ]);
-    }
 
-    Session::flash('flash_message', 'Successfully Submit Appraisal Form.');
-    return redirect()->route('appraisalmark.index');
+      Session::flash('flash_message', 'Successfully Submit Appraisal Form.');
+      return redirect()->route('appraisalmark.index');
+    } else {
+      Session::flash('flash_message', 'Successfully Submit Draft.');
+      return redirect()->route('appraisalmark.index');
+    }
   }
 
   /**
    * Display the specified resource.
    */
-  public function show(): View
+  public function show($id): View
   {
-    // return view('humanresources.hrdept.appraisal.mark.show', ['id' => $appraisalform]);
+    return view('humanresources.hrdept.appraisal.mark.show', ['id' => $id]);
   }
 
   /**

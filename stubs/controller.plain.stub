@@ -1,0 +1,46 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ rootNamespace }}Http\Controllers\Controller;
+
+// for controller output
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
+
+// models
+
+
+// load db facade
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+
+// load batch and queue
+use Illuminate\Bus\Batch;
+use Illuminate\Support\Facades\Bus;
+
+// load helper
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
+
+// load Carbon library
+use \Carbon\Carbon;
+use \Carbon\CarbonPeriod;
+use \Carbon\CarbonInterval;
+
+use Session;
+use Throwable;
+use Exception;
+use Log;
+
+class {{ class }} extends Controller
+{
+    //
+}

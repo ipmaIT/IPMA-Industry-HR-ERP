@@ -43,7 +43,7 @@
   use App\Models\Staff;
   use App\Models\HumanResources\HRAppraisalMark;
   
-  $staff = Staff::join('pivot_apoint_appraisals', 'pivot_apoint_appraisals.evaluatee_id', '=', 'staffs.id')->join('logins', 'logins.staff_id', '=', 'staffs.id')->where('pivot_apoint_appraisals.id', $id)->select('staffs.id as staffid', 'staffs.appraisal_category_id as catid', 'staffs.*', 'logins.*', 'pivot_apoint_appraisals.*')->first();
+  $staff = Staff::join('pivot_apoint_appraisals', 'pivot_apoint_appraisals.evaluatee_id', '=', 'staffs.id')->join('logins', 'logins.staff_id', '=', 'staffs.id')->where('pivot_apoint_appraisals.id', $id)->where('logins.active', 1)->select('staffs.id as staffid', 'staffs.appraisal_category_id as catid', 'staffs.*', 'logins.*', 'pivot_apoint_appraisals.*')->first();
   
   $pivotappraisal = DB::table('pivot_category_appraisals')
       ->join('option_appraisal_categories', 'option_appraisal_categories.id', '=', 'pivot_category_appraisals.category_id')

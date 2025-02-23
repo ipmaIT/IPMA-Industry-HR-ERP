@@ -41,6 +41,7 @@ use App\Http\Controllers\HumanResources\HRDept\HRReplacementLeaveController;
 use App\Http\Controllers\HumanResources\HRDept\OutstationDurationController;
 use App\Http\Controllers\HumanResources\HRDept\AttendanceReportPDFController;
 use App\Http\Controllers\HumanResources\HRDept\AppraisalExcelReportController;
+use App\Http\Controllers\HumanResources\HRDept\AppraisalExcelMarkReportController;
 use App\Http\Controllers\HumanResources\HRDept\AttendanceDailyReportController;
 use App\Http\Controllers\HumanResources\HRDept\AttendanceExcelReportController;
 use App\Http\Controllers\HumanResources\HRDept\HROutstationAttendanceController;
@@ -55,6 +56,7 @@ use App\Http\Controllers\HumanResources\HRDept\ConditionalIncentiveStaffChecking
 use App\Http\Controllers\HumanResources\HRDept\ConditionalIncentiveStaffCheckingReportController;
 use App\Http\Controllers\HumanResources\OutstationAttendance\OutstationAttendanceController;
 use App\Http\Controllers\HumanResources\HRDept\AttendancePayslipExcelReportSettingController;
+use App\Http\Controllers\HumanResources\HRDept\OutstationCustomerController;
 
 
 
@@ -93,6 +95,7 @@ Route::resources([
 	'outstationattendance' => OutstationAttendanceController::class,
 	'hroutstationattendance' => HROutstationAttendanceController::class,
 	'appraisalexcelreport' => AppraisalExcelReportController::class,
+	'appraisalexcelmarkreport' => AppraisalExcelMarkReportController::class,
 	'attendanceremark' => AttendanceRemarkController::class,
 	'appraisalform' => AppraisalFormController::class,
 	'appraisalapoint' => AppraisalApointController::class,
@@ -102,6 +105,7 @@ Route::resources([
 	'cicategoryitem' => ConditionalIncentiveCategoryItemController::class,
 	'cicategorystaff' => ConditionalIncentiveStaffController::class,
 	'cicategorystaffcheck' => ConditionalIncentiveStaffCheckingController::class,
+	'outstationcustomer' => OutstationCustomerController::class,
 ]);
 
 Route::get('/leavereject', [LeaveController::class, 'reject'])->name('hrleave.reject');
@@ -151,6 +155,7 @@ Route::patch('/attendancepayslipexcelsetting/update/{attendancepayslipexcelsetti
 Route::get('/attendanceabsentindicator/index', [AttendanceAbsentIndicatorController::class, 'index'])->name('attendanceabsentindicator.index');
 
 Route::get('/appraisalmark/create/{id}', [AppraisalMarkController::class, 'create'])->name('appraisalmark.create');
+Route::get('/appraisalmark/show/{id}', [AppraisalMarkController::class, 'show'])->name('appraisalmark.show');
 
 Route::get('/cicategorystaffcheckreport/create', [ConditionalIncentiveStaffCheckingReportController::class, 'create'])->name('cicategorystaffcheckreport.create');
 Route::post('/cicategorystaffcheckreport/store', [ConditionalIncentiveStaffCheckingReportController::class, 'store'])->name('cicategorystaffcheckreport.store');

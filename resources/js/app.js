@@ -28,8 +28,8 @@ try {
     // require('chart.js');
 
     require('pc-bootstrap4-datetimepicker');
-    require('../../node_modules/jquery-chained/jquery.chained');
-    require('../../node_modules/jquery-chained/jquery.chained.remote');
+    // require('../../node_modules/jquery-chained/jquery.chained');
+    // require('../../node_modules/jquery-chained/jquery.chained.remote');
     require('../../node_modules/jquery-ui/dist/jquery-ui');
     require('./dataTable-any-number');
     require('./datetime-moment');
