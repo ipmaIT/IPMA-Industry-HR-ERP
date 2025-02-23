@@ -97,21 +97,17 @@ class AppraisalExcelReportController extends Controller
 				'Utilize UPL',
 				'Utilize MC-UPL',
 				'Absent',
-				'Apparaisal Mark1',
-				'Apparaisal Mark2',
-				'Apparaisal Mark3',
-				'Apparaisal Mark4',
-				'Apparaisal Average Mark',
 				'Late Frequency ('.HRAppraisalSetting::find(1)->value1.'m per time)',
 				'UPL Frequency (1day-5day='.HRAppraisalSetting::find(2)->value1.'m, 6day-10day='.HRAppraisalSetting::find(2)->value2.'m, >11day='.HRAppraisalSetting::find(2)->value3.'m)',
-				'MC Frequency (9day-10day='.HRAppraisalSetting::find(3)->value1.'m, 11day-14day='.HRAppraisalSetting::find(3)->value2.'m, >15='.HRAppraisalSetting::find(3)->value3.'m)',
+				'MC Days (9day-10day='.HRAppraisalSetting::find(3)->value1.'m, 11day-14day='.HRAppraisalSetting::find(3)->value2.'m, >15='.HRAppraisalSetting::find(3)->value3.'m)',
 				'EL w/o Supporting Doc ('.HRAppraisalSetting::find(4)->value1.'m per time)',
 				'Absent w/o Notice or didn\'t Refill Form ('.HRAppraisalSetting::find(5)->value1.'m per day)',
 				'Absent As Reject By HR ('.HRAppraisalSetting::find(6)->value1.'m per day)',
 				'Apply Leave 3 Days Not In Advance ('.HRAppraisalSetting::find(7)->value1.'m per time)',
 				'UPL (Quarantine)',
 				'Verbal Warning ('.HRAppraisalSetting::find(8)->value1.'m per time)',
-				'Warning Letter Frequency ('.HRAppraisalSetting::find(9)->value1.'m per time)'
+				'Warning Letter Frequency ('.HRAppraisalSetting::find(9)->value1.'m per time)',
+				'EL-NRL'
 			];
 
 			// (A) READ EXISTING CSV FILE INTO ARRAY

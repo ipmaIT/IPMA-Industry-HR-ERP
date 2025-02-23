@@ -69,6 +69,7 @@
 			<li><a class="dropdown-item btn btn-sm btn-outline-secondary" href="{{ route('outstation.index') }}"><i class="fa-solid fa-person-walking-luggage fa-beat"></i> Outstation List</a></li>
 			<li><a class="dropdown-item btn btn-sm btn-outline-secondary" href="{{ route('hroutstationattendance.index') }}"><i class="fa-solid fa-person-circle-plus"></i> Outstation Attendance List</a></li>
 			<li><a class="dropdown-item btn btn-sm btn-outline-secondary" href="{{ route('outstationduration.index') }}"><i class="fa-regular fa-clock"></i> Outstation Duration</a></li>
+			<li><a class="dropdown-item btn btn-sm btn-outline-secondary" href="{{ route('outstationcustomer.index') }}"><i class="fa-regular fa-address-card"></i> Outstation Customer</a></li>
 		</ul>
 	</li>
 	<li class="nav-item dropdown">
@@ -129,6 +130,7 @@
 			<li><a class="dropdown-item btn btn-sm btn-outline-secondary" href="{{ route('appraisalform.index') }}"><i class="fa-solid fa-user-xmark"></i> Appraisal Form</a></li>
 			<li><hr class="dropdown-divider"></li>
 			<li><a class="dropdown-item btn btn-sm btn-outline-secondary" href="{{ route('appraisalexcelreport.create') }}"><i class="fa-solid fa-award"></i> Appraisal Point</a></li>
+			<li><a class="dropdown-item btn btn-sm btn-outline-secondary" href="{{ route('appraisalexcelmarkreport.create') }}"><i class="fa-solid fa-award"></i> Appraisal Mark</a></li>
 			<li><hr class="dropdown-divider"></li>
 			<li><a class="dropdown-item btn btn-sm btn-outline-secondary" href="{{ route('appraisalsetting.create') }}"><i class="fa-solid fa-wrench fa-beat"></i> Appraisal Point Settings</a></li>
 		</ul>

@@ -9,9 +9,9 @@ $appraisals = DB::table('pivot_apoint_appraisals')
   ->join('staffs', 'staffs.id', '=', 'pivot_apoint_appraisals.evaluatee_id')
   ->where('pivot_apoint_appraisals.evaluator_id', $user)
   ->where('logins.active', 1)
-  ->whereNull('pivot_apoint_appraisals.finalise_date')
+  //->whereNull('pivot_apoint_appraisals.finalise_date')
   ->whereNull('pivot_apoint_appraisals.deleted_at')
-  ->select('pivot_apoint_appraisals.id as apointid', 'staffs.name', 'logins.username', 'staffs.appraisal_category_id')
+  ->select('pivot_apoint_appraisals.id as apointid', 'staffs.name', 'logins.username', 'staffs.appraisal_category_id', 'pivot_apoint_appraisals.finalise_date')
   ->orderBy('logins.username', 'ASC')
   ->get();
 ?>
@@ -46,9 +46,15 @@ $appraisals = DB::table('pivot_apoint_appraisals')
           </td>
           <!-- IF ERROR : Please Apoint A Form To Every Evaluatees -->
           <td class="text-center">
+          @if(is_null($appraisal->finalise_date))
             <a href="{{ route('appraisalmark.create', ['id' => $appraisal->apointid]) }}" class="btn btn-sm btn-outline-secondary">
-              <i class="bi bi-pencil-square" style="font-size: 15px;"> PENDING</i>
+              <i class="bi bi-pencil-square" style="font-size: 15px; color: red;"> PENDING</i>
             </a>
+            @else
+            <a href="{{ route('appraisalmark.show', ['id' => $appraisal->apointid]) }}" class="btn btn-sm btn-outline-secondary">
+              <i class="bi bi-pencil-square" style="font-size: 15px; color: green;"> FINALLISE</i>
+            </a>
+            @endif
           </td>
         </tr>
 

@@ -76,9 +76,24 @@ class AppraisalApointController extends Controller
     $now = Carbon::now();
     $year = $now->format('Y');
 
+    // foreach ($request->evaluetee_id as $evaluateeid) {
+    //   $evaluateeid = Staff::find($evaluateeid);
+    //   $evaluateeid->belongstomanyevaluator()->attach($request->evaluator_id, ['year' => $year]);
+    // }
+
     foreach ($request->evaluetee_id as $evaluateeid) {
-      $evaluateeid = Staff::find($evaluateeid);
-      $evaluateeid->belongstomanyevaluator()->attach($request->evaluator_id, ['year' => $year]);
+      $evaluatee = Staff::find($evaluateeid);
+      $exists = $evaluatee->belongstomanyevaluator()->where('evaluator_id', $request->evaluator_id)->where('year', $year)->exists();
+
+      if (!$exists) { // Use $exists here
+        $evaluatee->belongstomanyevaluator()->attach($request->evaluator_id, ['year' => $year]);
+      } else {
+        DB::table('pivot_apoint_appraisals')
+        ->where('evaluator_id', $request->evaluator_id)
+        ->where('evaluatee_id', $evaluateeid)
+        ->where('year', $year)
+          ->update(['deleted_at' => NULL]);
+      }
     }
 
     Session::flash('flash_message', 'Successfully Apoint.');

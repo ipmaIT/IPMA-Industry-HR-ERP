@@ -71,6 +71,7 @@ class AppraisalJob implements ShouldQueue
 	{
 		$staffs = $this->staffs;
 		$year = $this->year;
+		$short_year = Carbon::createFromDate($year, 1, 1)->format('y'); // 'y' returns the two last digits of the year
 
 		$handle = fopen(storage_path('app/public/excel/export.csv'), 'a+') or die();
 		// $handle = fopen(storage_path('app/public/excel/Staff_Appraisal_'.$year.'_'.now()->format('j F Y g.i').'.csv'), 'a+') or die();
@@ -94,21 +95,17 @@ class AppraisalJob implements ShouldQueue
 						'Utilize UPL',
 						'Utilize MC-UPL',
 						'Absent',
-						'Apparaisal Mark1',
-						'Apparaisal Mark2',
-						'Apparaisal Mark3',
-						'Apparaisal Mark4',
-						'Apparaisal Average Mark',
 						'Late Frequency ('.HRAppraisalSetting::find(1)->value1.'m per time)',
 						'UPL Frequency (1day-5day='.HRAppraisalSetting::find(2)->value1.'m, 6day-10day='.HRAppraisalSetting::find(2)->value2.'m, >11day='.HRAppraisalSetting::find(2)->value3.'m)',
-						'MC Frequency (9day-10day='.HRAppraisalSetting::find(3)->value1.'m, 11day-14day='.HRAppraisalSetting::find(3)->value2.'m, >15='.HRAppraisalSetting::find(3)->value3.'m)',
+						'MC Days (9day-10day='.HRAppraisalSetting::find(3)->value1.'m, 11day-14day='.HRAppraisalSetting::find(3)->value2.'m, >15='.HRAppraisalSetting::find(3)->value3.'m)',
 						'EL w/o Supporting Doc ('.HRAppraisalSetting::find(4)->value1.'m per time)',
 						'Absent w/o Notice or didn\'t Refill Form ('.HRAppraisalSetting::find(5)->value1.'m per day)',
 						'Absent As Reject By HR ('.HRAppraisalSetting::find(6)->value1.'m per day)',
 						'Apply Leave 3 Days Not In Advance ('.HRAppraisalSetting::find(7)->value1.'m per time)',
 						'UPL (Quarantine)',
 						'Verbal Warning ('.HRAppraisalSetting::find(8)->value1.'m per time)',
-						'Warning Letter Frequency ('.HRAppraisalSetting::find(9)->value1.'m per time)'
+						'Warning Letter Frequency ('.HRAppraisalSetting::find(9)->value1.'m per time)',
+						'EL-NRL'
 					];
 
 		$i = 1;
@@ -129,7 +126,7 @@ class AppraisalJob implements ShouldQueue
 			$mcutilize = $MCentitlements?->mc_leave_utilize;
 			$mcbalance = $MCentitlements?->mc_leave_balance;
 			$nrl = HRLeaveReplacement::where([['staff_id', $v->id], ['leave_balance', '!=', 0]])->get();
-			$leave[$i] = HRLeave::where('staff_id', $v->id)->where(function(Builder $query){ $query->where('leave_status_id', 5)->orWhereNull('leave_status_id'); });
+			$leave[$i] = HRLeave::where('staff_id', $v->id)->where('leave_year', $short_year)->where(function(Builder $query){ $query->where('leave_status_id', 5)->orWhereNull('leave_status_id'); });
 			$attendance = HRAttendance::where('staff_id', $v->id)->whereYear('attend_date', $year)->where('exception', 0);
 
 
@@ -141,14 +138,14 @@ class AppraisalJob implements ShouldQueue
 
 			// UPL/EL-UPL
 			$utilizeupl = 0;
-			$upl = HRLeave::where('staff_id', $v->id)->where(function(Builder $query){ $query->where('leave_status_id', 5)->orWhereNull('leave_status_id'); })->whereIn('leave_type_id', [3, 6])->get();
+			$upl = HRLeave::where('staff_id', $v->id)->where('leave_year', $short_year)->whereIn('leave_type_id', [3, 6])->where(function(Builder $query){ $query->where('leave_status_id', 5)->orWhereNull('leave_status_id'); })->get();
 			foreach ($upl as $val) {
 				$utilizeupl += $val->period_day;
 			}
 
 			// MC-UPL
 			$utilizemcupl = 0;
-			$mcupl = HRLeave::where('staff_id', $v->id)->where(function(Builder $query){ $query->where('leave_status_id', 5)->orWhereNull('leave_status_id'); })->where('leave_type_id', 11)->get();
+			$mcupl = HRLeave::where('staff_id', $v->id)->where('leave_year', $short_year)->where('leave_type_id', 11)->where(function(Builder $query){ $query->where('leave_status_id', 5)->orWhereNull('leave_status_id'); })->get();
 			foreach ($mcupl as $val) {
 				$utilizemcupl += $val->period_day;
 			}
@@ -163,21 +160,6 @@ class AppraisalJob implements ShouldQueue
 					$absent += 0.5;
 				}
 			}
-
-			// Apparaisal Mark1
-			$apparaisalmark1 = NULL;
-
-			// Apparaisal Mark2
-			$apparaisalmark2 = NULL;
-
-			// Apparaisal Mark3
-			$apparaisalmark3 = NULL;
-
-			// Apparaisal Mark4
-			$apparaisalmark4 = NULL;
-
-			// Apparaisal Average Mark
-			$apparaisalaveragemark = NULL;
 
 			// Freq Late
 			$freqs = HRAttendance::where('staff_id', $v->id)
@@ -223,36 +205,22 @@ class AppraisalJob implements ShouldQueue
 			// MC Frequency
 			$mcfrequency = 0;
 			$mcfrequency += $mcupl->count();
-			$mcfrequency += HRLeave::where('staff_id', $v->id)
-									->where(function(Builder $query){
-										$query->where('leave_status_id', 5)
-											->orWhereNull('leave_status_id');
-										})->where('leave_type_id', 2)
-									->count();
+			// $mcfrequency += HRLeave::where('staff_id', $v->id)->where('leave_year', $short_year)->where('leave_type_id', 2)->where(function(Builder $query){ $query->where('leave_status_id', 5)->orWhereNull('leave_status_id'); })->count();
+			$mcfrequency += HRLeave::where('staff_id', $v->id)->where('leave_year', $short_year)->where('leave_type_id', 2)->where(function(Builder $query){ $query->where('leave_status_id', 5)->orWhereNull('leave_status_id'); })->sum('period_day');;
+
 			if ($mcfrequency < 9) {
-				$mcfrequencym = $mcfrequency.' times (0m)';
+				$mcfrequencym = $mcfrequency.' days (0m)';
 			} elseif ($mcfrequency >= 9 && $mcfrequency <= 10) {
-				$mcfrequencym = $mcfrequency.' times ('.HRAppraisalSetting::find(3)->value1.'m)';
+				$mcfrequencym = $mcfrequency.' days ('.HRAppraisalSetting::find(3)->value1.'m)';
 			} elseif ($mcfrequency >= 11 && $mcfrequency <= 14) {
-				$mcfrequencym = $mcfrequency.' times ('.HRAppraisalSetting::find(3)->value2.'m)';
+				$mcfrequencym = $mcfrequency.' days ('.HRAppraisalSetting::find(3)->value2.'m)';
 			} elseif ($mcfrequency >= 15) {
-				$mcfrequencym = $mcfrequency.' times ('.HRAppraisalSetting::find(3)->value3.'m)';
+				$mcfrequencym = $mcfrequency.' days ('.HRAppraisalSetting::find(3)->value3.'m)';
 			}
 
 
 			// EL w/o Supporting Doc
-			$elwosupportingdoc = HRLeave::where('staff_id', $v->id)
-										->where(function(Builder $query){
-												$query->where('leave_status_id', 5)
-													->orWhereNull('leave_status_id');
-										})
-										->whereIn('leave_type_id', [5, 6])
-										->where(function(Builder $query){
-												$query->whereNull('softcopy')
-													->WhereNull('hardcopy');
-										})
-										->get()
-										->count();
+			$elwosupportingdoc = HRLeave::where('staff_id', $v->id)->where('leave_year', $short_year)->whereIn('leave_type_id', [5, 6])->where(function(Builder $query){ $query->where('leave_status_id', 5)->orWhereNull('leave_status_id'); })->where(function(Builder $query){ $query->whereNull('softcopy')->WhereNull('hardcopy'); })->get()->count();
 			$pointelwosupportingdocm = HRAppraisalSetting::find(4)->value1 * $elwosupportingdoc;
 			$elwosupportingdocm = $elwosupportingdoc.' times ('.$pointelwosupportingdocm.'m)';
 
@@ -271,7 +239,7 @@ class AppraisalJob implements ShouldQueue
 			$absentwonoticem = $absentwonotice.' times ('.$pointabsentwonotice.'m)';
 
 			// Absent As Reject By HR (1m per day)
-			$rejects = HRLeave::where('staff_id', $v->id)->where('leave_status_id', 4)->get();
+			$rejects = HRLeave::where('staff_id', $v->id)->where('leave_year', $short_year)->where('leave_status_id', 4)->get();
 			$absentasreject = 0;
 			foreach ($rejects as $reject) {
 				$days = Carbon::parse($reject->date_time_start)->toPeriod($reject->date_time_end);
@@ -298,7 +266,7 @@ class AppraisalJob implements ShouldQueue
 
 
 			// Apply Leave 3 Days Not In Advance
-			$notapplyleave3 = HRLeave::where('staff_id', $v->id)
+			$notapplyleave3 = HRLeave::where('staff_id', $v->id)->where('leave_year', $short_year)
 										->where(function(Builder $query){
 												$query->where('leave_status_id', 5)
 												->orWhereNull('leave_status_id');
@@ -310,19 +278,30 @@ class AppraisalJob implements ShouldQueue
 			$notapplyleave3m = $notapplyleave3.' times ('.$pointnotapplyleave3.'m)';
 
 			// UPL (Quarantine)
-			$supl = HRLeave::where('staff_id', $v->id)->where(function(Builder $query){ $query->where('leave_status_id', 5)->orWhereNull('leave_status_id'); })->where('leave_type_id', 12)->get()->count();
+			$supl = HRLeave::where('staff_id', $v->id)->where('leave_year', $short_year)->where(function(Builder $query){ $query->where('leave_status_id', 5)->orWhereNull('leave_status_id'); })->where('leave_type_id', 12)->get()->count();
 
 			// Verbal Warning (1m per time)
-			$verbalwarning = HRDisciplinary::where('staff_id', $v->id)->where('disciplinary_action_id', 2)->get()->count();
+			$verbalwarning = HRDisciplinary::where('staff_id', $v->id)->whereYear('misconduct_date', $year)->where('disciplinary_action_id', 2)->get()->count();
 			$pointverbalwarning = HRAppraisalSetting::find(8)->value1 * $verbalwarning;
 			$verbalwarningm = $verbalwarning.' times ('.$pointverbalwarning.'m)';
 
 			// Warning Letter Frequency (3-5m per time)
-			$warningletterfrequency = HRDisciplinary::where('staff_id', $v->id)->where('disciplinary_action_id', 3)->get()->count();
+			$warningletterfrequency = HRDisciplinary::where('staff_id', $v->id)->whereYear('misconduct_date', $year)->where('disciplinary_action_id', 3)->get()->count();
 			$pointwarningletterfrequency = HRAppraisalSetting::find(9)->value1 * $warningletterfrequency;
 			$warningletterfrequencym = $warningletterfrequency.' times ('.$pointwarningletterfrequency.'m)';
 
-			$records[$i] = [/*$i, */$username, $name, $location, $department, /*$age,*/ $datejoined, $dateconfirmed, $altotal, $alutilize, $albalance, $mctotal, $mcutilize, $mcbalance, $nrlbalance, $utilizeupl, $utilizemcupl, $absent, $apparaisalmark1, $apparaisalmark2, $apparaisalmark3, $apparaisalmark4, $apparaisalaveragemark, $freqlatem, $uplfrequencym, $mcfrequencym, $elwosupportingdocm, $absentwonoticem, $absentasrejectm, $notapplyleave3m, $supl, $verbalwarningm, $warningletterfrequencym];
+			// Apply NRL 3 Days Not In Advance
+			$notapplyNRL3 = HRLeave::where('staff_id', $v->id)->where('leave_year', $short_year)
+										->where(function(Builder $query){
+												$query->where('leave_status_id', 5)
+												->orWhereNull('leave_status_id');
+										})
+										->where('leave_type_id', 10)
+										->get()
+										->count();
+			$notapplyNRL3m = $notapplyNRL3.' times';
+
+			$records[$i] = [$username, $name, $location, $department, $datejoined, $dateconfirmed, $altotal, $alutilize, $albalance, $mctotal, $mcutilize, $mcbalance, $nrlbalance, $utilizeupl, $utilizemcupl, $absent, $freqlatem, $uplfrequencym, $mcfrequencym, $elwosupportingdocm, $absentwonoticem, $absentasrejectm, $notapplyleave3m, $supl, $verbalwarningm, $warningletterfrequencym, $notapplyNRL3m];
 			$i++;
 		}
 		// $combine = $header + $records;

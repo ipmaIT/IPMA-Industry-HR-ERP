@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Playfair&#43;Display:700,900&amp;display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap');
 
 /* animate.css */
 @import "../../node_modules/animate.css/source/animate.css";
@@ -15,8 +15,8 @@
 @import "../../node_modules/bootstrap/dist/css/bootstrap-reboot.css";
 @import "../../node_modules/bootstrap/dist/css/bootstrap-utilities.css";
 
+/*bootstrap icon*/
 @import "../../node_modules/bootstrap-icons/font/bootstrap-icons.css";
-
 
 /*datatables.net*/
 @import "../../node_modules/datatables.net-bs5/css/dataTables.bootstrap5.css";
@@ -24,20 +24,52 @@
 @import "../../node_modules/datatables.net-fixedheader-bs5/css/fixedHeader.bootstrap5.css";
 @import "../../node_modules/datatables.net-responsive-bs5/css/responsive.bootstrap5.css";
 
+/*minicolors*/
 @import "../../node_modules/@claviska/jquery-minicolors/jquery.minicolors.css";
+
+/*mdi icons*/
 @import "../../node_modules/@mdi/font/css/materialdesignicons.css";
 
-/*fullcalendar version 3.9 compatible with jquery others are not compatible*/
-/*@import "../../node_modules/fullcalendar/dist/fullcalendar.css";*/
-/*@import "../../node_modules/fullcalendar/dist/fullcalendar.print.css";*/
-
+/*jquery ui*/
 @import "../../node_modules/jquery-ui/themes/base/core.css";
 @import "../../node_modules/jquery-ui/themes/base/all.css";
 
+/*pretty checkbox*/
+@import "../../node_modules/pretty-checkbox/dist/pretty-checkbox.css";
+
+/*select2*/
+@import "../../node_modules/select2/dist/css/select2.css";
+
+/*select2 bootstrap5 themes*/
+@import "../../node_modules/select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.css";
+
+/*sweet alert 2*/
+@import "../../node_modules/sweetalert2/dist/sweetalert2.css";
+
+/*jquery validators*/
 @import "./bootstrapValidator4/css/bootstrapValidator.css";
 
 @import "../../node_modules/pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css";
 
+/*Style*/
+body {
+  font-family: "Roboto Flex", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "slnt" 0,
+    "wdth" 100,
+    "GRAD" 0,
+    "XOPQ" 96,
+    "XTRA" 468,
+    "YOPQ" 79,
+    "YTAS" 750,
+    "YTDE" -203,
+    "YTFI" 738,
+    "YTLC" 514,
+    "YTUC" 712;
+}
 /* for template */
 .bd-placeholder-img {
     font-size: 1.125rem;

@@ -10,6 +10,7 @@ use \Carbon\Carbon;
 @include('humanresources.hrdept.navhr')
 	<h2>Staffs Overtime&nbsp;<a class="btn btn-sm btn-outline-secondary" href="{{ route('overtime.create') }}"><i class="fa-solid fa-person-circle-plus fa-beat"></i> Add Staff Overtime</a></h2>
 	<div class="d-flex justify-content-center">
+		{!! $sa->links() !!}
 	</div>
 	<div class="table-responsive">
 		<table id="overtime" class="table table-hover table-sm align-middle" style="font-size:12px">
@@ -105,6 +106,7 @@ if ($me1) {																				// hod
 		</table>
 	</div>
 	<div class="d-flex justify-content-center">
+
 	</div>
 </div>
 @endsection

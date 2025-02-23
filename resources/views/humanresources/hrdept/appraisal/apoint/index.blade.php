@@ -42,6 +42,9 @@
 
 use \App\Models\Staff;
 use \App\Models\HumanResources\OptAppraisalCategories;
+use \App\Models\HumanResources\AppraisalPivot;
+
+$newest_year = AppraisalPivot::orderBy('year', 'desc')->first();
 
 $staffs = Staff::join('logins', 'staffs.id', '=', 'logins.staff_id')
   ->leftjoin('option_appraisal_categories', 'staffs.appraisal_category_id', '=', 'option_appraisal_categories.id')
@@ -86,7 +89,10 @@ $evaluatees = Staff::join('logins', 'staffs.id', '=', 'logins.staff_id')
     <div class="col-6">
 
       <div class="row mb-3">
-        <div class="col-12">
+        <div class="col-2 text-center" style="border-radius: 10px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold;">
+          {{ $newest_year->year }}
+        </div>
+        <div class="col-10">
           <button type="button" class="btn btn-sm btn-outline-secondary distribute">
             OPEN APPRAISAL
           </button>
@@ -105,7 +111,8 @@ $evaluatees = Staff::join('logins', 'staffs.id', '=', 'logins.staff_id')
             ->where('logins.active', 1)
             ->whereNull('pivot_apoint_appraisals.deleted_at')
             ->where('pivot_apoint_appraisals.evaluatee_id', $staff->id)
-            ->whereNull('pivot_apoint_appraisals.finalise_date')
+            ->where('pivot_apoint_appraisals.year', $newest_year->year)
+            //->whereNull('pivot_apoint_appraisals.finalise_date')
             ->orderBy('logins.username', 'ASC')
             ->get();
           ?>
@@ -222,113 +229,113 @@ $evaluatees = Staff::join('logins', 'staffs.id', '=', 'logins.staff_id')
 @section('js')
 ////////////////////////////////////////////////////////////////////////////////////
 $('.form-select').select2({
-  placeholder: 'Please Select',
-  width: '100%',
-  allowClear: true,
-  closeOnSelect: true,
+placeholder: 'Please Select',
+width: '100%',
+allowClear: true,
+closeOnSelect: true,
 });
 
 $(document).on('click', '.form-button', function(e){
-  var formid = $(this).data('id');
+var formid = $(this).data('id');
 
-  $('#appraisal_category_id' + formid).select2({
-    placeholder: 'Please Select',
-    width: '100%',
-    allowClear: true,
-    closeOnSelect: true,
-    dropdownParent: $('#form' + formid)
-  });
+$('#appraisal_category_id' + formid).select2({
+placeholder: 'Please Select',
+width: '100%',
+allowClear: true,
+closeOnSelect: true,
+dropdownParent: $('#form' + formid)
+});
 });
 
 
 ////////////////////////////////////////////////////////////////////////////////////
 // DELETE APOINT APPRAISAL
 $(document).on('click', '.pivot_delete', function(e){
-  var pivotId = $(this).data('id');
-  SwalPivotDelete(pivotId);
-  e.preventDefault();
+var pivotId = $(this).data('id');
+SwalPivotDelete(pivotId);
+e.preventDefault();
 });
 
 function SwalPivotDelete(pivotId){
-  swal.fire({
-    title: 'DELETE',
-    text: "Do you want to delete?",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes',
-    showLoaderOnConfirm: true,
+swal.fire({
+title: 'DELETE',
+text: "Do you want to delete?",
+icon: 'warning',
+showCancelButton: true,
+confirmButtonColor: '#3085d6',
+cancelButtonColor: '#d33',
+confirmButtonText: 'Yes',
+showLoaderOnConfirm: true,
 
-    preConfirm: function() {
-      return new Promise(function(resolve) {
-        $.ajax({
-          type: 'DELETE',
-          url: '{{ url('appraisalapoint') }}' + '/' + pivotId,
-          data: {
-            _token : $('meta[name=csrf-token]').attr('content'),
-            id: pivotId,
-          },
-          dataType: 'json'
-        })
-        .done(function(response){
-          swal.fire('Deleted', response.message, response.status)
-          .then(function(){
-            window.location.reload(true);
-          });
-        })
-        .fail(function(){
-          swal.fire('Error', 'Something wrong with ajax!', 'error');
-        })
-      });
-    },
-    allowOutsideClick: false
-  })
-  .then((result) => {
-    if (result.dismiss === swal.DismissReason.cancel) {
-      swal.fire('Cancelled', 'Delete has been cancelled', 'info')
-    }
-  });
+preConfirm: function() {
+return new Promise(function(resolve) {
+$.ajax({
+type: 'DELETE',
+url: '{{ url('appraisalapoint') }}' + '/' + pivotId,
+data: {
+_token : $('meta[name=csrf-token]').attr('content'),
+id: pivotId,
+},
+dataType: 'json'
+})
+.done(function(response){
+swal.fire('Deleted', response.message, response.status)
+.then(function(){
+window.location.reload(true);
+});
+})
+.fail(function(){
+swal.fire('Error', 'Something wrong with ajax!', 'error');
+})
+});
+},
+allowOutsideClick: false
+})
+.then((result) => {
+if (result.dismiss === swal.DismissReason.cancel) {
+swal.fire('Cancelled', 'Delete has been cancelled', 'info')
+}
+});
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////////
 // UPDATE APPRAISAL CATEGORY
 $(".form-appraisal-category").on('submit', function (e) {
-  var ids = $(this).data('id');
+var ids = $(this).data('id');
 
-  e.preventDefault();
-  $.ajax({
-    url: '{{ url('appraisalapoint/update') }}',
-    type: 'PATCH',
-    data: {
-      _token: '{!! csrf_token() !!}',
-      id: ids,
-      category_id: $('#appraisal_category_id' + ids).val(),
-    },
-    dataType: 'json',
-    global: false,
-    async: false,
-    success: function (response) {
-      $('#form').modal('hide');
-      // var row = $('#form').parent().parent();
-      // row.remove();
-      swal.fire({
-        title: 'Success!',
-        text: response.message,
-        icon: response.status
-      }).then((result) => {
-        if (result.isConfirmed) {
-          location.reload();
-        }
-      });
-    },
-    error: function (resp) {
-      const res = resp.responseJSON;
-      $('#form').modal('hide');
-      swal.fire('Error!', res.message, 'error');
-    }
-  });
+e.preventDefault();
+$.ajax({
+url: '{{ url('appraisalapoint/update') }}',
+type: 'PATCH',
+data: {
+_token: '{!! csrf_token() !!}',
+id: ids,
+category_id: $('#appraisal_category_id' + ids).val(),
+},
+dataType: 'json',
+global: false,
+async: false,
+success: function (response) {
+$('#form').modal('hide');
+// var row = $('#form').parent().parent();
+// row.remove();
+swal.fire({
+title: 'Success!',
+text: response.message,
+icon: response.status
+}).then((result) => {
+if (result.isConfirmed) {
+location.reload();
+}
+});
+},
+error: function (resp) {
+const res = resp.responseJSON;
+$('#form').modal('hide');
+swal.fire('Error!', res.message, 'error');
+}
+});
 });
 
 
@@ -336,44 +343,44 @@ $(".form-appraisal-category").on('submit', function (e) {
 // DISTRIBUTE APPRAISAL
 $(document).on('click', '.distribute', function(e){
 
-  e.preventDefault();
-  swal.fire({
-    title: 'DISTRIBUTE',
-    text: "Do you want to distribute current year appraisal?",
-    icon: 'info',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes',
-    showLoaderOnConfirm: true,
+e.preventDefault();
+swal.fire({
+title: 'DISTRIBUTE',
+text: "Do you want to distribute current year appraisal?",
+icon: 'info',
+showCancelButton: true,
+confirmButtonColor: '#3085d6',
+cancelButtonColor: '#d33',
+confirmButtonText: 'Yes',
+showLoaderOnConfirm: true,
 
-    preConfirm: function() {
-      return new Promise(function(resolve) {
-        $.ajax({
-          type: 'PATCH',
-          url: '{{ url('appraisallist/update') }}',
-          data: {
-            _token : $('meta[name=csrf-token]').attr('content'),
-          },
-          dataType: 'json'
-        })
-        .done(function(response){
-          swal.fire('Distributed', response.message, response.status)
-          .then(function(){
-            window.location.reload(true);
-          });
-        })
-        .fail(function(){
-          swal.fire('Error', 'Something wrong with ajax!', 'error');
-        })
-      });
-    },
-    allowOutsideClick: false
-  })
-  .then((result) => {
-    if (result.dismiss === swal.DismissReason.cancel) {
-      swal.fire('Cancelled', 'Process has been cancelled', 'info')
-    }
-  });
+preConfirm: function() {
+return new Promise(function(resolve) {
+$.ajax({
+type: 'PATCH',
+url: '{{ url('appraisallist/update') }}',
+data: {
+_token : $('meta[name=csrf-token]').attr('content'),
+},
+dataType: 'json'
+})
+.done(function(response){
+swal.fire('Distributed', response.message, response.status)
+.then(function(){
+window.location.reload(true);
+});
+})
+.fail(function(){
+swal.fire('Error', 'Something wrong with ajax!', 'error');
+})
+});
+},
+allowOutsideClick: false
+})
+.then((result) => {
+if (result.dismiss === swal.DismissReason.cancel) {
+swal.fire('Cancelled', 'Process has been cancelled', 'info')
+}
+});
 });
 @endsection

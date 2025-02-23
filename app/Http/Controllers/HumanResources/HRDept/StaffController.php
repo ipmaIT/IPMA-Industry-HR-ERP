@@ -187,7 +187,7 @@ class StaffController extends Controller
 		// 	dump($v['backup_staff_id']);
 		// }
 		// dd($request->all());
-		$data = $request->only(['ic', 'gender_id', 'marital_status_id', 'race_id', 'religion_id', 'mobile', 'email', 'phone', 'dob', 'nationality_id', 'cimb_account', 'epf_account', 'income_tax_no', 'socso_no', 'weight', 'height', 'authorise_id', 'div_id', 'join', 'restday_group_id', 'leave_flow_id']);
+		$data = $request->only(['ic', 'gender_id', 'marital_status_id', 'race_id', 'religion_id', 'mobile', 'email', 'phone', 'dob', 'nationality_id', 'cimb_account', 'epf_account', 'income_tax_no', 'socso_no', 'weight', 'height', 'authorise_id', 'div_id', 'join', 'confirmed', 'restday_group_id', 'leave_flow_id']);
 
 		if($request->name){
 			$data += ['name' => ucwords(Str::of($request->name)->lower())];
@@ -233,7 +233,7 @@ class StaffController extends Controller
 					'username' => Str::upper($request->username),
 					'password' => $staff->hasmanylogin()->where('active', 0)->first()->password,
 				]);
-				$staff->update(['status_id' => $request->status_id, 'confirmed' => now()]);
+				$staff->update(['status_id' => $request->status_id]);
 			} else {
 				$staff->hasmanylogin()->update($login);
 				$staff->update(['status_id' => $request->status_id]);
