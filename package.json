@@ -28,6 +28,7 @@
     "datatables.net-responsive-bs5": "^2.5.0",
     "fullcalendar": "^6.1.15",
     "jquery": "^3.7.1",
+    "jquery-chained": "1.0",
     "jquery-ui": "^1.13.2",
     "laravel-mix": "^6.0.19",
     "moment": "^2.29.4",
