@@ -25,7 +25,7 @@ A Laravel-based Human Resources ERP designed for industrial environments. It pro
 - **Backend:** PHP (Laravel)
 - **Frontend:** Blade templates, Tailwind CSS
 - **Build tools:** Laravel Mix / Webpack, NPM
-- **Database:** MySQL/MariaDB
+- **Database:** MariaDB
 
 Project files include `tailwind.config.js`, `webpack.mix.js`, and a SQL dump `ipmaerp.sql`, indicating Tailwind + Mix and a MySQL schema seed.
 
@@ -51,7 +51,7 @@ ipmaerp.sql         # Database schema/data dump
 ## 🚀 Quick Start
 
 ### 1) Prerequisites
-- PHP ≥ 8.1 (with OpenSSL, PDO, Mbstring, Tokenizer, XML, Ctype, JSON, BCMath, Fileinfo)
+- PHP ≥ 8.2 (with OpenSSL, PDO, Mbstring, Tokenizer, XML, Ctype, JSON, BCMath, Fileinfo)
 - Composer
 - MySQL 8.x (or MariaDB equivalent)
 - Node.js (LTS) & npm
@@ -74,17 +74,14 @@ php artisan key:generate
 # DB_USERNAME=...
 # DB_PASSWORD=...
 
-# Option A: Import provided SQL (fastest way to preview data)
+# Import provided SQL (fastest way to preview data)
 # Using your MySQL client:
 #   CREATE DATABASE ipmaerp CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 #   IMPORT ipmaerp.sql into ipmaerp
 
-# Option B: Use migrations + (optional) seeders
-php artisan migrate --seed
-
 # Frontend assets
 npm install
-npm run dev   # or: npm run build for production
+npx mix
 
 # Storage symlink for public uploads
 php artisan storage:link
