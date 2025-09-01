@@ -1,66 +1,181 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# IPMA Industry HR ERP
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel-based Human Resources ERP designed for industrial environments. It provides core HR master data, attendance capture (including bulk uploads), and a foundation for leave, approvals, and reporting.
 
-## About Laravel
+> **Repository:** `ipmaIT/IPMA-Industry-HR-ERP`
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## ✨ Key Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Core HR master data**: Employees, departments, designations, and related references.
+- **Authentication & authorization**: Laravel-based login and role/permission scaffolding.
+- **Attendance management**
+  - Daily time records
+  - **Bulk upload via Excel** using the provided `Attendance_File_Upload.xls` template
+- **Reports (foundation)**: Common HR/attendance summaries (extendable).
+- **Extensible architecture**: Conventional Laravel app structure with Blade views and Tailwind CSS.
 
-## Learning Laravel
+> *Note:* Feature scope reflects what’s present in the repository structure and seed assets. Build out advanced modules (leave, overtime, payroll) on top of the existing foundations as needed.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🧱 Tech Stack
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- **Backend:** PHP (Laravel)
+- **Frontend:** Blade templates, Tailwind CSS
+- **Build tools:** Laravel Mix / Webpack, NPM
+- **Database:** MariaDB
 
-## Laravel Sponsors
+Project files include `tailwind.config.js`, `webpack.mix.js`, and a SQL dump `ipmaerp.sql`, indicating Tailwind + Mix and a MySQL schema seed.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+---
 
-### Premium Partners
+## 📦 Project Structure (high level)
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+```
+app/                # Application code (Models, Http Controllers, etc.)
+bootstrap/
+config/
+database/           # Migrations/seeders (if present)
+public/
+resources/          # Blade views, assets
+routes/             # Web/API routes
+storage/
+Attendance_File_Upload.xls  # Excel template for bulk attendance
+ipmaerp.sql         # Database schema/data dump
+```
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🚀 Quick Start
 
-## Code of Conduct
+### 1) Prerequisites
+- PHP ≥ 8.2 (with OpenSSL, PDO, Mbstring, Tokenizer, XML, Ctype, JSON, BCMath, Fileinfo)
+- Composer
+- MySQL 8.x (or MariaDB equivalent)
+- Node.js (LTS) & npm
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 2) Clone & install
+```bash
+# Clone
+git clone https://github.com/ipmaIT/IPMA-Industry-HR-ERP.git
+cd IPMA-Industry-HR-ERP
 
-## Security Vulnerabilities
+# Install PHP deps
+composer install --no-dev --prefer-dist
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Copy environment
+cp .env.example .env
+php artisan key:generate
 
-## License
+# Configure DB in .env
+# DB_DATABASE=ipmaerp
+# DB_USERNAME=...
+# DB_PASSWORD=...
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# Import provided SQL (fastest way to preview data)
+# Using your MySQL client:
+#   CREATE DATABASE ipmaerp CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+#   IMPORT ipmaerp.sql into ipmaerp
+
+# Frontend assets
+npm install
+npx mix
+
+# Storage symlink for public uploads
+php artisan storage:link
+```
+
+### 3) Run the app
+```bash
+php artisan serve
+# App will be available at http://127.0.0.1:8000
+```
+
+---
+
+## 📄 Attendance Upload (Excel)
+
+1. Open `Attendance_File_Upload.xls` (root of the repo).
+2. Fill the sheet with the required columns (employee identifier, date, in, out, etc.).
+3. Upload via the Attendance module/import screen (ensure date/time formats match your config and timezone).
+4. Validate the import summary, fix any rejected rows, and re-upload.
+
+> Tip: Keep a master of the original file, and upload a copy each time. Enable strict input validation in the import logic to prevent partial/bad data.
+
+---
+
+## 🔧 Configuration
+
+Update these in `.env`:
+
+- **App**: `APP_NAME`, `APP_URL`, `APP_TIMEZONE`, `APP_LOCALE`
+- **Database**: `DB_*`
+- **Cache/Queue**: `CACHE_DRIVER`, `QUEUE_CONNECTION`
+- **Mail**: `MAIL_MAILER`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`
+- **Filesystem**: `FILESYSTEM_DISK`
+
+If your industry site uses a reverse proxy or load balancer, set `TRUSTED_PROXIES` and `SESSION_SECURE_COOKIE=true` when serving over HTTPS.
+
+---
+
+## 🧪 Testing
+
+```bash
+php artisan test
+```
+
+Add/extend tests under `tests/` to cover HR flows (attendance import, employee CRUD, role gating).
+
+---
+
+## 🛡️ Security
+
+- Keep dependencies updated (`composer update`, `npm audit fix` when safe).
+- Rotate app key and DB credentials in production as per policy.
+- Enforce strong passwords and 2FA (if using an external IdP).
+- Restrict who can perform bulk imports and critical HR actions.
+
+---
+
+## 🗺️ Roadmap Ideas
+
+- Leave management & approvals workflow
+- Shift/roster planning
+- Overtime requests & approvals
+- Payroll integration (allowances, deductions, OT)
+- Self-service portal for employees (leave, claims, payslips)
+- Audit trail & activity logs
+- API endpoints for integration (attendance devices, payroll, BI)
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repo
+2. Create your feature branch: `git checkout -b feature/awesome`
+3. Commit changes: `git commit -m "feat: add awesome"`
+4. Push the branch: `git push origin feature/awesome`
+5. Open a Pull Request
+
+Please include tests for critical HR flows.
+
+---
+
+## 📜 License
+
+No explicit license file is present. Treat the code as **All Rights Reserved** unless the maintainers add an open-source license. Contact the repository owners for usage and distribution permissions.
+
+---
+
+## 🙏 Acknowledgements
+
+- Built on [Laravel](https://laravel.com
+---
+
+## 📫 Support & Contact
+
+- Open an Issue on GitHub with reproduction steps and environment details.
+- For private/enterprise support, contact the maintainers through your organization’s channel.
+
