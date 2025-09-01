@@ -396,9 +396,6 @@ function toggle_time_checked(obj){
 	`;
 };
 
-// -----------------------
-// Helpers (shared)
-// -----------------------
 function appendWrapper(html) {
 	$('#remove').remove();
 	$('#wrapper').append('<div id="remove">' + html + '</div>');
