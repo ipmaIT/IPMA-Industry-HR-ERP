@@ -36,4 +36,5 @@ mix.js('resources/js/app.js', 'public/js/app.js')
 	// })
 	.copyDirectory('node_modules/fullcalendar', 'public/js/fullcalendar')
 	.copyDirectory('node_modules/chart.js', 'public/js/chart.js')
+	.copyDirectory('node_modules/jquery-chained', 'public/js/jquery-chained')
 	.sourceMaps();
