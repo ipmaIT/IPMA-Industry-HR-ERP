@@ -13,7 +13,7 @@
 				</tr>
 			</thead>
 			<tbody>
-@foreach(\App\Model\QuotItemAttribute::all() as $k)
+@foreach(\App\Models\QuotItemAttribute::all() as $k)
 				<tr>
 					<td>{{ $k->id }}</td>
 					<td>{{ $k->attribute }}</td>

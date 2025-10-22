@@ -5,15 +5,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 // load model
-use \App\Model\QuotQuotation;
-use \App\Model\QuotQuotationSection;
-use \App\Model\QuotQuotationSectionItem;
-use \App\Model\QuotQuotationSectionItemAttrib;
+use \App\Models\QuotQuotation;
+use \App\Models\QuotQuotationSection;
+use \App\Models\QuotQuotationSectionItem;
+use \App\Models\QuotQuotationSectionItemAttrib;
 
-use \App\Model\QuotQuotationRevision;
-use \App\Model\QuotQuotationTermOfPayment;
-use \App\Model\QuotQuotationExclusion;
-use \App\Model\QuotQuotationRemark;
+use \App\Models\QuotQuotationRevision;
+use \App\Models\QuotQuotationTermOfPayment;
+use \App\Models\QuotQuotationExclusion;
+use \App\Models\QuotQuotationRemark;
 
 
 // load session
@@ -27,6 +27,8 @@ class QuotationController extends Controller
 	function __construct()
 	{
 		$this->middleware('auth');
+		$this->middleware('highMgmtAccess:1|2|4|5,NULL'/*, ['only' => ['show', 'edit', 'update']]*/);
+		$this->middleware('highMgmtAccessLevel1:1|5,14', ['only' => ['create', 'show', 'edit', 'update']]);
 	}
 
 	public function index()

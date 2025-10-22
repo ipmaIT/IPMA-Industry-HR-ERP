@@ -13,7 +13,7 @@
 				</tr>
 			</thead>
 			<tbody>
-@foreach(\App\Model\QuotWarranty::all() as $k)
+@foreach(\App\Models\QuotWarranty::all() as $k)
 				<tr>
 					<td>{{ $k->id }}</td>
 					<td>{{ $k->warranty }}</td>

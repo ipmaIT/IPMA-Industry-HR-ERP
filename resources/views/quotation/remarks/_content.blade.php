@@ -13,7 +13,7 @@
 				</tr>
 			</thead>
 			<tbody>
-@foreach(\App\Model\QuotRemark::all() as $k)
+@foreach(\App\Models\QuotRemark::all() as $k)
 				<tr>
 					<td>{{ $k->id }}</td>
 					<td>{{ $k->quot_remarks }}</td>

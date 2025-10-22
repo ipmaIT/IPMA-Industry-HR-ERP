@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Costing;
 use App\Http\Controllers\Controller;
 
 // load model
-use App\Model\QuotQuotationExclusion;
+use App\Models\QuotQuotationExclusion;
 
 use Illuminate\Http\Request;
 
@@ -16,6 +16,8 @@ class QuotQuotationExclusionController extends Controller
 	function __construct()
 	{
 		$this->middleware('auth');
+		$this->middleware('highMgmtAccess:1|2|4|5,NULL'/*, ['only' => ['show', 'edit', 'update']]*/);
+		$this->middleware('highMgmtAccessLevel1:1|5,14', ['only' => ['create', 'show', 'edit', 'update']]);
 	}
 
 	public function index()

@@ -13,7 +13,7 @@
 				</tr>
 			</thead>
 			<tbody>
-@foreach(\App\Model\QuotDealer::all() as $k)
+@foreach(\App\Models\QuotDealer::all() as $k)
 				<tr>
 					<td>{{ $k->id }}</td>
 					<td>{{ $k->dealer }}</td>
