@@ -23,7 +23,6 @@
 				<input type="submit" name="upload" value="Upload" class="btn btn-sm btn-outline-secondary">
 			</div>
 		</div>
-		{!! Form::close() !!}
 	</form>
 	<p>&nbsp;</p>
 	<?php
