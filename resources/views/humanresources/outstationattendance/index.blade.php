@@ -35,7 +35,8 @@ if ($r->count()) {
 		<div id="map_canvas" class="my-2 vw-50 vh-100">
 		</div>
 
-		{{ Form::open(['route' => ['outstationattendance.store'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true,  'data-toggle' => 'validator']) }}
+		<form method="POST" action="{{ router('outstationattendance.store') }}" accept-charset="UTF-8" id="form" autocomplete="off" data-toggle="validator" enctype="multipart/form-data">
+			@csrf
 			<div class="col-sm-12">
 				<dl class="row">
 					<dt class="col-sm-3">Latitude :</dt>

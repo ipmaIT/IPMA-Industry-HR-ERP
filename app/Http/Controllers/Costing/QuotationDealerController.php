@@ -31,7 +31,7 @@ class QuotationDealerController extends Controller
 	public function store(Request $request)
 	{
 		QuotDealer::create($request->only('dealer'));
-		Session::flash('flash_message', 'Data successfully stored!');
+		Session::flash('message', 'Data successfully stored!');
 		return redirect(route('quotDeal.index'));
 	}
 
@@ -48,7 +48,7 @@ class QuotationDealerController extends Controller
 	public function update(Request $request, QuotDealer $quotDeal)
 	{
 		$quotDeal->update($request->only(['dealer']));
-		Session::flash('flash_message', 'Data successfully updated!');
+		Session::flash('message', 'Data successfully updated!');
 		return redirect(route('quotDeal.index'));
 	}
 

@@ -67,7 +67,7 @@ class OutstationController extends Controller
 				'active' => 1,
 			]);
 		}
-		Session::flash('flash_message', 'Successfully add staff for outstation');
+		Session::flash('message', 'Successfully add staff for outstation');
 		return redirect()->route('outstation.index');
 	}
 

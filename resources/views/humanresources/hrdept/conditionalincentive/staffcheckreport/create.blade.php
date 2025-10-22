@@ -7,10 +7,11 @@
 
 	<div class="hstack align-items-start justify-content-between">
 		<div class="col-sm-12">
-			{{ Form::open(['route' => ['cicategorystaffcheckreport.store'], 'method' => 'POST', 'id' => 'form', 'files' => true]) }}
+ 	   <form method="POST" action="{{ route('cicategorystaffcheckreport.store') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+      @csrf
 
 			<div class="form-group hstack @error('date_from') has-error is-invalid @enderror">
-				{{ Form::label( 'week1', 'From Week : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+				<label for="week1" class="col-sm-2 col-form-label">From Week : </label>
 				<div class="col-sm-4 align-items-center">
 					<select name="date_from" id="week1" class="form-select form-select-sm @error('date_from') is-invalid @enderror"></select>
 					@error('date_from') <div id="week1a" class="invalid-feedback">{{ $message }}</div> @enderror
@@ -18,7 +19,7 @@
 			</div>
 
 			<div class="form-group hstack @error('date_to') has-error is-invalid @enderror">
-				{{ Form::label( 'week2', 'To Week : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+				<label for="week2" class="col-sm-2 col-form-label">To Week : </label>
 				<div class="col-sm-4 align-items-center">
 					<select name="date_to" id="week2" class="form-select form-select-sm @error('date_to') is-invalid @enderror"></select>
 					@error('date_to') <div id="week2a" class="invalid-feedback">{{ $message }}</div> @enderror
@@ -29,7 +30,7 @@
 				<button type="submit" class="btn btn-sm btn-outline-secondary">Submit</button>
 			</div>
 
-			{{ Form::close() }}
+			</form>
 		</div>
 	</div>
 

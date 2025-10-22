@@ -106,7 +106,7 @@ class ProfileController extends Controller
 			$login->save(); // Save the changes to the database
 		}
 
-		Session::flash('flash_message', 'Password successfully updated!');
+		Session::flash('message', 'Password successfully updated!');
 		return Redirect::route('profile.show', $profile);
 	}
 

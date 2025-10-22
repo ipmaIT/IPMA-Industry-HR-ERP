@@ -358,14 +358,14 @@ class AjaxController extends Controller
 					'remarks' => ucwords(Str::lower($request->remarks)),
 				]);
 			} else {
-				Session::flash('flash_message', 'Verification Code was incorrect');
+				Session::flash('message', 'Verification Code was incorrect');
 				return redirect()->back()->withInput();
 			}
 		} elseif($request->leave_status_id == 4) {								// leave rejected
 			$saly = $sal->leave_type_id;										// need to find out leave type
 			if ($saly == 1 || $saly == 5) {										// annual leave: put period leave to annual leave entitlement
 				if (!$p1) {
-					Session::flash('flash_danger', 'Please inform IT Department with this message: "No link between leave and annual leave table (database). This is old leave created from old system."');
+					Session::flash('danger', 'Please inform IT Department with this message: "No link between leave and annual leave table (database). This is old leave created from old system."');
 					return redirect()->back()->withInput();
 				}
 				$pd = $sal->period_day;											// get period day
@@ -377,7 +377,7 @@ class AjaxController extends Controller
 				// $sal->belongstomanyleaveannual()->detach($p1->id);
 			} elseif($saly == 4 || $saly == 10) {								// replacement leave
 				if (!$p4) {
-					Session::flash('flash_danger', 'Please inform IT Department with this message: "No link between leave and replacement leave table (database). This is old leave created from old system."');
+					Session::flash('danger', 'Please inform IT Department with this message: "No link between leave and replacement leave table (database). This is old leave created from old system."');
 					return redirect()->back()->withInput();
 				}
 				$pd = $sal->period_day;											// get period day
@@ -389,7 +389,7 @@ class AjaxController extends Controller
 				// $sal->belongstomanyleavereplacement()->detach($p4->id);
 			} elseif($saly == 2) {												// mc leave
 				if (!$p2) {
-					Session::flash('flash_danger', 'Please inform IT Department with this message: "No link between leave and MC leave table (database). This is old leave created from old system."');
+					Session::flash('danger', 'Please inform IT Department with this message: "No link between leave and MC leave table (database). This is old leave created from old system."');
 					return redirect()->back()->withInput();
 				}
 				$pd = $sal->period_day;											// get period day
@@ -401,7 +401,7 @@ class AjaxController extends Controller
 				// $sal->belongstomanyleavemc()->detach($p2->id);
 			} elseif($saly == 7) {
 				if (!$p3) {
-					Session::flash('flash_danger', 'Please inform IT Department with this message: "No link between leave and maternity leave table (database). This is old leave created from old system."');
+					Session::flash('danger', 'Please inform IT Department with this message: "No link between leave and maternity leave table (database). This is old leave created from old system."');
 					return redirect()->back()->withInput();
 				}
 				$pd = $sal->period_day;											// get period day
@@ -438,7 +438,7 @@ class AjaxController extends Controller
 				HRAttendance::where('id', $s->id)->update(['leave_id' => null]);
 			}
 		}
-		// Session::flash('flash_message', 'Successfully make an approval.');
+		// Session::flash('message', 'Successfully make an approval.');
 		// return redirect()->back();
 		return response()->json([
 				'status' => 'success',
@@ -489,14 +489,14 @@ class AjaxController extends Controller
 					'remarks' => ucwords(Str::lower($request->remarks)),
 				]);
 			} else {
-				Session::flash('flash_message', 'Verification Code was incorrect');
+				Session::flash('message', 'Verification Code was incorrect');
 				return redirect()->back()->withInput();
 			}
 		} elseif($request->leave_status_id == 4) {								// leave rejected
 			$saly = $sal->leave_type_id;										// need to find out leave type
 			if ($saly == 1 || $saly == 5) {										// annual leave: put period leave to annual leave entitlement
 				if (!$p1) {
-					Session::flash('flash_danger', 'Please inform IT Department with this message: "No link between leave and annual leave table (database). This is old leave created from old system."');
+					Session::flash('danger', 'Please inform IT Department with this message: "No link between leave and annual leave table (database). This is old leave created from old system."');
 					return redirect()->back()->withInput();
 				}
 				$pd = $sal->period_day;											// get period day
@@ -508,7 +508,7 @@ class AjaxController extends Controller
 				// $sal->belongstomanyleaveannual()->detach($p1->id);
 			} elseif($saly == 4 || $saly == 10) {								// replacement leave
 				if (!$p4) {
-					Session::flash('flash_danger', 'Please inform IT Department with this message: "No link between leave and replacement leave table (database). This is old leave created from old system."');
+					Session::flash('danger', 'Please inform IT Department with this message: "No link between leave and replacement leave table (database). This is old leave created from old system."');
 					return redirect()->back()->withInput();
 				}
 				$pd = $sal->period_day;											// get period day
@@ -520,7 +520,7 @@ class AjaxController extends Controller
 				// $sal->belongstomanyleavereplacement()->detach($p4->id);
 			} elseif($saly == 2) {												// mc leave
 				if (!$p2) {
-					Session::flash('flash_danger', 'Please inform IT Department with this message: "No link between leave and MC leave table (database). This is old leave created from old system."');
+					Session::flash('danger', 'Please inform IT Department with this message: "No link between leave and MC leave table (database). This is old leave created from old system."');
 					return redirect()->back()->withInput();
 				}
 				$pd = $sal->period_day;											// get period day
@@ -532,7 +532,7 @@ class AjaxController extends Controller
 				// $sal->belongstomanyleavemc()->detach($p2->id);
 			} elseif($saly == 7) {
 				if (!$p3) {
-					Session::flash('flash_danger', 'Please inform IT Department with this message: "No link between leave and maternity leave table (database). This is old leave created from old system."');
+					Session::flash('danger', 'Please inform IT Department with this message: "No link between leave and maternity leave table (database). This is old leave created from old system."');
 					return redirect()->back()->withInput();
 				}
 				$pd = $sal->period_day;											// get period day
@@ -569,7 +569,7 @@ class AjaxController extends Controller
 				HRAttendance::where('id', $s->id)->update(['leave_id' => null]);
 			}
 		}
-		// Session::flash('flash_message', 'Successfully make an approval.');
+		// Session::flash('message', 'Successfully make an approval.');
 		// return redirect()->back();
 		return response()->json([
 				'status' => 'success',
@@ -620,14 +620,14 @@ class AjaxController extends Controller
 					'remarks' => ucwords(Str::lower($request->remarks)),
 				]);
 			} else {
-				Session::flash('flash_message', 'Verification Code was incorrect');
+				Session::flash('message', 'Verification Code was incorrect');
 				return redirect()->back()->withInput();
 			}
 		} elseif($request->leave_status_id == 4) {								// leave rejected
 			$saly = $sal->leave_type_id;										// need to find out leave type
 			if ($saly == 1 || $saly == 5) {										// annual leave: put period leave to annual leave entitlement
 				if (!$p1) {
-					Session::flash('flash_danger', 'Please inform IT Department with this message: "No link between leave and annual leave table (database). This is old leave created from old system."');
+					Session::flash('danger', 'Please inform IT Department with this message: "No link between leave and annual leave table (database). This is old leave created from old system."');
 					return redirect()->back()->withInput();
 				}
 				$pd = $sal->period_day;											// get period day
@@ -639,7 +639,7 @@ class AjaxController extends Controller
 				// $sal->belongstomanyleaveannual()->detach($p1->id);
 			} elseif($saly == 4 || $saly == 10) {								// replacement leave
 				if (!$p4) {
-					Session::flash('flash_danger', 'Please inform IT Department with this message: "No link between leave and replacement leave table (database). This is old leave created from old system."');
+					Session::flash('danger', 'Please inform IT Department with this message: "No link between leave and replacement leave table (database). This is old leave created from old system."');
 					return redirect()->back()->withInput();
 				}
 				$pd = $sal->period_day;											// get period day
@@ -651,7 +651,7 @@ class AjaxController extends Controller
 				// $sal->belongstomanyleavereplacement()->detach($p4->id);
 			} elseif($saly == 2) {												// mc leave
 				if (!$p2) {
-					Session::flash('flash_danger', 'Please inform IT Department with this message: "No link between leave and MC leave table (database). This is old leave created from old system."');
+					Session::flash('danger', 'Please inform IT Department with this message: "No link between leave and MC leave table (database). This is old leave created from old system."');
 					return redirect()->back()->withInput();
 				}
 				$pd = $sal->period_day;											// get period day
@@ -663,7 +663,7 @@ class AjaxController extends Controller
 				// $sal->belongstomanyleavemc()->detach($p2->id);
 			} elseif($saly == 7) {
 				if (!$p3) {
-					Session::flash('flash_danger', 'Please inform IT Department with this message: "No link between leave and maternity leave table (database). This is old leave created from old system."');
+					Session::flash('danger', 'Please inform IT Department with this message: "No link between leave and maternity leave table (database). This is old leave created from old system."');
 					return redirect()->back()->withInput();
 				}
 				$pd = $sal->period_day;											// get period day
@@ -751,7 +751,7 @@ class AjaxController extends Controller
 				$sal->hasmanyleaveapprovalhr()->update([/*'staff_id' => \Auth::user()->belongstostaff->id,*/ 'leave_status_id' => $request->leave_status_id, 'remarks' => ucwords(Str::lower($request->remarks))]);
 			}
 		}
-		// Session::flash('flash_message', 'Successfully make an approval.');
+		// Session::flash('message', 'Successfully make an approval.');
 		// return redirect()->back();
 		return response()->json([
 				'status' => 'success',
@@ -803,14 +803,14 @@ class AjaxController extends Controller
 				]);
 				$sal->update(['leave_status_id' => $request->leave_status_id]);
 			} else {
-				Session::flash('flash_message', 'Verification Code was incorrect');
+				Session::flash('message', 'Verification Code was incorrect');
 				return redirect()->back()->withInput();
 			}
 		} elseif($request->leave_status_id == 4) {								// leave rejected
 			$saly = $sal->leave_type_id;										// need to find out leave type
 			if ($saly == 1 || $saly == 5) {										// annual leave: put period leave to annual leave entitlement
 				if (!$p1) {
-					Session::flash('flash_danger', 'Please inform IT Department with this message: "No link between leave and annual leave table (database). This is old leave created from old system."');
+					Session::flash('danger', 'Please inform IT Department with this message: "No link between leave and annual leave table (database). This is old leave created from old system."');
 					return redirect()->back()->withInput();
 				}
 				$pd = $sal->period_day;											// get period day
@@ -822,7 +822,7 @@ class AjaxController extends Controller
 				// $sal->belongstomanyleaveannual()->detach($p1->id);
 			} elseif($saly == 4 || $saly == 10) {								// replacement leave
 				if (!$p4) {
-					Session::flash('flash_danger', 'Please inform IT Department with this message: "No link between leave and replacement leave table (database). This is old leave created from old system."');
+					Session::flash('danger', 'Please inform IT Department with this message: "No link between leave and replacement leave table (database). This is old leave created from old system."');
 					return redirect()->back()->withInput();
 				}
 				$pd = $sal->period_day;											// get period day
@@ -834,7 +834,7 @@ class AjaxController extends Controller
 				// $sal->belongstomanyleavereplacement()->detach($p4->id);
 			} elseif($saly == 2) {												// mc leave
 				if (!$p2) {
-					Session::flash('flash_danger', 'Please inform IT Department with this message: "No link between leave and MC leave table (database). This is old leave created from old system."');
+					Session::flash('danger', 'Please inform IT Department with this message: "No link between leave and MC leave table (database). This is old leave created from old system."');
 					return redirect()->back()->withInput();
 				}
 				$pd = $sal->period_day;											// get period day
@@ -846,7 +846,7 @@ class AjaxController extends Controller
 				// $sal->belongstomanyleavemc()->detach($p2->id);
 			} elseif($saly == 7) {
 				if (!$p3) {
-					Session::flash('flash_danger', 'Please inform IT Department with this message: "No link between leave and maternity leave table (database). This is old leave created from old system."');
+					Session::flash('danger', 'Please inform IT Department with this message: "No link between leave and maternity leave table (database). This is old leave created from old system."');
 					return redirect()->back()->withInput();
 				}
 				$pd = $sal->period_day;											// get period day
@@ -885,7 +885,7 @@ class AjaxController extends Controller
 		} elseif($request->leave_status_id == 6) {								// leave waived, so need to put back all leave period.
 
 		}
-		// Session::flash('flash_message', 'Successfully make an approval.');
+		// Session::flash('message', 'Successfully make an approval.');
 		// return redirect()->back();
 		return response()->json([
 				'status' => 'success',
@@ -922,7 +922,7 @@ class AjaxController extends Controller
 											'password' => $request->password,
 											'active' => 1,
 										]);
-		Session::flash('flash_message', 'Successfully activate ex-staff '.$staff->name);
+		Session::flash('message', 'Successfully activate ex-staff '.$staff->name);
 		return redirect()->route('staff.show', $staff->id);
 	}
 

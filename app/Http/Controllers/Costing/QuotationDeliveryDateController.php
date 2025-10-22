@@ -31,7 +31,7 @@ class QuotationDeliveryDateController extends Controller
 	public function store(Request $request)
 	{
 		QuotDeliveryDate::create($request->only(['delivery_date_period']));
-		Session::flash('flash_message', 'Data successfully stored!');
+		Session::flash('message', 'Data successfully stored!');
 		return redirect(route('quotdd.index'));
 	}
 
@@ -48,7 +48,7 @@ class QuotationDeliveryDateController extends Controller
 	public function update(Request $request, QuotDeliveryDate $quotdd)
 	{
 		$quotdd->update($request->only(['delivery_date_period']));
-		Session::flash('flash_message', 'Data successfully updated!');
+		Session::flash('message', 'Data successfully updated!');
 		return redirect(route('quotdd.index'));
 	}
 

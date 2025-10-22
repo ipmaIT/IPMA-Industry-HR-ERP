@@ -10,37 +10,38 @@ use \Carbon\Carbon;
 <div class="col-sm-12 row">
 	@include('humanresources.hrdept.navhr')
 	<h4>Add Holiday Calendar</h4>
-	{!! Form::open(['route' => ['holidaycalendar.store'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) !!}
-		<div class="row mb-3 g-3 " style="position: relative">
-			{{ Form::label( 'yea', 'Date Range : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+	<form method="POST" action="{{ route('holidaycalendar.store') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+		@csrf
+		<div class="row mb-3 g-3" style="position: relative">
+			<label for="yea" class="col-form-label col-sm-2">Date Range : </label>
 			<div class="form-group col-sm-5 {{ $errors->has('date_start')?'has-error':'' }}">
-				{{ Form::text('date_start', @$value, ['class' => 'form-control col-auto', 'id' => 'dstart', 'placeholder' => 'Date Start', 'autocomplete' => 'off']) }}
+				<input type="text" name="date_start" value="{{ old('date_start') }}" id="dstart" class="form-control form-control-sm col-sm-12 @error('date_start') is-invalid @enderror" placeholder="Date Start">
 			</div>
 			<div class="form-group col-sm-5{{ $errors->has('date_end')?'has-error':'' }}">
-				{{ Form::text('date_end', @$value, ['class' => 'form-control col-auto', 'id' => 'dend', 'placeholder' => 'Date End', 'autocomplete' => 'off']) }}
+				<input type="text" name="date_end" value="{{ old('date_end') }}" id="dend" class="form-control form-control-sm col-sm-12 @error('date_end') is-invalid @enderror" placeholder="Date End">
 			</div>
 		</div>
 
 		<div class="form-group row mb-3 g-3 {{ $errors->has('holiday')?'has-error':'' }}">
-			{{ Form::label( 'hol', 'Holiday : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+			<label for="hol" class="col-form-label col-sm-2">Holiday : </label>
 			<div class="col-sm-10">
-				{{ Form::text('holiday', @$value, ['class' => 'form-control col-auto', 'id' => 'hol', 'placeholder' => 'Holiday', 'autocomplete' => 'off']) }}
+				<input type="text" name="holiday" value="{{ old('holiday') }}" id="hol" class="form-control form-control-sm col-sm-12 @error('holiday') is-invalid @enderror" placeholder="Holiday">
 			</div>
 		</div>
 
 		<div class="form-group row mb-3 g-3 {{ $errors->has('remarks')?'has-error':'' }}">
-			{{ Form::label( 'rem', 'Holiday : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+			<label for="rem" class="col-form-label col-sm-2">Remarks : </label>
 			<div class="col-sm-10">
-				{{ Form::textarea('remarks', @$value, ['class' => 'form-control col-auto', 'id' => 'rem', 'placeholder' => 'Remarks', 'autocomplete' => 'off']) }}
+				<textarea name="remarks" id="rem" class="form-control form-control-sm col-sm-12 @error('remarks') is-invalid @enderror">{{ old('remarks') }}</textarea>
 			</div>
 		</div>
 
 		<div class="form-group row mb-3 g-3">
 			<div class="col-sm-10 offset-sm-2">
-				{!! Form::button('Add Holiday', ['class' => 'btn btn-sm btn-outline-secondary', 'type' => 'submit']) !!}
+				<button type="submit" class="btn btn-sm btn-outline-secondary">Add Holiday</button>
 			</div>
 		</div>
-	{{ Form::close() }}
+	</form>
 
 </div>
 @endsection

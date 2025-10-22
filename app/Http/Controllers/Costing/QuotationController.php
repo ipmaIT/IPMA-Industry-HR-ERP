@@ -1,6 +1,8 @@
 <?php
-
 namespace App\Http\Controllers\Costing;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 // load model
 use \App\Model\QuotQuotation;
@@ -13,8 +15,6 @@ use \App\Model\QuotQuotationTermOfPayment;
 use \App\Model\QuotQuotationExclusion;
 use \App\Model\QuotQuotationRemark;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 // load session
 use Session;
@@ -31,12 +31,12 @@ class QuotationController extends Controller
 
 	public function index()
 	{
-		return view('marketingAndBusinessDevelopment.costing.quotation.index');
+		return view('costing.quotation.index');
 	}
 
 	public function create()
 	{
-		return view('marketingAndBusinessDevelopment.costing.quotation.create');
+		return view('costing.quotation.create');
 	}
 
 	public function store(Request $request)
@@ -148,7 +148,7 @@ class QuotationController extends Controller
 			}
 		}
 
-		Session::flash('flash_message', 'Data successfully stored!');
+		Session::flash('message', 'Data successfully stored!');
 		return redirect(route('quot.index'));
 	}
 
@@ -159,7 +159,7 @@ class QuotationController extends Controller
 
 	public function edit(QuotQuotation $quot)
 	{
-		return view('marketingAndBusinessDevelopment.costing.quotation.edit', compact(['quot']));
+		return view('costing.quotation.edit', compact(['quot']));
 	}
 
 	public function update(Request $request, QuotQuotation $quot)
@@ -341,7 +341,7 @@ class QuotationController extends Controller
 			}
 		}
 
-		Session::flash('flash_message', 'Data successfully stored!');
+		Session::flash('message', 'Data successfully stored!');
 		return redirect(route('quot.index'));
 	}
 

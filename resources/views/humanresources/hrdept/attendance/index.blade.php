@@ -43,14 +43,15 @@ $i = 1;
 	<h4>Attendance</h4>
 
 	<div class="col-sm-12 row m-1">
-		{{ Form::open(['route' => ['attendance.index'], 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off']) }}
-			<div class="col-sm-4 row">
-				{{ Form::text('date', @$selected_date, ['class' => 'form-control form-control-sm col-sm-4', 'id' => 'date', 'autocomplete' => 'off']) }}
+		  <form method="POST" action="{{ route('attendance.index') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="form-horizontal" enctype="multipart/form-data">
+		    @csrf
+			<div class="col-sm-8 row g-3">
+				<input type="text" name="date" value="{{ old('date', $selected_date) }}" id="date" class="col-sm-2 form-control form-control-sm @error('date') is-invalid @enderror" placeholder="Date">
 				<div class="col-auto">
-					{!! Form::submit('SEARCH', ['class' => 'form-control form-control-sm btn btn-sm btn-outline-secondary']) !!}
+					<button type="submit" class="btn btn-sm btn-outline-secondary">Search</button>
 				</div>
 			</div>
-		{!! Form::close() !!}
+		</form>
 	</div>
 
 	<div class="col-sm-12 table-responsive">
@@ -4138,19 +4139,19 @@ $i = 1;
 /////////////////////////////////////////////////////////////////////////////////////////
 // DATE PICKER
 $('#date').datetimepicker({
-icons: {
-time: "fas fas-regular fa-clock fa-beat",
-date: "fas fas-regular fa-calendar fa-beat",
-up: "fa-regular fa-circle-up fa-beat",
-down: "fa-regular fa-circle-down fa-beat",
-previous: 'fas fas-regular fa-arrow-left fa-beat',
-next: 'fas fas-regular fa-arrow-right fa-beat',
-today: 'fas fas-regular fa-calenday-day fa-beat',
-clear: 'fas fas-regular fa-broom-wide fa-beat',
-close: 'fas fas-regular fa-rectangle-xmark fa-beat'
-},
-format: 'YYYY-MM-DD',
-useCurrent: true,
+	icons: {
+		time: "fas fas-regular fa-clock fa-beat",
+		date: "fas fas-regular fa-calendar fa-beat",
+		up: "fa-regular fa-circle-up fa-beat",
+		down: "fa-regular fa-circle-down fa-beat",
+		previous: 'fas fas-regular fa-arrow-left fa-beat',
+		next: 'fas fas-regular fa-arrow-right fa-beat',
+		today: 'fas fas-regular fa-calenday-day fa-beat',
+		clear: 'fas fas-regular fa-broom-wide fa-beat',
+		close: 'fas fas-regular fa-rectangle-xmark fa-beat'
+	},
+	format: 'YYYY-MM-DD',
+	useCurrent: true,
 });
 
 

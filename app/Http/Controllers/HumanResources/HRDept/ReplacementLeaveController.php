@@ -87,7 +87,7 @@ class ReplacementLeaveController extends Controller
 			]);
 		}
 
-		Session::flash('flash_message', 'Successfully Add Replacement Leave.');
+		Session::flash('message', 'Successfully Add Replacement Leave.');
 		return redirect()->route('rleave.create');
 	}
 
@@ -113,7 +113,7 @@ class ReplacementLeaveController extends Controller
 	public function update(ReplacementRequestUpdate $request, HRLeaveReplacement $rleave): RedirectResponse
 	{
 		$rleave->update( Arr::add( $request->only(['date_start', 'date_end', 'customer_id', 'leave_total', 'leave_utilize', 'leave_balance']), 'reason', $request->reason ));
-		Session::flash('flash_message', 'Data successfully updated!');
+		Session::flash('message', 'Data successfully updated!');
 		return Redirect::route('rleave.index', $rleave);
 	}
 

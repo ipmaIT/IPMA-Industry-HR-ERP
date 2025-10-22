@@ -31,7 +31,7 @@ class QuotationRemarkController extends Controller
 	public function store(Request $request)
 	{
 		QuotRemark::create( $request->only('quot_remarks') );
-		Session::flash('flash_message', 'Data successfully stored!');
+		Session::flash('message', 'Data successfully stored!');
 		return redirect(route('quotRem.index'));
 	}
 
@@ -48,7 +48,7 @@ class QuotationRemarkController extends Controller
 	public function update(Request $request, QuotRemark $quotRem)
 	{
 		$quotRem->update( $request->only('quot_remarks') );
-		Session::flash('flash_message', 'Data successfully stored!');
+		Session::flash('message', 'Data successfully stored!');
 		return redirect(route('quotRem.index'));
 	}
 
