@@ -13,7 +13,7 @@
 				</tr>
 			</thead>
 			<tbody>
-@foreach(\App\Model\QuotExclusion::all() as $k)
+@foreach(\App\Models\QuotExclusion::all() as $k)
 				<tr>
 					<td>{{ $k->id }}</td>
 					<td>{{ $k->exclusion }}</td>

@@ -17,7 +17,7 @@
 				</tr>
 			</thead>
 			<tbody>
-@foreach(\App\Model\QuotItem::all() as $k)
+@foreach(\App\Models\QuotItem::all() as $k)
 				<tr>
 					<td>{{ $k->id }}</td>
 					<td>{{ $k->item }}</td>

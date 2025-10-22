@@ -13,7 +13,7 @@
 				</tr>
 			</thead>
 			<tbody>
-@foreach(\App\Model\QuotDeliveryDate::all() as $k)
+@foreach(\App\Models\QuotDeliveryDate::all() as $k)
 				<tr>
 					<td>{{ $k->id }}</td>
 					<td>{{ $k->delivery_date_period }}</td>

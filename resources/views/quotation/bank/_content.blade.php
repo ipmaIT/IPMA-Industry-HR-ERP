@@ -13,7 +13,7 @@
 				</tr>
 			</thead>
 			<tbody>
-@foreach(\App\Model\QuotBank::all() as $k)
+@foreach(\App\Models\QuotBank::all() as $k)
 				<tr>
 					<td>{{ $k->id }}</td>
 					<td>{!! nl2br($k->bank) !!}</td>
