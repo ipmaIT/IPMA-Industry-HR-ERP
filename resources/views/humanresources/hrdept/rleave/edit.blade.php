@@ -100,7 +100,6 @@ $customer = App\Models\Customer::pluck('customer', 'id')->sortKeys()->toArray();
 
   <div class="row mt-3">
     <div class="col-md-2">
-      {{Form::label('customer_id', 'Customer')}}
       <label for="customer_id" class="col-form-label col-auto">Customer : </label>
     </div>
     <div class="col-md-10 @error('customer_id') has-error @enderror">

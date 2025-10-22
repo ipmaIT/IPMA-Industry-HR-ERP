@@ -297,7 +297,7 @@ $us = $user->belongstomanydepartment->first()?->branch_id;              //get us
           ->where('leave_type_id', 11)
           ->get();
 
-        // INDICATOR 
+        // INDICATOR
         $leave_type_code = $leav->belongstooptleavetype?->leave_type_code;
 
         if (strpos($leave_type_code, 'EL') === false) {
@@ -561,8 +561,10 @@ $us = $user->belongstomanydepartment->first()?->branch_id;              //get us
                     </div>
                     <!-------------------------------------------------------------------------------- LEAVE SHOW END -------------------------------------------------------------------------------->
 
-                    {{ Form::open(['route' => ['leavestatus.supervisorstatus'], 'method' => 'patch', 'id' => 'form', 'class' => 'form', 'autocomplete' => 'off', 'files' => true, 'data-id' => $a->id, 'data-toggle' => 'validator']) }}
-                    {{ Form::hidden('id', $a->id) }}
+                    <form method="POST" action="{{ route('leavestatus.supervisorstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" data-id="{{ $a->id }}" enctype="multipart/form-data">
+                      @csrf
+                      @method('PATCH')
+                    <input type="hidden" name="id" value="{{ $a->id }}">
 
                     <div class="offset-sm-4 col-sm-6">
                       @foreach($ls as $k => $val)
@@ -590,9 +592,9 @@ $us = $user->belongstomanydepartment->first()?->branch_id;              //get us
 
                   <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                    {{ Form::submit('Submit', ['class' => 'btn btn-sm btn-outline-secondary']) }}
+                    <button type="submit" class="btn btn-sm btn-outline-secondary">Submit</button>
                   </div>
-                  {{ Form::close() }}
+                    </form>
                 </div>
               </div>
             </div>
@@ -759,8 +761,10 @@ $us = $user->belongstomanydepartment->first()?->branch_id;              //get us
                     </div>
                     <!-------------------------------------------------------------------------------- LEAVE SHOW END -------------------------------------------------------------------------------->
 
-                    {{ Form::open(['route' => ['leavestatus.supervisorstatus'], 'method' => 'patch', 'id' => 'form', 'class' => 'form', 'data-id' => $a->id, 'autocomplete' => 'off', 'files' => true,'data-toggle' => 'validator']) }}
-                    {{ Form::hidden('id', $a->id) }}
+                    <form method="POST" action="{{ route('leavestatus.supervisorstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" data-id="{{ $a->id }}" enctype="multipart/form-data">
+                      @csrf
+                      @method('PATCH')
+                    <input type="hidden" name="id" value="{{ $a->id }}">
 
                     <div class="offset-sm-4 col-sm-6">
                       @foreach($ls as $k => $val)
@@ -788,9 +792,9 @@ $us = $user->belongstomanydepartment->first()?->branch_id;              //get us
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                    {{ Form::submit('Submit', ['class' => 'btn btn-sm btn-outline-secondary']) }}
+                    <button type="submit" class="btn btn-sm btn-outline-secondary">Submit</button>
                   </div>
-                  {{ Form::close() }}
+                    </form>
                 </div>
               </div>
             </div>

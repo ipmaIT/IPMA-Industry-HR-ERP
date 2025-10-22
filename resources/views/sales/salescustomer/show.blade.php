@@ -28,7 +28,7 @@ $no = 1;
       Customer
     </div>
     <div class="col-md-10">
-      {{ Form::text('customer', $customer->customer, ['class' => 'form-control form-control-sm', 'id' => 'customer', 'readonly' => 'readonly']) }}
+      <input type="text" name="customer" value="{{ old('customer', @$customer->customer) }}" id="id" class="form-control form-control-sm col-sm-12 @error('customer') is-invalid @enderror" readonly>
     </div>
   </div>
 
@@ -37,7 +37,7 @@ $no = 1;
       Contact
     </div>
     <div class="col-md-10">
-      {{ Form::text('customer', $customer->contact, ['class' => 'form-control form-control-sm', 'id' => 'customer', 'readonly' => 'readonly']) }}
+      <input type="text" name="contact" value="{{ old('contact', @$customer->contact) }}" id="id" class="form-control form-control-sm col-sm-12 @error('contact') is-invalid @enderror" readonly>
     </div>
   </div>
 
@@ -46,7 +46,7 @@ $no = 1;
       Phone
     </div>
     <div class="col-md-10">
-      {{ Form::text('customer', $customer->phone, ['class' => 'form-control form-control-sm', 'id' => 'customer', 'readonly' => 'readonly']) }}
+      <input type="text" name="phone" value="{{ old('phone', @$customer->phone) }}" id="id" class="form-control form-control-sm col-sm-12 @error('phone') is-invalid @enderror" readonly>
     </div>
   </div>
 
@@ -55,7 +55,7 @@ $no = 1;
       Fax
     </div>
     <div class="col-md-10">
-      {{ Form::text('customer', $customer->fax, ['class' => 'form-control form-control-sm', 'id' => 'customer', 'readonly' => 'readonly']) }}
+      <input type="text" name="fax" value="{{ old('fax', @$customer->fax) }}" id="id" class="form-control form-control-sm col-sm-12 @error('fax') is-invalid @enderror" readonly>
     </div>
   </div>
 
@@ -64,7 +64,7 @@ $no = 1;
       Area
     </div>
     <div class="col-md-10">
-      {{ Form::text('customer', $customer->area, ['class' => 'form-control form-control-sm', 'id' => 'customer', 'readonly' => 'readonly']) }}
+      <input type="text" name="area" value="{{ old('area', @$customer->area) }}" id="id" class="form-control form-control-sm col-sm-12 @error('area') is-invalid @enderror" readonly>
     </div>
   </div>
 
@@ -73,7 +73,7 @@ $no = 1;
       Address
     </div>
     <div class="col-md-10">
-      {{ Form::textarea('address', $customer->address, ['class' => 'form-control form-control-sm', 'id' => 'address', 'readonly' => 'readonly', 'rows' => '3']) }}
+      <textarea name="address" id="id" class="form-control form-control-sm col-sm-12 @error('address') is-invalid @enderror" readonly>{{ old('address', @$customer->address) }}</textarea>
     </div>
   </div>
 

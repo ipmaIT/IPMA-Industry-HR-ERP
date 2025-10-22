@@ -220,7 +220,7 @@ use App\Models\HumanResources\HRLeaveApprovalFlow;
 									</button>
 								</div>
 								<div class="col-sm-11 form-group {{ $errors->has('staffspouse.*.spouse') ? 'has-error' : '' }}">
-									{{ Form::hidden('staffspouse['.$i.'][id]', $spouse->id) }}
+									<input type="hidden" name="staffspouse[{{ $i }}][id]" value="{{ $spouse->id }}">
 									<input type="text" name="staffspouse[{{ $i }}][spouse]" id="spo" value="{{ $spouse->spouse }}" class="form-control form-control-sm" placeholder="Spouse">
 								</div>
 								<div class="col-sm-1"></div>
