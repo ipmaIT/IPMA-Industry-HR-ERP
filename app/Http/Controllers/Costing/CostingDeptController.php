@@ -21,6 +21,6 @@ class CostingDeptController extends Controller
 
 	public function index(): View
 	{
-		return view('costing.index');
+		return view('quotation.index');
 	}
 }

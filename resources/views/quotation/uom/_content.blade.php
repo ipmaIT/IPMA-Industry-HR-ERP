@@ -13,7 +13,7 @@
 				</tr>
 			</thead>
 			<tbody>
-@foreach(\App\Model\QuotUOM::all() as $k)
+@foreach(\App\Models\QuotUOM::all() as $k)
 				<tr>
 					<td>{{ $k->id }}</td>
 					<td>{{ $k->uom }}</td>
