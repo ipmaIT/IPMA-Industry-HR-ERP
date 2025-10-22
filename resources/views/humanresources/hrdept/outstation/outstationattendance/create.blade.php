@@ -5,55 +5,56 @@
 	@include('humanresources.hrdept.navhr')
 	<h4>Add Staff For Outstation Attendance</h4>
 	<div class="col-sm-12 row">
-		{!! Form::open(['route' => ['hroutstationattendance.store'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) !!}
+	<form method="POST" action="{{ route('hroutstationattendance.store') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+		@csrf
 
-		<div class="form-group row m-3 {{ $errors->has('date_attend') ? 'has-error' : Null }}">
-			{{ Form::label('date', 'Attend Date : ', ['class' => 'col-sm-4 col-form-label']) }}
+		<div class="form-group row m-3 @error('date_attend') is-invalid @enderror">
+			<label for="date" class="col-sm-4 col-form-label">Attend Date : </label>
 			<div class="col-sm-8" style="position:relative;">
-				{{ Form::text('date_attend', @$value, ['class' => 'form-control form-control-sm col-sm-auto', 'id' => 'date']) }}
+				<input type="text" name="date_attend" value="{{ old('date_attend') }}" id="date" class="form-control form-control-sm col-sm-12 @error('date_attend') is-invalid @enderror" placeholder="Date Attend">
 			</div>
 		</div>
 
-		<div class="form-group row m-3 {{ $errors->has('attend_date') ? 'has-error' : Null }}">
-			{{ Form::label('loc', 'Location : ', ['class' => 'col-sm-4 col-form-label']) }}
+		<div class="form-group row m-3 @error('outstation_id') has-error @enderror">
+			<label for="loc" class="col-sm-4 col-form-label">Location : </label>
 			<div class="col-sm-8">
 				<select name="outstation_id" id="loc" class="form-select form-select-sm col-sm-5"></select>
 			</div>
 		</div>
 
-		<div class="form-group row m-3 {{ $errors->has('staff_id') ? 'has-error' : Null }}">
-			{{ Form::label('staff', 'Staff : ', ['class' => 'col-sm-4 col-form-label']) }}
+		<div class="form-group row m-3 @error('staff_id.*') has-error @enderror">
+			<label for="staff" class="col-sm-4 col-form-label">Staff : </label>
 			<div class="col-sm-8">
 				<select name="staff_id[]" id="staff" class="form-select form-select-sm col-sm-5" multiple="multiple"></select>
 			</div>
 		</div>
 
-		<div class="form-group row m-3 {{ $errors->has('in') ? 'has-error' : Null }}">
-			{{ Form::label('in', 'In : ', ['class' => 'col-sm-4 col-form-label']) }}
+		<div class="form-group row m-3 @error('in') has-error @enderror">
+			<label for="in" class="col-sm-4 col-form-label">In : </label>
 			<div class="col-sm-8" style="position:relative;">
-				{{ Form::text('in', @$value, ['class' => 'form-control form-control-sm col-sm-auto', 'id' => 'in']) }}
+				<input type="text" name="in" value="{{ old('in') }}" id="in" class="form-control form-control-sm col-sm-12 @error('in') is-invalid @enderror" placeholder="In">
 			</div>
 		</div>
 
-		<div class="form-group row m-3 {{ $errors->has('out') ? 'has-error' : Null }}">
-			{{ Form::label('out', 'Out : ', ['class' => 'col-sm-4 col-form-label']) }}
+		<div class="form-group row m-3 @error('out') has-error @enderror">
+			<label for="out" class="col-sm-4 col-form-label">Out : </label>
 			<div class="col-sm-8" style="position:relative;">
-				{{ Form::text('out', @$value, ['class' => 'form-control form-control-sm col-sm-auto', 'id' => 'out']) }}
+				<input type="text" name="out" value="{{ old('out') }}" id="out" class="form-control form-control-sm col-sm-12 @error('out') is-invalid @enderror" placeholder="Out">
 			</div>
 		</div>
 
 		<div class="form-group row m-3 {{ $errors->has('in') ? 'has-error' : Null }}">
-			{{ Form::label('remarks', 'Remarks : ', ['class' => 'col-sm-4 col-form-label']) }}
+			<label for="remarks" class="col-sm-4 col-form-label">Remarks : </label>
 			<div class="col-sm-8">
-				{{ Form::textarea('remarks', @$value, ['class' => 'form-control form-control-sm col-sm-auto', 'id' => 'remarks']) }}
+				<textarea name="remarks" id="remarks" class="form-control form-control-sm col-sm-12 @error('remarks') is-invalid @enderror">{{ old('remarks') }}</textarea>
 			</div>
 		</div>
 
 		<div class="offset-sm-4 col-sm-8">
-			{{ Form::submit('Generate Attendance',['class' => 'btn btn-sm btn-outline-secondary']) }}
+			<button type="submit" class="btn btn-sm btn-outline-secondary">Generate Attendance</button>
 		</div>
 
-		{{ Form::close() }}
+		</form>
 	</div>
 </div>
 @endsection

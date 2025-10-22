@@ -10,23 +10,24 @@ use \Carbon\Carbon;
 <div class="col-sm-12 row">
 	@include('humanresources.hrdept.navhr')
 	<h4>Generate Working Hour For A Year</h4>
-	{!! Form::open(['route' => ['workinghour.store'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) !!}
+	<form method="POST" action="{{ route('workinghour.store') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+		@csrf
 	<div class="form-group row {{ ($errors->has('effective_date_start') || $errors->has('effective_date_end')) ? ' has-error' : '' }} mb-3 g-3">
-		{{ Form::label( 'yea', 'Ramadhan Duration : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+		<label for="yea" class="col-form-label col-sm-2">Ramadhan Duration : </label>
 		<div class="col-sm-5">
-			{{ Form::text('effective_date_start', @$value, ['class' => 'form-control col-auto', 'id' => 'effective_date_start', 'placeholder' => 'Ramadhan Start', 'autocomplete' => 'off']) }}
+			<input type="text" name="effective_date_start" value="{{ old('effective_date_start') }}" id="effective_date_start" class="form-control form-control-sm col-sm-12 @error('effective_date_start') is-invalid @enderror" placeholder="Ramadhan Start">
 		</div>
 		<div class="col-sm-5">
-			{{ Form::text('effective_date_end', @$value, ['class' => 'form-control col-auto', 'id' => 'effective_date_end', 'placeholder' => 'Ramadhan End', 'autocomplete' => 'off']) }}
+			<input type="text" name="effective_date_end" value="{{ old('effective_date_end') }}" id="effective_date_end" class="form-control form-control-sm col-sm-12 @error('effective_date_end') is-invalid @enderror" placeholder="Ramadhan End">
 		</div>
 	</div>
 
 	<div class="form-group row">
 		<div class="col-sm-10 offset-sm-2">
-			{!! Form::button('Generate Next Year Working Hour', ['class' => 'btn btn-sm btn-outline-secondary', 'type' => 'submit']) !!}
+			<button type="submit" class="btn btn-sm btn-outline-secondary">Generate Next Year Working Hour</button>
 		</div>
 	</div>
-	{{ Form::close() }}
+	</form>
 
 </div>
 @endsection

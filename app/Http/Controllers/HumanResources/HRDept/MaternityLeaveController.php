@@ -84,7 +84,7 @@ class MaternityLeaveController extends Controller
 	public function update(Request $request, HRLeaveMaternity $maternityleave): RedirectResponse
 	{
 		$maternityleave->update($request->except(['_method', '_token']));
-		Session::flash('flash_message', 'Data successfully updated!');
+		Session::flash('message', 'Data successfully updated!');
 		return Redirect::route('maternityleave.index');
 	}
 

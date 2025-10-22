@@ -96,7 +96,7 @@ class AppraisalApointController extends Controller
       }
     }
 
-    Session::flash('flash_message', 'Successfully Apoint.');
+    Session::flash('message', 'Successfully Apoint.');
     return redirect()->route('appraisalapoint.index');
   }
 

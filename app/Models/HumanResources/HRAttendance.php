@@ -22,6 +22,9 @@ class HRAttendance extends Model
 
 	// protected $connection = 'mysql';
 	protected $table = 'hr_attendances';
+	protected $casts = [
+    'exception' => 'boolean',
+	];
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	//belongsto relationship

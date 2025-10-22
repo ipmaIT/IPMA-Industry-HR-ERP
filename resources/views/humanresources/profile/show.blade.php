@@ -253,26 +253,41 @@ $childrens = $profile->hasmanychildren()->get();
 	<div class="col-sm-12 table-responsive">
 		<h4>Attendance</h4>
 
-		{{ Form::open(['route' => ['profile.show', $profile->id], 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) }}
+		<form method="POST" action="{{ route('profile.show', $profile->id) }}" accept-charset="UTF-8" id="form" class="form-horizontal" autocomplete="off" enctype="multipart/form-data">
+			@csrf()
 
 		<table width="100%" class="text">
 			<tr>
 				<td></td>
 				<td width="100px">
-					{{ Form::select('year', $group_year, @$year, ['class' => 'form-control form-control-sm form-select', 'id' => 'year', 'placeholder' => '', 'autocomplete' => 'off']) }}
+					<select name="year" id="year" class="form-select form-select-sm form-select">
+						<option value="">Please choose</option>
+						@if(count($group_year))
+							@foreach($group_year as $gy)
+								<option value="{{ $gy }}">{{ $gy }}</option>
+							@endforeach
+						@endif
+					</select>
 				</td>
 				<td width="5px"></td>
 				<td width="80px">
-					{{ Form::select('month', $group_month, @$month, ['class' => 'form-control form-control-sm form-select', 'id' => 'month', 'placeholder' => '', 'autocomplete' => 'off']) }}
+					<select name="month" id="month" class="form-select form-select-sm form-select">
+						<option value="">Please choose</option>
+						@if(count($group_month))
+							@foreach($group_month as $gm)
+								<option value="{{ $gm }}">{{ $gm }}</option>
+							@endforeach
+						@endif
+					</select>
 				</td>
 				<td width="5px"></td>
 				<td width="70px">
-					{!! Form::submit('SEARCH', ['class' => 'form-control form-control-sm btn btn-sm btn-outline-secondary']) !!}
+					<button type="submit" class="btn btn-sm btn-outline-secondary">SEARCH</button>
 				</td>
 			</tr>
 		</table>
 
-		{!! Form::close() !!}
+		</form>
 
 		<table id="attendance" class="table table-hover table-sm align-middle" style="font-size:12px">
 			<thead>
@@ -889,10 +904,16 @@ $('#al, #mc, #ml').DataTable({
 /////////////////////////////////////////////////////////////////////////////////////////
 // fullcalendar cant use jquery
 var calendarEl = document.getElementById('calendar');
-var calendar = new FullCalendar.Calendar(calendarEl, {
+var calendar = new Calendar(calendarEl, {
 	aspectRatio: 1.0,
 	height: 2000,
-	// plugins: [multiMonthPlugin],
+	plugins: [
+		timeGridPlugin,
+		dayGridPlugin,
+		multiMonthPlugin,
+		momentPlugin,
+		bootstrap5Plugin
+	],
 	initialView: 'multiMonthYear',
 	// initialView: 'dayGridMonth',
 	// multiMonthMaxColumns: 1,					// force a single column

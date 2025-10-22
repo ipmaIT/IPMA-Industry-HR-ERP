@@ -10,50 +10,52 @@ use \Carbon\Carbon;
 <div class="col-sm-12 row">
 	@include('humanresources.hrdept.navhr')
 	<h4>Edit Medical Certificate Leave Entitlement Year {{ $mcleave->year }} for {{ $mcleave->belongstostaff->name }}</h4>
-	{{ Form::model($mcleave, ['route' => ['mcleave.update', $mcleave->id], 'method' => 'PATCH', 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) }}
+	<form method="POST" action="{{ route('mcleave.update', $mcleave) }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+		@csrf
+		@method('PATCH')
 
 		<div class="form-group row {{ $errors->has('mc_leave') ? 'has-error' : '' }} mb-3 g-3">
-			{{ Form::label( 'alt', 'Medical Certificate Leave : ', ['class' => 'col-sm-3 col-form-label'] ) }}
+			<label for="alt" class="col-form-label col-sm-3">Medical Certificate Leave : </label>
 			<div class=" col-sm-2">
-				{{ Form::text('mc_leave', @$value, ['class' => 'form-control form-control-sm', 'id' => 'alt', 'placeholder' => 'Medical Certificate Leave Initialize', 'autocomplete' => 'off', 'readOnly']) }}
+				<input type="text" name="mc_leave" value="{{ old('mc_leave', $mcleave->mc_leave) }}" id="alt" class="form-control form-control-sm col-sm-12 @error('mc_leave') is-invalid @enderror" placeholder="Medical Certificate Leave Initialize">
 			</div>
 		</div>
 
 		<div class="form-group row {{ $errors->has('mc_leave_adjustment') ? 'has-error' : '' }} mb-3 g-3">
-			{{ Form::label( 'ala', 'Medical Certificate Leave Adjustment : ', ['class' => 'col-sm-3 col-form-label'] ) }}
+			<label for="ala" class="col-form-label col-sm-3">Medical Certificate Leave Adjustment : </label>
 			<div class=" col-sm-2">
-				{{ Form::number('mc_leave_adjustment', @$value, ['class' => 'form-control form-control-sm', 'id' => 'ala', 'placeholder' => 'Medical Certificate Leave Adjustment', 'step' => '0.5', 'autocomplete' => 'off']) }}
+				<input type="number" name="mc_leave_adjustment" value="{{ old('mc_leave_adjustment', $mcleave->mc_leave_adjustment) }}" id="ala" class="form-control form-control-sm col-sm-12 @error('mc_leave_adjustment') is-invalid @enderror" step="0.5" placeholder="Medical Certificate Leave Adjustment">
 			</div>
 		</div>
 
 		<div class="form-group row {{ $errors->has('mc_leave_utilize') ? 'has-error' : '' }} mb-3 g-3">
-			{{ Form::label( 'alu', 'Medical Certificate Leave Utilize : ', ['class' => 'col-sm-3 col-form-label'] ) }}
+			<label for="alu" class="col-form-label col-sm-3">Medical Certificate Leave Utilize : </label>
 			<div class=" col-sm-2">
-				{{ Form::text('mc_leave_utilize', @$value, ['class' => 'form-control form-control-sm', 'id' => 'alu', 'placeholder' => 'Medical Certificate Leave Utilize', 'autocomplete' => 'off', 'readOnly']) }}
+				<input type="text" name="mc_leave_utilize" value="{{ old('mc_leave_utilize', $mcleave->mc_leave_utilize) }}" id="alu" class="form-control form-control-sm col-sm-12 @error('mc_leave_utilize') is-invalid @enderror" placeholder="Medical Certificate Leave Utilize">
 			</div>
 		</div>
 
 		<div class="form-group row {{ $errors->has('mc_leave_balance') ? 'has-error' : '' }} mb-3 g-3">
-			{{ Form::label( 'alb', 'Medical Certificate Leave Balance : ', ['class' => 'col-sm-3 col-form-label'] ) }}
+			<label for="alb" class="col-form-label col-sm-3">Medical Certificate Leave Balance : </label>
 			<div class=" col-sm-2">
-				{{ Form::text('mc_leave_balance', @$value, ['class' => 'form-control form-control-sm', 'id' => 'alb', 'placeholder' => 'Medical Certificate Leave Balance', 'autocomplete' => 'off', 'readOnly']) }}
+				<input type="text" name="mc_leave_balance" value="{{ old('mc_leave_balance', $mcleave->mc_leave_balance) }}" id="alb" class="form-control form-control-sm col-sm-12 @error('mc_leave_balance') is-invalid @enderror" placeholder="Medical Certificate Leave Balance">
 			</div>
 		</div>
 
 		<div class="form-group row {{ $errors->has('remarks') ? 'has-error' : '' }} mb-3 g-3">
-			{{ Form::label( 'rem', 'Remarks : ', ['class' => 'col-sm-3 col-form-label'] ) }}
+			<label for="rem" class="col-form-label col-sm-3">Remarks : </label>
 			<div class=" col-sm-4">
-				{{ Form::textarea('remarks', @$value, ['class' => 'form-control form-control-sm', 'id' => 'rem', 'placeholder' => 'Remarks', 'autocomplete' => 'off']) }}
+				<textarea name="remarks" id="rem" class="form-control form-control-sm col-sm-12 @error('remarks') is-invalid @enderror" placeholder="Remarks">{{ old('remarks', $mcleave->remarks) }}</textarea>
 			</div>
 		</div>
 
 		<div class="form-group row  mb-3 g-3">
 			<div class="col-sm-10 offset-sm-3">
-				{!! Form::button('Submit', ['class' => 'btn btn-sm btn-outline-secondary', 'type' => 'submit']) !!}
+				<button type="submit" class="btn btn-sm btn-outline-secondary">Submit</button>
 			</div>
 		</div>
 
-	{{ Form::close() }}
+	</form>
 
 </div>
 @endsection

@@ -65,7 +65,7 @@ class OutstationCustomerController extends Controller
       'latitude' => $request->latitude,
       'longitude' => $request->longitude,
     ]);
-    Session::flash('flash_message', 'Successfully add customer');
+    Session::flash('message', 'Successfully add customer');
     return redirect()->route('outstationcustomer.index');
   }
 

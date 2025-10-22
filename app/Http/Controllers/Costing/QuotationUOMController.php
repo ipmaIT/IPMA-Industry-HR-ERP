@@ -31,7 +31,7 @@ class QuotationUOMController extends Controller
 	public function store(Request $request)
 	{
 		QuotUOM::create($request->only('uom'));
-		Session::flash('flash_message', 'Data successfully stored!');
+		Session::flash('message', 'Data successfully stored!');
 		return redirect(route('quotUOM.index'));
 	}
 
@@ -48,7 +48,7 @@ class QuotationUOMController extends Controller
 	public function update(Request $request, QuotUOM $quotUOM)
 	{
 		$quotUOM->update($request->uom);
-		Session::flash('flash_message', 'Data successfully updated!');
+		Session::flash('message', 'Data successfully updated!');
 		return redirect(route('quotUOM.index'));
 	}
 

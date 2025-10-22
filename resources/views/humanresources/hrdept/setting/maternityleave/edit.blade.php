@@ -10,50 +10,52 @@ use \Carbon\Carbon;
 <div class="col-sm-12 row">
 	@include('humanresources.hrdept.navhr')
 	<h4>Edit Maternity Leave Entitlement Year {{ $maternityleave->year }} for {{ $maternityleave->belongstostaff->name }}</h4>
-	{{ Form::model($maternityleave, ['route' => ['maternityleave.update', $maternityleave->id], 'method' => 'PATCH', 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) }}
+	<form method="POST" action="{{ route('maternityleave.update', $maternityleave) }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+		@csrf
+		@method('PATCH')
 
 		<div class="form-group row {{ $errors->has('maternity_leave') ? 'has-error' : '' }} mb-3 g-3">
-			{{ Form::label( 'alt', 'Maternity Leave : ', ['class' => 'col-sm-3 col-form-label'] ) }}
+			<label for="alt" class="col-form-label col-sm-3">Maternity Leave : </label>
 			<div class=" col-sm-2">
-				{{ Form::text('maternity_leave', @$value, ['class' => 'form-control form-control-sm', 'id' => 'alt', 'placeholder' => 'Maternity Leave Initialize', 'autocomplete' => 'off']) }}
+				<input type="text" name="maternity_leave" value="{{ old('maternity_leave', $maternityleave->maternity_leave) }}" id="alt" class="form-control form-control-sm col-sm-12 @error('maternity_leave') is-invalid @enderror" placeholder="Maternity Leave Initialize">
 			</div>
 		</div>
 
 		<div class="form-group row {{ $errors->has('maternity_leave_adjustment') ? 'has-error' : '' }} mb-3 g-3">
-			{{ Form::label( 'ala', 'Maternity Leave Adjustment : ', ['class' => 'col-sm-3 col-form-label'] ) }}
+			<label for="ala" class="col-form-label col-sm-3">Maternity Leave Adjustment : </label>
 			<div class=" col-sm-2">
-				{{ Form::text('maternity_leave_adjustment', @$value, ['class' => 'form-control form-control-sm', 'id' => 'ala', 'placeholder' => 'Maternity Leave Adjustment', 'autocomplete' => 'off']) }}
+				<input type="text" name="maternity_leave_adjustment" value="{{ old('maternity_leave_adjustment', $maternityleave->maternity_leave_adjustment) }}" id="ala" class="form-control form-control-sm col-sm-12 @error('maternity_leave_adjustment') is-invalid @enderror" placeholder="Maternity Leave Adjustment">
 			</div>
 		</div>
 
 		<div class="form-group row {{ $errors->has('maternity_leave_utilize') ? 'has-error' : '' }} mb-3 g-3">
-			{{ Form::label( 'alu', 'Maternity Leave Utilize : ', ['class' => 'col-sm-3 col-form-label'] ) }}
+			<label for="alu" class="col-form-label col-sm-3">Maternity Leave Utilize : </label>
 			<div class=" col-sm-2">
-				{{ Form::text('maternity_leave_utilize', @$value, ['class' => 'form-control form-control-sm', 'id' => 'alu', 'placeholder' => 'Maternity Leave Utilize', 'autocomplete' => 'off']) }}
+				<input type="text" name="maternity_leave_utilize" value="{{ old('maternity_leave_utilize', $maternityleave->maternity_leave_utilize) }}" id="alu" class="form-control form-control-sm col-sm-12 @error('maternity_leave_utilize') is-invalid @enderror" placeholder="Maternity Leave Utilize">
 			</div>
 		</div>
 
 		<div class="form-group row {{ $errors->has('maternity_leave_balance') ? 'has-error' : '' }} mb-3 g-3">
-			{{ Form::label( 'alb', 'Maternity Leave Balance : ', ['class' => 'col-sm-3 col-form-label'] ) }}
+			<label for="alb" class="col-form-label col-sm-3">Maternity Leave Balance : </label>
 			<div class=" col-sm-2">
-				{{ Form::text('maternity_leave_balance', @$value, ['class' => 'form-control form-control-sm', 'id' => 'alb', 'placeholder' => 'Maternity Leave Balance', 'autocomplete' => 'off']) }}
+				<input type="text" name="maternity_leave_balance" value="{{ old('maternity_leave_balance', $maternityleave->maternity_leave_balance) }}" id="alb" class="form-control form-control-sm col-sm-12 @error('maternity_leave_balance') is-invalid @enderror" placeholder="Maternity Leave Balance">
 			</div>
 		</div>
 
 		<div class="form-group row {{ $errors->has('remarks') ? 'has-error' : '' }} mb-3 g-3">
-			{{ Form::label( 'rem', 'Remarks : ', ['class' => 'col-sm-3 col-form-label'] ) }}
+			<label for="rem" class="col-form-label col-sm-3">Remarks : </label>
 			<div class=" col-sm-4">
-				{{ Form::textarea('remarks', @$value, ['class' => 'form-control form-control-sm', 'id' => 'rem', 'placeholder' => 'Remarks', 'autocomplete' => 'off']) }}
+				<textarea name="remarks" id="rem" class="form-control form-control-sm col-sm-12 @error('remarks') is-invalid @enderror" placeholder="Remarks">{{ old('remarks', $maternityleave->remarks) }}</textarea>
 			</div>
 		</div>
 
-		<div class="form-group row  mb-3 g-3">
+		<div class="form-group row mb-3 g-3">
 			<div class="col-sm-10 offset-sm-3">
-				{!! Form::button('Submit', ['class' => 'btn btn-sm btn-outline-secondary', 'type' => 'submit']) !!}
+				<button type="submit" class="btn btn-sm btn-outline-secondary">Submit</button>
 			</div>
 		</div>
 
-	{{ Form::close() }}
+	</form>
 
 </div>
 @endsection

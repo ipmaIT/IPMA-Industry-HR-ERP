@@ -31,8 +31,7 @@
 @import "../../node_modules/@mdi/font/css/materialdesignicons.css";
 
 /*jquery ui*/
-@import "../../node_modules/jquery-ui/themes/base/core.css";
-@import "../../node_modules/jquery-ui/themes/base/all.css";
+@import "../../node_modules/jquery-ui/dist/themes/cupertino/jquery-ui.css";
 
 /*pretty checkbox*/
 @import "../../node_modules/pretty-checkbox/dist/pretty-checkbox.css";

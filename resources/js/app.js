@@ -1,5 +1,5 @@
 window._ = require('lodash');
-window.Popper = require('../../node_modules/popper.js/src/index').default;
+// window.Popper = require('../../node_modules/popper.js/src/index').default;
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -8,8 +8,8 @@ window.Popper = require('../../node_modules/popper.js/src/index').default;
  */
 
 try {
-    window.$ = window.jQuery = require('../../node_modules/jquery/dist/jquery');
-    require('../../node_modules/bootstrap/dist/js/bootstrap');
+    require ('./jQuery');
+    require('bootstrap/dist/js/bootstrap.bundle');
 	require('@claviska/jquery-minicolors');
     require('@fortawesome/fontawesome-free');
 	require('datatables.net');
@@ -30,7 +30,7 @@ try {
     require('pc-bootstrap4-datetimepicker');
     // require('../../node_modules/jquery-chained/jquery.chained');
     // require('../../node_modules/jquery-chained/jquery.chained.remote');
-    require('../../node_modules/jquery-ui/dist/jquery-ui');
+    // require('jquery-ui/dist/jquery-ui');
     require('./dataTable-any-number');
     require('./datetime-moment');
 
@@ -42,6 +42,11 @@ try {
 	window.swal = require ('sweetalert2');
 
 	require ('./bootstrapValidator4/js/bootstrapValidator');
+    require ('./bootstrap');
+    require ('./jQuery-ui');
+    require ('./fullcalendar');
+    require ('./chart');
+    require ('./addRemoveRowjQueryPlugins');
 } catch (e) {}
 
 /**

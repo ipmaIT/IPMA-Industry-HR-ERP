@@ -2,7 +2,7 @@
 
 A Laravel-based Human Resources ERP designed for industrial environments. It provides core HR master data, attendance capture (including bulk uploads), and a foundation for leave, approvals, and reporting.
 
-> **Repository:** `ipmaIT/IPMA-Industry-HR-ERP`
+> **Repository:** `kroos/ipma_erp2`
 
 ---
 
@@ -12,9 +12,9 @@ A Laravel-based Human Resources ERP designed for industrial environments. It pro
 - **Authentication & authorization**: Laravel-based login and role/permission scaffolding.
 - **Attendance management**
   - Daily time records
-  - **Bulk upload via Excel** using the provided `Attendance_File_Upload.xls` template
+  - **Bulk upload via Excel** using the provided `Attendance_File_Upload.xls` template for staff attendance report example
 - **Reports (foundation)**: Common HR/attendance summaries (extendable).
-- **Extensible architecture**: Conventional Laravel app structure with Blade views and Tailwind CSS.
+- **Extensible architecture**: Conventional Laravel app structure with Blade views and Bootstrap CSS.
 
 > *Note:* Feature scope reflects what’s present in the repository structure and seed assets. Build out advanced modules (leave, overtime, payroll) on top of the existing foundations as needed.
 
@@ -23,11 +23,11 @@ A Laravel-based Human Resources ERP designed for industrial environments. It pro
 ## 🧱 Tech Stack
 
 - **Backend:** PHP (Laravel)
-- **Frontend:** Blade templates, Tailwind CSS
+- **Frontend:** Blade templates, Bootstrap CSS
 - **Build tools:** Laravel Mix / Webpack, NPM
 - **Database:** MariaDB
 
-Project files include `tailwind.config.js`, `webpack.mix.js`, and a SQL dump `ipmaerp.sql`, indicating Tailwind + Mix and a MySQL schema seed.
+Project files include `tailwind.config.js`, `webpack.mix.js`, and a SQL dump `ipmaerp.sql`, indicating Laravel Mix and a MariaDB schema seed. 
 
 ---
 
@@ -53,14 +53,14 @@ ipmaerp.sql         # Database schema/data dump
 ### 1) Prerequisites
 - PHP ≥ 8.2 (with OpenSSL, PDO, Mbstring, Tokenizer, XML, Ctype, JSON, BCMath, Fileinfo)
 - Composer
-- MySQL 8.x (or MariaDB equivalent)
+- MariaDB
 - Node.js (LTS) & npm
 
 ### 2) Clone & install
 ```bash
 # Clone
-git clone https://github.com/ipmaIT/IPMA-Industry-HR-ERP.git
-cd IPMA-Industry-HR-ERP
+git clone https://github.com/kroos/ipma_erp2.git
+cd ipma_erp2
 
 # Install PHP deps
 composer install --no-dev --prefer-dist
@@ -75,13 +75,13 @@ php artisan key:generate
 # DB_PASSWORD=...
 
 # Import provided SQL (fastest way to preview data)
-# Using your MySQL client:
+# Using your MariaDB client:
 #   CREATE DATABASE ipmaerp CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 #   IMPORT ipmaerp.sql into ipmaerp
 
 # Frontend assets
 npm install
-npx mix
+npx mix   # build assets
 
 # Storage symlink for public uploads
 php artisan storage:link
@@ -92,6 +92,8 @@ php artisan storage:link
 php artisan serve
 # App will be available at http://127.0.0.1:8000
 ```
+
+> **Admin user:** If no admin account is present after import, register via the UI or create one directly in the DB. (Adjust to your organization’s roles/flags.)
 
 ---
 
@@ -171,7 +173,9 @@ No explicit license file is present. Treat the code as **All Rights Reserved** u
 
 ## 🙏 Acknowledgements
 
-- Built on [Laravel](https://laravel.com
+- Built on [Laravel](https://laravel.com)
+- Bootstrap CSS
+
 ---
 
 ## 📫 Support & Contact

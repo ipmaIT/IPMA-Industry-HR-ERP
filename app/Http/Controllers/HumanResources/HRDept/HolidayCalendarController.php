@@ -66,7 +66,7 @@ class HolidayCalendarController extends Controller
 	public function store(Request $request):RedirectResponse
 	{
 		HRHolidayCalendar::create($request->except(['_token']));
-		Session::flash('flash_message', 'Data successfully added!');
+		Session::flash('message', 'Data successfully added!');
 		return redirect( route('holidaycalendar.index') );
 	}
 
@@ -93,7 +93,7 @@ class HolidayCalendarController extends Controller
 	public function update(Request $request, HRHolidayCalendar $holidaycalendar):RedirectResponse
 	{
 		HRHolidayCalendar::where('id', $holidaycalendar->id)->update($request->except(['_token', '_method']));
-		Session::flash('flash_message', 'Data successfully edited!');
+		Session::flash('message', 'Data successfully edited!');
 		return redirect( route('holidaycalendar.index') );
 	}
 

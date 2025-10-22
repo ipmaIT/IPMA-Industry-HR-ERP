@@ -39,20 +39,26 @@ $lastYear = Carbon::now()->subYear()->year;
   @include('humanresources.hrdept.navhr')
   <h4>Overtime Report</h4>
 
-  {{ Form::open(['route' => ['overtimereport.index'], 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) }}
+  <form method="POST" action="{{ route('overtimereport.index') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+    @csrf
 
   <div class="row g-3 mb-3">
     <div class="col-auto">
-      {{ Form::text('date_start', @$value, ['class' => 'form-control form-control-sm col-auto', 'id' => 'date_start', 'placeholder' => 'Date Start', 'autocomplete' => 'off']) }}
+      <input type="text" name="date_start" value="{{ old('date_start') }}" id="date_start" class="form-control form-control-sm col-sm-12 @error('date_start') is-invalid @enderror" placeholder="Date Start">
     </div>
     <div class="col-auto">
-      {{ Form::text('date_end', @$value, ['class' => 'form-control form-control-sm col-auto', 'id' => 'date_end', 'placeholder' => 'Date End', 'autocomplete' => 'off']) }}
+      <input type="text" name="date_end" value="{{ old('date_end') }}" id="date_end" class="form-control form-control-sm col-sm-12 @error('date_end') is-invalid @enderror" placeholder="Date End">
     </div>
     <div class="col-auto">
-      {{ Form::select('branch', $location, @$value, ['class' => 'form-control branch', 'id' => 'branch', 'placeholder' => '']) }}
+      <select name="branch" id="branch" class="form-select form-select-sm branch @error('branch') is-invalid @enderror">
+        <option value="">Please choose</option>
+        @foreach($location as $k1 => $v1)
+          <option value="{{ $k1 }}" {{ (old('branch') == $k1)?'selected':NULL }}>{{ $v1 }}</option>
+        @endforeach
+      </select>
     </div>
     <div class="col-auto">
-      <select class="form-control title" id="title" name="title">
+      <select class="form-select form-select-sm title @error('title') is-invalid @enderror" id="title" name="title">
         <option selected="selected" value=""></option>
         <option value="1st half">1st half</option>
         <option value="2nd half">2nd half</option>
@@ -76,18 +82,18 @@ $lastYear = Carbon::now()->subYear()->year;
       </select>
     </div>
     <div class="col-auto">
-      <select class="form-control year" id="year" name="year">
+      <select class="form-select form-select-sm year @error('year') is-invalid @enderror" id="year" name="year">
         <option selected="selected" value=""></option>
         <option value="{{ $currentYear }}">{{ $currentYear }}</option>
         <option value="{{ $lastYear }}">{{ $lastYear }}</option>
       </select>
     </div>
     <div class="col-auto">
-      {!! Form::submit('SUBMIT', ['class' => 'form-control form-control-sm btn btn-sm btn-outline-secondary']) !!}
+      <button type="submit" class="btn btn-sm btn-outline-secondary">Submit</button>
     </div>
   </div>
 
-  {!! Form::close() !!}
+  </form>
 
   @if ($overtimes != NULL)
   <div class="row g-3 mb-3 text-center">
@@ -205,7 +211,8 @@ $lastYear = Carbon::now()->subYear()->year;
       <div style="width: 25px; height: 25px; background-color: #d9d9d9;"></div>&nbsp;REMARK
     </div>
 
-    {{ Form::open(['route' => ['overtimereport.print'], 'method' => 'GET',  'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) }}
+    <form method="GET" action="{{ route('overtimereport.print') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+      @csrf
     <div class="row">
       <div class="text-center">
         <input type="hidden" name="date_start" id="date_start" value="{{ $date_start }}">
@@ -218,7 +225,7 @@ $lastYear = Carbon::now()->subYear()->year;
         <input type="submit" class="btn btn-sm btn-outline-secondary" value="PRINT" target="_blank">
       </div>
     </div>
-    {{ Form::close() }}
+    </form>
   </div>
   @endif
 
@@ -229,89 +236,89 @@ $lastYear = Carbon::now()->subYear()->year;
 /////////////////////////////////////////////////////////////////////////////////////////
 // DATE PICKER
 $('#date_start, #date_end').datetimepicker({
-icons: {
-time: "fas fas-regular fa-clock fa-beat",
-date: "fas fas-regular fa-calendar fa-beat",
-up: "fa-regular fa-circle-up fa-beat",
-down: "fa-regular fa-circle-down fa-beat",
-previous: 'fas fas-regular fa-arrow-left fa-beat',
-next: 'fas fas-regular fa-arrow-right fa-beat',
-today: 'fas fas-regular fa-calenday-day fa-beat',
-clear: 'fas fas-regular fa-broom-wide fa-beat',
-close: 'fas fas-regular fa-rectangle-xmark fa-beat'
-},
-format: 'YYYY-MM-DD',
-useCurrent: true,
+  icons: {
+    time: "fas fas-regular fa-clock fa-beat",
+    date: "fas fas-regular fa-calendar fa-beat",
+    up: "fa-regular fa-circle-up fa-beat",
+    down: "fa-regular fa-circle-down fa-beat",
+    previous: 'fas fas-regular fa-arrow-left fa-beat',
+    next: 'fas fas-regular fa-arrow-right fa-beat',
+    today: 'fas fas-regular fa-calenday-day fa-beat',
+    clear: 'fas fas-regular fa-broom-wide fa-beat',
+    close: 'fas fas-regular fa-rectangle-xmark fa-beat'
+  },
+  format: 'YYYY-MM-DD',
+  useCurrent: true,
 });
 
 
 /////////////////////////////////////////////////////////////////////////////////////////
 $('#branch').select2({
-placeholder: 'Location',
-width: '100px',
-allowClear: false,
-closeOnSelect: true,
+  placeholder: 'Location',
+  width: '100px',
+  allowClear: false,
+  closeOnSelect: true,
 });
 
 $('#title').select2({
-placeholder: 'Title',
-width: '100px',
-allowClear: false,
-closeOnSelect: true,
+  placeholder: 'Title',
+  width: '100px',
+  allowClear: false,
+  closeOnSelect: true,
 });
 
 $('#month').select2({
-placeholder: 'Month',
-width: '130px',
-allowClear: false,
-closeOnSelect: true,
+  placeholder: 'Month',
+  width: '130px',
+  allowClear: false,
+  closeOnSelect: true,
 });
 
 $('#year').select2({
-placeholder: 'Year',
-width: '100px',
-allowClear: false,
-closeOnSelect: true,
+  placeholder: 'Year',
+  width: '100px',
+  allowClear: false,
+  closeOnSelect: true,
 });
 
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // VALIDATOR
 $(document).ready(function() {
-$('#form').bootstrapValidator({
-feedbackIcons: {
-valid: '',
-invalid: '',
-validating: ''
-},
+  $('#form').bootstrapValidator({
+    feedbackIcons: {
+      valid: '',
+      invalid: '',
+      validating: ''
+    },
 
-fields: {
-date_start: {
-validators: {
-notEmpty: {
-message: 'Please select a start date.'
-}
-}
-},
+    fields: {
+      date_start: {
+        validators: {
+          notEmpty: {
+            message: 'Please select a start date.'
+          }
+        }
+      },
 
-date_end: {
-validators: {
-notEmpty: {
-message: 'Please select a end date.'
-}
-}
-},
+      date_end: {
+        validators: {
+          notEmpty: {
+            message: 'Please select a end date.'
+          }
+        }
+      },
 
-branch: {
-validators: {
-notEmpty: {
-message: 'Please select a branch.'
-}
-}
-},
+      branch: {
+        validators: {
+          notEmpty: {
+            message: 'Please select a branch.'
+          }
+        }
+      },
 
-}
-})
+    }
+  })
 
 });
 @endsection

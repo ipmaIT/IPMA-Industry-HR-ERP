@@ -84,7 +84,7 @@ class MCLeaveController extends Controller
 	public function update(Request $request, HRLeaveMC $mcleave): RedirectResponse
 	{
 		$mcleave->update($request->except(['_method', '_token']));
-		Session::flash('flash_message', 'Data successfully updated!');
+		Session::flash('message', 'Data successfully updated!');
 		return Redirect::route('mcleave.index');
 	}
 

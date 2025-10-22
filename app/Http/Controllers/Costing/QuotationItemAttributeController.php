@@ -31,7 +31,7 @@ class QuotationItemAttributeController extends Controller
 	public function store(Request $request)
 	{
 		QuotItemAttribute::create($request->only('attribute'));
-		Session::flash('flash_message', 'Data successfully stored!');
+		Session::flash('message', 'Data successfully stored!');
 		return redirect(route('quotItemAttrib.index'));
 	}
 
@@ -48,7 +48,7 @@ class QuotationItemAttributeController extends Controller
 	public function update(Request $request, QuotItemAttribute $quotItemAttrib)
 	{
 		$quotItemAttrib->update( $request->only('attribute') );
-		Session::flash('flash_message', 'Data successfully updated!');
+		Session::flash('message', 'Data successfully updated!');
 		return redirect(route('quotItemAttrib.index'));
 	}
 

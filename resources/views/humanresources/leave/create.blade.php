@@ -27,20 +27,21 @@
 	<!-- herecomes the hardest part, leave application -->
 
 	<div class="col-sm-12 row">
-		{{ Form::open(['route' => ['leave.store'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true,  'data-toggle' => 'validator']) }}
+		<form method="POST" action="{{ route('leave.store') }}" accept-charset="UTF-8" id="form" autocomplete="off" data-toggle="validator" enctype="multipart/form-data">
+			@csrf
 		<h5 class="text-center">Leave Application</h5>
 
-		<div class="form-group row m-2 {{ $errors->has('leave_id') ? 'has-error' : '' }}">
-			{{ Form::label( 'leave_type_id', 'Leave Type : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+		<div class="form-group row m-2 {{ $errors->has('leave_type_id') ? 'has-error' : '' }}">
+			<label for="leave_id" class="col-sm-4 col-form-label">Leave Type : </label>
 			<div class="col-sm-8">
 				<select name="leave_type_id" id="leave_id" class="form-control form-control-sm"></select>
 			</div>
 		</div>
 
 		<div class="form-group row m-2 {{ $errors->has('reason') ? 'has-error' : '' }}">
-			{{ Form::label( 'reason', 'Reason : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+			<label for="reason" class="col-sm-4 col-form-label">Reason : </label>
 			<div class="col-sm-8">
-				{{ Form::textarea('reason', @$value, ['class' => 'form-control form-control-sm ', 'id' => 'reason', 'placeholder' => 'Reason', 'autocomplete' => 'off']) }}
+				<textarea name="reason" id="reason" class="form-control form-control-sm" placeholder="Reason">{{ old('reason') }}</textarea>
 			</div>
 		</div>
 
@@ -49,17 +50,17 @@
 
 		<div class="form-group row m-2 {{ $errors->has('akuan') ? 'has-error' : '' }}">
 			<div class="col-sm-8 offset-sm-4 form-check">
-				{{ Form::checkbox('akuan', 1, @$value, ['class' => 'form-check-input ', 'id' => 'akuan1']) }}
+				<input type="checkbox" name="akuan" value="1" id="akuan1" class="form-check-input">
 				<label for="akuan1" class="form-check-label p-1 bg-warning text-danger rounded"><p>I hereby confirmed that all details and information filled in are <strong>CORRECT</strong> and <strong>CHECKED</strong> before sending.</p></label>
 			</div>
 		</div>
 
 		<div class="form-group row mb-3">
 			<div class="col-sm-8 offset-sm-4">
-				{!! Form::button('Submit Application', ['class' => 'btn btn-sm btn-primary', 'type' => 'submit']) !!}
+				<button type="submit" class="btn btn-sm btn-primary">Submit Application</button>
 			</div>
 		</div>
-		{{ Form::close() }}
+		</form>
 	</div>
 </div>
 
@@ -283,18 +284,18 @@ let replacementForm = `
 
 let from = `
 	<div class="form-group row m-2 {{ $errors->has('date_time_start') ? 'has-error' : '' }}">
-		{{ Form::label('from', 'From : ', ['class' => 'col-sm-4 col-form-label']) }}
+		<label for="from" class="col-sm-4 col-form-label">From : </label>
 		<div class="col-sm-8 datetime" style="position: relative">
-			{{ Form::text('date_time_start', @$value, ['class' => 'form-control form-control-sm', 'id' => 'from', 'placeholder' => 'From : ', 'autocomplete' => 'off']) }}
+			<input type="text" name="date_time_start" value="{{ old('date_time_start') }}" id="from" class="form-control form-control-sm" placeholder="From">
 		</div>
 	</div>
 `;
 
 let to = `
 	<div class="form-group row m-2 {{ $errors->has('date_time_end') ? 'has-error' : '' }}">
-		{{ Form::label('to', 'To : ', ['class' => 'col-sm-4 col-form-label']) }}
+		<label for="to" class="col-sm-4 col-form-label">To : </label>
 		<div class="col-sm-8 datetime" style="position: relative">
-			{{ Form::text('date_time_end', @$value, ['class' => 'form-control form-control-sm', 'id' => 'to', 'placeholder' => 'To : ', 'autocomplete' => 'off']) }}
+			<input type="text" name="date_time_end" value="{{ old('date_time_end') }}" id="to" class="form-control form-control-sm" placeholder="To">
 		</div>
 	</div>
 `;
@@ -309,7 +310,7 @@ let wrapperday = `
 let userneedbackup = `
 	@if( $userneedbackup == 1 )
 	<div class="form-group row m-2 {{ $errors->has('staff_id') ? 'has-error' : '' }}">
-		{{ Form::label('backupperson', 'Replacement : ', ['class' => 'col-sm-4 col-form-label']) }}
+		<label for="backupperson" class="col-sm-4 col-form-label">Replacement : </label>
 		<div class="col-sm-8 backup">
 			<select name="staff_id" id="backupperson" class="form-control form-select form-select-sm " placeholder="Please choose" autocomplete="off"></select>
 		</div>
@@ -319,14 +320,14 @@ let userneedbackup = `
 
 let timeOffHtml =
 '<div class="form-group row m-2 {{ $errors->has('date_time_end') ? 'has-error' : '' }}">' +
-	'{{ Form::label('to', 'Time : ', ['class' => 'col-sm-4 col-form-label']) }}' +
+	'<label for="to" class="col-sm-4 col-form-label">Time : </label>' +
 	'<div class="col-sm-8">' +
 		'<div class="form-row time">' +
 			'<div class="col-sm-8 m-2" style="position: relative">' +
-				'{{ Form::text('time_start', @$value, ['class' => 'form-control form-control-sm', 'id' => 'start', 'placeholder' => 'From', 'autocomplete' => 'off']) }}' +
+				'<input type="text" name="time_start" value="{{ old('time_start') }}" id="start" class="form-control form-control-sm" placeholder="Time Start">' +
 			'</div>' +
 			'<div class="col-sm-8 m-2" style="position: relative">' +
-				'{{ Form::text('time_end', @$value, ['class' => 'form-control form-control-sm', 'id' => 'end', 'placeholder' => 'To', 'autocomplete' => 'off']) }}' +
+				'<input type="text" name="time_end" value="{{ old('time_end') }}" id="end" class="form-control form-control-sm" placeholder="Time End">' +
 			'</div>' +
 		'</div>' +
 	'</div>' +
@@ -334,9 +335,9 @@ let timeOffHtml =
 
 let doc = `
 	<div class="form-group row m-2 {{ $errors->has('document') ? 'has-error' : '' }}">
-		{{ Form::label( 'doc', 'Upload Supporting Document : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+		<label for="doc" class="col-sm-4 col-form-label">Upload Supporting Document : </label>
 		<div class="col-sm-8 supportdoc">
-			{{ Form::file( 'document', ['class' => 'form-control form-control-sm form-control-file', 'id' => 'doc', 'placeholder' => 'Supporting Document']) }}
+			<input type="file" name="document" id="doc" class="form-control form-control-sm form-control-file" placeholder="Supporting Document">
 		</div>
 	</div>
 `;
@@ -590,7 +591,7 @@ function handleELToChange() {
 // Main optimized if-blocks
 // -----------------------
 $('#leave_id').on('change', function () {
-	$selection = $(this).find(':selected');
+	let $selection = $(this).find(':selected');
 	const val = $selection.val();
 
 	// ---- TYPE 1 & 3 (Full day / MC w/ support) ----

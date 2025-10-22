@@ -28,19 +28,19 @@ use App\Models\HumanResources\HRAttendance;
 	@include('humanresources.hrdept.navhr')
 	<h4>Attendance Daily Report</h4>
 
-	{{ Form::open(['route' => ['attendancedailyreport.index'], 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) }}
+  <form method="POST" action="{{ route('attendancedailyreport.index') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="form-horizontal" enctype="multipart/form-data">
+    @csrf
 
 	<div class="row g-3 mb-3">
 		<div class="col-auto">
-			{{ Form::text('date', @$selected_date, ['class' => 'form-control form-control-sm col-auto', 'id' => 'date', 'autocomplete' => 'off']) }}
+			<input type="text" name="date" value="{{ $selected_date }}" id="date" class="form-control form-control-sm col-auto @error('date') is-invalid @enderror">
 		</div>
 		<div class="col-auto">
-			{!! Form::submit('SEARCH', ['class' => 'form-control form-control-sm btn btn-sm btn-outline-secondary']) !!}
+			<button type="submit" class="form-control form-control-sm btn btn-sm btn-outline-secondary">SEARCH</button>
 		</div>
 	</div>
 
-	{!! Form::close() !!}
-
+	</form>
 
 	@if (!empty($dailyreport_absent)|| !empty($dailyreport_late)|| !empty($dailyreport_outstation))
 	<div class="row g-3 mb-3">

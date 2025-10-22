@@ -251,7 +251,7 @@ class LeaveController extends Controller
 		// if (!$noOverlap && !($hrleave->period_day == $totalday)) {
 		if (!$noOverlap) {
 			if ($request->leave_type_id != 7) {
-				Session::flash('flash_danger', 'Date leave overlapped with other LEAVE, PUBLIC HOLIDAY and RESTDAY');
+				Session::flash('danger', 'Date leave overlapped with other LEAVE, PUBLIC HOLIDAY and RESTDAY');
 				$hrleave->update(['leave_status_id' => $b4leavestatus]);
 				$request->session()->forget('hrleave');
 				return redirect()->back()->withInput();
@@ -268,14 +268,14 @@ class LeaveController extends Controller
 				if ($request->has('leave_cat')) {																										// applied for 1 full day OR half day
 					if($request->leave_cat == 2){																										// half day
 						if((($r1->annual_leave_balance) + $hrleave->period_day) < 0.5){
-							Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+							Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 							$hrleave->update(['leave_status_id' => $b4leavestatus]);
 							$request->session()->forget('hrleave');
 							return redirect()->back();
 						}
 					} elseif($request->leave_cat == 1) {
 						if((($r1->annual_leave_balance) + $hrleave->period_day) < 1){
-							Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+							Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 							$hrleave->update(['leave_status_id' => $b4leavestatus]);
 							$request->session()->forget('hrleave');
 							return redirect()->back();
@@ -284,14 +284,14 @@ class LeaveController extends Controller
 				} else {																																// applied for more than 1 day
 					if ($noOverlap) {
 						if((($r1->annual_leave_balance) + $hrleave->period_day) < $totalday){
-							Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+							Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 							$hrleave->update(['leave_status_id' => $b4leavestatus]);
 							$request->session()->forget('hrleave');
 							return redirect()->back();
 						}
 					} else {
 						if((($r1->annual_leave_balance) + $hrleave->period_day) < $totaldayfiltered){
-							Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+							Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 							$hrleave->update(['leave_status_id' => $b4leavestatus]);
 							$request->session()->forget('hrleave');
 							return redirect()->back();
@@ -306,14 +306,14 @@ class LeaveController extends Controller
 				if ($request->has('leave_cat')) {																										// applied for 1 full day OR half day
 					if($request->leave_cat == 2){																										// half day
 						if($r1a->annual_leave_balance < 0.5){
-							Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+							Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 							$hrleave->update(['leave_status_id' => $b4leavestatus]);
 							$request->session()->forget('hrleave');
 							return redirect()->back();
 						}
 					} elseif($request->leave_cat == 1) {
 						if($r1a->annual_leave_balance < 1){
-							Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+							Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 							$hrleave->update(['leave_status_id' => $b4leavestatus]);
 							$request->session()->forget('hrleave');
 							return redirect()->back();
@@ -322,14 +322,14 @@ class LeaveController extends Controller
 				} else {																																// applied for more than 1 day
 					if ($noOverlap) {
 						if($r1a->annual_leave_balance < $totalday){
-							Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+							Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 							$hrleave->update(['leave_status_id' => $b4leavestatus]);
 							$request->session()->forget('hrleave');
 							return redirect()->back();
 						}
 					} else {
 						if($r1a->annual_leave_balance < $totaldayfiltered){
-							Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+							Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 							$hrleave->update(['leave_status_id' => $b4leavestatus]);
 							$request->session()->forget('hrleave');
 							return redirect()->back();
@@ -346,14 +346,14 @@ class LeaveController extends Controller
 				if ($request->has('leave_cat')) {																										// applied for 1 full day OR half day
 					if($request->leave_cat == 2){																										// half day
 						if((($r2->mc_leave_balance) + $hrleave->period_day) < 0.5){
-							Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+							Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 							$hrleave->update(['leave_status_id' => $b4leavestatus]);
 							$request->session()->forget('hrleave');
 							return redirect()->back();
 						}
 					} elseif($request->leave_cat == 1) {
 						if((($r2->mc_leave_balance) + $hrleave->period_day) < 1){
-							Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+							Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 							$hrleave->update(['leave_status_id' => $b4leavestatus]);
 							$request->session()->forget('hrleave');
 							return redirect()->back();
@@ -362,14 +362,14 @@ class LeaveController extends Controller
 				} else {																																// applied for more than 1 day
 					if ($noOverlap) {
 						if((($r2->mc_leave_balance) + $hrleave->period_day) < $totalday){
-							Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+							Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 							$hrleave->update(['leave_status_id' => $b4leavestatus]);
 							$request->session()->forget('hrleave');
 							return redirect()->back();
 						}
 					} else {
 						if((($r2->mc_leave_balance) + $hrleave->period_day) < $totaldayfiltered){
-							Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+							Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 							$hrleave->update(['leave_status_id' => $b4leavestatus]);
 							$request->session()->forget('hrleave');
 							return redirect()->back();
@@ -383,14 +383,14 @@ class LeaveController extends Controller
 				if ($request->has('leave_cat')) {																										// applied for 1 full day OR half day
 					if($request->leave_cat == 2){																										// half day
 						if(($r2a->mc_leave_balance) < 0.5){
-							Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+							Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 							$hrleave->update(['leave_status_id' => $b4leavestatus]);
 							$request->session()->forget('hrleave');
 							return redirect()->back();
 						}
 					} elseif($request->leave_cat == 1) {
 						if(($r2a->mc_leave_balance) < 1){
-							Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+							Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 							$hrleave->update(['leave_status_id' => $b4leavestatus]);
 							$request->session()->forget('hrleave');
 							return redirect()->back();
@@ -399,14 +399,14 @@ class LeaveController extends Controller
 				} else {																																// applied for more than 1 day
 					if ($noOverlap) {
 						if(($r2a->mc_leave_balance) < $totalday){
-							Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+							Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 							$hrleave->update(['leave_status_id' => $b4leavestatus]);
 							$request->session()->forget('hrleave');
 							return redirect()->back();
 						}
 					} else {
 						if(($r2a->mc_leave_balance) < $totaldayfiltered){
-							Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+							Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 							$hrleave->update(['leave_status_id' => $b4leavestatus]);
 							$request->session()->forget('hrleave');
 							return redirect()->back();
@@ -421,7 +421,7 @@ class LeaveController extends Controller
 			// change leave to ML from ML
 			if ($hrleave->leave_type_id == 7) {
 				if((($r3->maternity_leave_balance) + $hrleave->period_day) < $totalday){
-					Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+					Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 					$hrleave->update(['leave_status_id' => $b4leavestatus]);
 					$request->session()->forget('hrleave');
 					return redirect()->back();
@@ -432,7 +432,7 @@ class LeaveController extends Controller
 			if (($hrleave->leave_type_id == 1 || $hrleave->leave_type_id == 5) || ($hrleave->leave_type_id == 2) || ($hrleave->leave_type_id == 4 || $hrleave->leave_type_id == 10) || ($hrleave->leave_type_id == 3 || $hrleave->leave_type_id == 6 || $hrleave->leave_type_id == 9 || $hrleave->leave_type_id == 11 || $hrleave->leave_type_id == 12)) {
 				$r3a = $user->hasmanyleavematernity()->where('year', $t)->first();
 				if(($r3a->maternity_leave_balance) < $totalday){
-					Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+					Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 					$hrleave->update(['leave_status_id' => $b4leavestatus]);
 					$request->session()->forget('hrleave');
 					return redirect()->back();
@@ -456,14 +456,14 @@ class LeaveController extends Controller
 					if ($request->has('leave_cat')) {																										// applied for 1 full day OR half day
 						if($request->leave_cat == 2){																										// half day
 							if((($r4->leave_balance) + $hrleave->period_day) < 0.5){
-								Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+								Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 								$hrleave->update(['leave_status_id' => $b4leavestatus]);
 								$request->session()->forget('hrleave');
 								return redirect()->back();
 							}
 						} elseif($request->leave_cat == 1) {
 							if((($r4->leave_balance) + $hrleave->period_day) < 1){
-								Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+								Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 								$hrleave->update(['leave_status_id' => $b4leavestatus]);
 								$request->session()->forget('hrleave');
 								return redirect()->back();
@@ -472,14 +472,14 @@ class LeaveController extends Controller
 					} else {																																// applied for more than 1 day
 						if ($noOverlap) {
 							if((($r4->leave_balance) + $hrleave->period_day) < $totalday){
-								Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+								Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 								$hrleave->update(['leave_status_id' => $b4leavestatus]);
 								$request->session()->forget('hrleave');
 								return redirect()->back();
 							}
 						} else {
 							if((($r4->leave_balance) + $hrleave->period_day) < $totaldayfiltered){
-								Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+								Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 								$hrleave->update(['leave_status_id' => $b4leavestatus]);
 								$request->session()->forget('hrleave');
 								return redirect()->back();
@@ -491,14 +491,14 @@ class LeaveController extends Controller
 					if ($request->has('leave_cat')) {																										// applied for 1 full day OR half day
 						if($request->leave_cat == 2){																										// half day
 							if($r4a->leave_balance < 0.5){
-								Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+								Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 								$hrleave->update(['leave_status_id' => $b4leavestatus]);
 								$request->session()->forget('hrleave');
 								return redirect()->back();
 							}
 						} elseif($request->leave_cat == 1) {
 							if($r4a->leave_balance < 1){
-								Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+								Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 								$hrleave->update(['leave_status_id' => $b4leavestatus]);
 								$request->session()->forget('hrleave');
 								return redirect()->back();
@@ -507,14 +507,14 @@ class LeaveController extends Controller
 					} else {																																// applied for more than 1 day
 						if ($noOverlap) {
 							if($r4a->leave_balance < $totalday){
-								Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+								Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 								$hrleave->update(['leave_status_id' => $b4leavestatus]);
 								$request->session()->forget('hrleave');
 								return redirect()->back();
 							}
 						} else {
 							if($r4a->leave_balance < $totaldayfiltered){
-								Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+								Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 								$hrleave->update(['leave_status_id' => $b4leavestatus]);
 								$request->session()->forget('hrleave');
 								return redirect()->back();
@@ -529,14 +529,14 @@ class LeaveController extends Controller
 				if ($request->has('leave_cat')) {																										// applied for 1 full day OR half day
 					if($request->leave_cat == 2){																										// half day
 						if(($r4a->leave_balance) < 0.5){
-							Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+							Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 							$hrleave->update(['leave_status_id' => $b4leavestatus]);
 							$request->session()->forget('hrleave');
 							return redirect()->back();
 						}
 					} elseif($request->leave_cat == 1) {
 						if(($r4a->leave_balance) < 1){
-							Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+							Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 							$hrleave->update(['leave_status_id' => $b4leavestatus]);
 							$request->session()->forget('hrleave');
 							return redirect()->back();
@@ -545,14 +545,14 @@ class LeaveController extends Controller
 				} else {																																// applied for more than 1 day
 					if ($noOverlap) {
 						if(($r4a->leave_balance) < $totalday){
-							Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+							Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 							$hrleave->update(['leave_status_id' => $b4leavestatus]);
 							$request->session()->forget('hrleave');
 							return redirect()->back();
 						}
 					} else {
 						if(($r4a->leave_balance) < $totaldayfiltered){
-							Session::flash('flash_danger', 'Please make sure applied leave does not exceed available leave balance');
+							Session::flash('danger', 'Please make sure applied leave does not exceed available leave balance');
 							$hrleave->update(['leave_status_id' => $b4leavestatus]);
 							$request->session()->forget('hrleave');
 							return redirect()->back();
@@ -573,7 +573,7 @@ class LeaveController extends Controller
 			if ($hrleave->leave_type_id == 9)
 			{
 				if ( $ts->gte($te) ) { // time start less than time end
-					Session::flash('flash_danger', 'Your Time Off application can\'t be processed due to your selection time ('.\Carbon\Carbon::parse($request->date_time_start.' '.$request->time_start)->format('D, j F Y h:i A').' untill '.\Carbon\Carbon::parse($request->date_time_start.' '.$request->time_end)->format('D, j F Y h:i A').') . Please choose time correctly.');
+					Session::flash('danger', 'Your Time Off application can\'t be processed due to your selection time ('.\Carbon\Carbon::parse($request->date_time_start.' '.$request->time_start)->format('D, j F Y h:i A').' untill '.\Carbon\Carbon::parse($request->date_time_start.' '.$request->time_end)->format('D, j F Y h:i A').') . Please choose time correctly.');
 					$hrleave->update(['leave_status_id' => $b4leavestatus]);
 					$request->session()->forget('hrleave');
 					return redirect()->back();
@@ -584,7 +584,7 @@ class LeaveController extends Controller
 			if (($hrleave->leave_type_id == 1 || $hrleave->leave_type_id == 5) || $hrleave->leave_type_id == 2 || $hrleave->leave_type_id == 7 || ($hrleave->leave_type_id == 4 || $hrleave->leave_type_id == 10) || ($hrleave->leave_type_id == 3 || $hrleave->leave_type_id == 6 || $hrleave->leave_type_id == 9 || $hrleave->leave_type_id == 11 || $hrleave->leave_type_id == 12))
 			{
 				if ( $ts->gte($te) ) { // time start less than time end
-					Session::flash('flash_danger', 'Your Time Off application can\'t be processed due to your selection time ('.\Carbon\Carbon::parse($request->date_time_start.' '.$request->time_start)->format('D, j F Y h:i A').' untill '.\Carbon\Carbon::parse($request->date_time_start.' '.$request->time_end)->format('D, j F Y h:i A').') . Please choose time correctly.');
+					Session::flash('danger', 'Your Time Off application can\'t be processed due to your selection time ('.\Carbon\Carbon::parse($request->date_time_start.' '.$request->time_start)->format('D, j F Y h:i A').' untill '.\Carbon\Carbon::parse($request->date_time_start.' '.$request->time_end)->format('D, j F Y h:i A').') . Please choose time correctly.');
 					$hrleave->update(['leave_status_id' => $b4leavestatus]);
 					$request->session()->forget('hrleave');
 					return redirect()->back();
@@ -594,7 +594,7 @@ class LeaveController extends Controller
 
 		// test
 		// $hrleave->update(['leave_status_id' => $b4leavestatus]);
-		// Session::flash('flash_message', 'Pass Checkpoint 1');
+		// Session::flash('message', 'Pass Checkpoint 1');
 		// return redirect()->back()->withInput();
 		// exit;
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -602,7 +602,7 @@ class LeaveController extends Controller
 		// AL & EL-AL
 		if ($hrleave->leave_type_id == 1 || $hrleave->leave_type_id == 5) {
 			if (!$r1) {
-				Session::flash('flash_danger', 'Please inform IT Department with this message: "No link between leave and annual leave table (database). This is old leave created from old system."');
+				Session::flash('danger', 'Please inform IT Department with this message: "No link between leave and annual leave table (database). This is old leave created from old system."');
 				$hrleave->update(['leave_status_id' => $b4leavestatus]);
 				return redirect()->back()->withInput();
 			}
@@ -623,7 +623,7 @@ class LeaveController extends Controller
 		// MC
 		if ($hrleave->leave_type_id == 2) {																				// give back all to MC
 			if (!$r2) {
-				Session::flash('flash_danger', 'Please inform IT Department with this message: "No link between leave and MC leave table (database). This is old leave created from old system."');
+				Session::flash('danger', 'Please inform IT Department with this message: "No link between leave and MC leave table (database). This is old leave created from old system."');
 				$hrleave->update(['leave_status_id' => $b4leavestatus]);
 				$request->session()->forget('hrleave');
 				return redirect()->back()->withInput();
@@ -644,7 +644,7 @@ class LeaveController extends Controller
 		// ML
 		if ($hrleave->leave_type_id == 7) {																				// give back all to ML
 			if (!$r3) {
-				Session::flash('flash_danger', 'Please inform IT Department with this message: "No link between leave and maternity leave table (database). This is old leave created from old system."');
+				Session::flash('danger', 'Please inform IT Department with this message: "No link between leave and maternity leave table (database). This is old leave created from old system."');
 				$hrleave->update(['leave_status_id' => $b4leavestatus]);
 				$request->session()->forget('hrleave');
 				return redirect()->back()->withInput();
@@ -665,7 +665,7 @@ class LeaveController extends Controller
 		// NRL & EL-NRL
 		if ($hrleave->leave_type_id == 4 || $hrleave->leave_type_id == 10) {											// give back all to NRL & EL-NRL
 			if (!$r4) {
-				Session::flash('flash_danger', 'Please inform IT Department with this message: "No link between leave and replacement leave table (database). This is old leave created from old system."');
+				Session::flash('danger', 'Please inform IT Department with this message: "No link between leave and replacement leave table (database). This is old leave created from old system."');
 				$hrleave->update(['leave_status_id' => $b4leavestatus]);
 				$request->session()->forget('hrleave');
 				return redirect()->back()->withInput();
@@ -1528,7 +1528,7 @@ class LeaveController extends Controller
 		}
 		$hrleave->update(['leave_status_id' => $b4leavestatus]);
 		$request->session()->forget('hrleave');
-		Session::flash('flash_message', 'Successfully edit leave. Please check the date of leave at the attendance section for a verification');
+		Session::flash('message', 'Successfully edit leave. Please check the date of leave at the attendance section for a verification');
 		return redirect()->route('hrleave.show', $hrleave->id);
 	}
 

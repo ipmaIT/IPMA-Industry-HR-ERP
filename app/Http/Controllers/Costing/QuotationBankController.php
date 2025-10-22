@@ -31,7 +31,7 @@ class QuotationBankController extends Controller
 	public function store(Request $request)
 	{
 		QuotBank::create($request->only('bank'));
-		Session::flash('flash_message', 'Data successfully stored!');
+		Session::flash('message', 'Data successfully stored!');
 		return redirect(route('quotBank.index'));
 	}
 
@@ -48,7 +48,7 @@ class QuotationBankController extends Controller
 	public function update(Request $request, QuotBank $quotBank)
 	{
 		$quotBank->updated($request->only('bank'));
-		Session::flash('flash_message', 'Data successfully updated!');
+		Session::flash('message', 'Data successfully updated!');
 		return redirect(route('quotBank.index'));
 	}
 
