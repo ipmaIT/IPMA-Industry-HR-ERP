@@ -395,7 +395,8 @@ use App\Models\HumanResources\HRAttendance;
 	</div>
 	@endif
 
-	{{ Form::open(['route' => ['attendancedailyreport.print'], 'method' => 'GET',  'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) }}
+	<form method="GET" action="{{ route('attendancedailyreport.print') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+		@csrf
 	<div class="row">
 		<div class="text-center">
 			<input type="hidden" name="date" id="date" value="{{ $selected_date }}">
@@ -403,7 +404,7 @@ use App\Models\HumanResources\HRAttendance;
 			<input type="submit" class="btn btn-sm btn-outline-secondary" value="PRINT" target="_blank">
 		</div>
 	</div>
-	{{ Form::close() }}
+	</form>
 </div>
 @endsection
 

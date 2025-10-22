@@ -294,7 +294,7 @@ $appraisals = DB::table('pivot_category_appraisals')
               </tr>
               <tr>
                 <td colspan="2">
-                  {!! Form::textarea('3' . $no, @$value, ['style' => 'width:99%;', 'rows' => 4]) !!}
+                  <textarea name="3{{ $no }}" id="id" class="form-control form-control-sm col-sm-12 @error('3'.$no) is-invalid @enderror">{{ old('3'.$no, @$variable->3.$no) }}</textarea>
                 </td>
               </tr>
               <tr>

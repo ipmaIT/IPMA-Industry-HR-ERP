@@ -38,7 +38,6 @@ use App\Models\HumanResources\HROutstation;
 				@endif
 				<input type="submit" class="form-control form-control-sm btn btn-sm btn-outline-secondary" value="Print PDF" target="_blank">
 			</div>
-			{{ Form::close() }}
 		</form>
 		<p>&nbsp;</p>
 		@if($sa)

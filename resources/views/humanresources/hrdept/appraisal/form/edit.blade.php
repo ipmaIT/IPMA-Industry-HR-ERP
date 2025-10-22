@@ -894,16 +894,6 @@ $appraisals = DB::table('pivot_category_appraisals')
         <!-- POP UP SECTION -->
         <div class="modal fade" id="section{{ $section->id }}" aria-labelledby="sectionlabel{{ $section->id }}" aria-hidden="true">
           <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-            {!! Form::model($section, [
-            'route' => ['appraisalform.update', $section->id],
-            'method' => 'PATCH',
-            'id' => 'form',
-            'autocomplete' => 'off',
-            'files' => true,
-            'class' => 'form_section',
-            'data-id' => $section->id,
-            'data-toggle' => 'validator',
-            ]) !!}
             <form method="POST" action="{{ route('appraisalform.update', $section->id) }}" accept-charset="UTF-8" id="form" autocomplete="off" class="form_section" data-id="{{ $section->id }}" enctype="multipart/form-data">
               @csrf
               @method('PATCH')
@@ -963,16 +953,6 @@ $appraisals = DB::table('pivot_category_appraisals')
         <!-- POP UP SECTION SUB -->
         <div class="modal fade" id="section_sub{{ $section_sub->id }}" aria-labelledby="sectionsublabel{{ $section_sub->id }}" aria-hidden="true">
           <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-            {!! Form::model($section_sub, [
-            'route' => ['appraisalform.update', $section_sub->id],
-            'method' => 'PATCH',
-            'id' => 'form',
-            'autocomplete' => 'off',
-            'files' => true,
-            'class' => 'form_section_sub',
-            'data-id' => $section_sub->id,
-            'data-toggle' => 'validator',
-            ]) !!}
             <form method="POST" action="{{ route('appraisalform.update', $section_sub->id) }}" accept-charset="UTF-8" id="form" autocomplete="off" class="form_section" data-id="{{ $section_sub->id }}" enctype="multipart/form-data">
               @csrf
               @method('PATCH')
@@ -1023,16 +1003,6 @@ $appraisals = DB::table('pivot_category_appraisals')
         <!-- POP UP MAIN QUESTION -->
         <div class="modal fade" id="main_question{{ $main_question->id }}" aria-labelledby="mainquestionlabel{{ $main_question->id }}" aria-hidden="true">
           <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-            {!! Form::model($main_question, [
-            'route' => ['appraisalform.update', $main_question->id],
-            'method' => 'PATCH',
-            'id' => 'form',
-            'autocomplete' => 'off',
-            'files' => true,
-            'class' => 'form_main_question',
-            'data-id' => $main_question->id,
-            'data-toggle' => 'validator',
-            ]) !!}
             <form method="POST" action="{{ route('appraisalform.update', $main_question->id) }}" accept-charset="UTF-8" id="form" autocomplete="off" class="form_section" data-id="{{ $main_question->id }}" enctype="multipart/form-data">
               @csrf
               @method('PATCH')

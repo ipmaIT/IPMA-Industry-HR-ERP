@@ -66,11 +66,13 @@ use \Carbon\Carbon;
 												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 											</div>
 											<div class="modal-body">
-												{{ Form::model($sale, ['route' => ['saleamend', $sale->id], 'method' => 'PATCH', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) }}
+												<form method="POST" action="{{ route('saleamend', $sale) }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+													@csrf
+													@method('PATCH')
 												<div class="form-group row m-2 {{ $errors->has('amend') ? 'has-error' : '' }}">
-													{{ Form::label( 'nam', 'Amendment : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+													<label for="nam" class="col-form-label col-sm-4">Amendment : </label>
 													<div class="col-sm-8">
-														{{ Form::textarea('amend', @$value, ['class' => 'form-control form-control-sm', 'id' => 'nam', 'placeholder' => 'Amendment', 'autocomplete' => 'off']) }}
+														<textarea name="amend" id="nam" class="form-control form-control-sm col-sm-12 @error('amend') is-invalid @enderror" placeholder="Amendment">{{ old('amend', @$sale->amend) }}</textarea>
 													</div>
 												</div>
 											</div>
@@ -78,7 +80,7 @@ use \Carbon\Carbon;
 												<button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
 												<button type="submit" class="btn btn-sm btn-primary">Save changes</button>
 											</div>
-												{{ Form::close() }}
+												</form>
 										</div>
 									</div>
 								</div>

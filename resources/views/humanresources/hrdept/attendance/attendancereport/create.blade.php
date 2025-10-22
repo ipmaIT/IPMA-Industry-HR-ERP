@@ -24,7 +24,6 @@ p {
 	@include('humanresources.hrdept.navhr')
 	<h4>Attendance Report</h4>
 
-	{{ Form::open(['route' => 'attendancereport.store', 'method' => 'GET',  'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) }}
 	<form method="GET" action="{{ route('attendancereport.store') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="form-horizontal" enctype="multipart/form-data">
 		@csrf
 		<div class="row g-3 mb-3">

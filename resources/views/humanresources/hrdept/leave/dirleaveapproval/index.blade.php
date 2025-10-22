@@ -266,7 +266,7 @@ foreach ($c as $v) {
           ->where('leave_type_id', 11)
           ->get();
 
-        // INDICATOR 
+        // INDICATOR
         $leave_type_code = $leav->belongstooptleavetype?->leave_type_code;
 
         if (strpos($leave_type_code, 'EL') === false) {
@@ -528,38 +528,40 @@ foreach ($c as $v) {
                     </div>
                     <!-------------------------------------------------------------------------------- LEAVE SHOW END -------------------------------------------------------------------------------->
 
-                    {{ Form::open(['route' => ['leavestatus.dirstatus'], 'method' => 'patch', 'id' => 'form', 'class' => 'form', 'data-id' => $a->id, 'autocomplete' => 'off', 'files' => true, 'data-toggle' => 'validator']) }}
-                    {{ Form::hidden('id', $a->id) }}
+                    <form method="POST" action="{{ route('leavestatus.dirstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" data-id="{{ $a->id }}" enctype="multipart/form-data">
+                      @csrf
+                      @method('PATCH')
+                      <input type="hidden" name="id" value="{{ $a->id }}">
 
-                    <div class="offset-sm-4 col-sm-6">
-                      @foreach($ls as $k => $val)
-                      <div class="form-check form-check-inline {{ $errors->has('leave_status_id') ? 'has-error' : '' }}">
-                        <input type="radio" name="leave_status_id" value="{{ $val['id'] }}" id="dirstatus{{ $a->id.$val['id'] }}" class="form-check-input">
-                        <label class="form-check-label" for="dirstatus{{ $a->id.$val['id'] }}">{{ $val['text'] }}</label>
+                      <div class="offset-sm-4 col-sm-6">
+                        @foreach($ls as $k => $val)
+                        <div class="form-check form-check-inline {{ $errors->has('leave_status_id') ? 'has-error' : '' }}">
+                          <input type="radio" name="leave_status_id" value="{{ $val['id'] }}" id="dirstatus{{ $a->id.$val['id'] }}" class="form-check-input">
+                          <label class="form-check-label" for="dirstatus{{ $a->id.$val['id'] }}">{{ $val['text'] }}</label>
+                        </div>
+                        @endforeach
                       </div>
-                      @endforeach
+
+                      <div class="form-group mb-3 row {{ $errors->has('verify_code') ? 'has-error' : '' }}">
+                        <label for="dircode{{ $a->id }}" class="col-sm-4 col-form-label col-form-label-sm">Verify Code :</label>
+                        <div class="col-sm-8">
+                          <input type="text" name="verify_code" value="{{ (($user->div_id == 1 && $user->belongstomanydepartment->first()->id == 14) || $user->authorise_id == 1)?$leav->verify_code:@$value }}" id="dircode{{ $a->id }}" class="form-control form-control-sm" placeholder="Verify Code">
+                        </div>
+                      </div>
+
+                      <div class="form-group row mb-3 {{ $errors->has('remarks') ? 'has-error' : '' }}">
+                        <label for="remarks{{ $a->id }}" class="col-sm-4 col-form-label col-form-label-sm">Remarks :</label>
+                        <div class="col-sm-8">
+                          <textarea name="remarks" value="{{ $a->remarks }}" id="remarks{{ $a->id }}" class="form-control form-control-sm" rows="3" placeholder="Remarks"></textarea>
+                        </div>
+                      </div>
                     </div>
 
-                    <div class="form-group mb-3 row {{ $errors->has('verify_code') ? 'has-error' : '' }}">
-                      <label for="dircode{{ $a->id }}" class="col-sm-4 col-form-label col-form-label-sm">Verify Code :</label>
-                      <div class="col-sm-8">
-                        <input type="text" name="verify_code" value="{{ (($user->div_id == 1 && $user->belongstomanydepartment->first()->id == 14) || $user->authorise_id == 1)?$leav->verify_code:@$value }}" id="dircode{{ $a->id }}" class="form-control form-control-sm" placeholder="Verify Code">
-                      </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-sm btn-outline-secondary">Submit</button>
                     </div>
-
-                    <div class="form-group row mb-3 {{ $errors->has('remarks') ? 'has-error' : '' }}">
-                      <label for="remarks{{ $a->id }}" class="col-sm-4 col-form-label col-form-label-sm">Remarks :</label>
-                      <div class="col-sm-8">
-                        <textarea name="remarks" value="{{ $a->remarks }}" id="remarks{{ $a->id }}" class="form-control form-control-sm" rows="3" placeholder="Remarks"></textarea>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                    {{ Form::submit('Submit', ['class' => 'btn btn-sm btn-outline-secondary']) }}
-                  </div>
-                  {{ Form::close() }}
+                  </form>
                 </div>
               </div>
             </div>
