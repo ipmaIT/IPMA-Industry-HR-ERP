@@ -17,12 +17,12 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-/laravel10_erp.db
 /*.editorconfig
 /testweb.sql
 /*.log
 /app/Http/Requests/HumanResources/Profile/ProfileRequestUpdate - emergency_spouse_children.php
 /.env
+*.git
 * - Copy.php
 /public/js/chart.js
 /public/js/fullcalendar
@@ -34,4 +34,5 @@ yarn-error.log
 /public/css
 /public/mix-manifest.json
 /public/vendor
-/public/main.js
+/public/js/jquery-chained
+/public/js/jquery-chained/jquery.chained.js

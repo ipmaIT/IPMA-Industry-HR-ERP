@@ -31,7 +31,7 @@ class QuotationWarrantyController extends Controller
 	public function store(Request $request)
 	{
 		QuotWarranty::create($request->only(['warranty']));
-		Session::flash('flash_message', 'Data successfully stored!');
+		Session::flash('message', 'Data successfully stored!');
 		return redirect(route('quotWarr.index'));
 	}
 
@@ -48,7 +48,7 @@ class QuotationWarrantyController extends Controller
 	public function update(Request $request, QuotWarranty $quotWarr)
 	{
 		$quotWarr->update($request->only(['warranty']));
-		Session::flash('flash_message', 'Data successfully updated!');
+		Session::flash('message', 'Data successfully updated!');
 		return redirect(route('quotWarr.index'));
 	}
 

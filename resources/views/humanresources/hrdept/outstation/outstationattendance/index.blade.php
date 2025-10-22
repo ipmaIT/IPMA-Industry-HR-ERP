@@ -18,13 +18,14 @@ use Illuminate\Support\Str;
 	<h4>Outstation Attendance List&nbsp;<a class="btn btn-sm btn-outline-secondary" href="{{ route('hroutstationattendance.create') }}"><i class="fa-solid fa-person-digging fa-beat"></i> Add Outstation Attendance</a></h4>
 
 	@if($hroa->count())
-	{{ Form::open(['route' => ['confirmoutstationattendance'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) }}
+	<form method="POST" action="{{ route('confirmoutstationattendance') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+		@csrf
 	<div class="table-responsive">
 		<table id="outstation" class="table table-hover table-sm align-middle" style="font-size:12px">
 				<thead>
 					<tr>
 						<th>
-							{{ Form::checkbox('name', null, false, ['class' => 'form-check-input', 'id' => 'checkAll']) }}
+							<input type="checkbox" name="name" value="" id="checkAll" class="form-check-input">
 						</th>
 						<th>ID</th>
 						<th>Staff</th>
@@ -46,7 +47,9 @@ use Illuminate\Support\Str;
 				@foreach($hroa as $k => $v)
 					<tr>
 						<td>
-							{{ (!$v->confirm)?Form::checkbox('id[]', $v->id, @$value, ['class' => 'form-check-input']):null }}
+							@if(!$v->confirm)
+								<input type="checkbox" name="id[]" value="{{ $v->id }}" class="form-check-input @error('id.*') is-invalid @enderror" {{ (old('id.*') == $v->id)?'checked':NULL }}>
+							@endif
 						</td>
 						<td>{{ Login::where([['staff_id', $v->staff_id], ['active', 1]])->first()?->username }}</td>
 						<td>{{ Staff::find($v->staff_id)->name }}</td>
@@ -75,9 +78,9 @@ use Illuminate\Support\Str;
 		</table>
 	</div>
 	<div class="offset-sm-6 col-sm-auto mt-3">
-		{{ Form::submit('Send to Main Attendance', ['class' => 'btn btn-sm btn-outline-secondary']) }}
+		<button type="submit" class="btn btn-sm btn-outline-secondary">Send to Main Attendance</button>
 	</div>
-	{{ Form::close() }}
+	</form>
 	@endif
 </div>
 @endsection

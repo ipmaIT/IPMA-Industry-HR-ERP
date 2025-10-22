@@ -31,7 +31,7 @@ class QuotationExclusionController extends Controller
 	public function store(Request $request)
 	{
 		QuotExclusion::create($request->only(['exclusion']));
-		Session::flash('flash_message', 'Data successfully stored!');
+		Session::flash('message', 'Data successfully stored!');
 		return redirect(route('quotExcl.index'));
 	}
 
@@ -48,7 +48,7 @@ class QuotationExclusionController extends Controller
 	public function update(Request $request, QuotExclusion $quotExcl)
 	{
 		$quotExcl->update($request->only(['exclusion']));
-		Session::flash('flash_message', 'Data successfully updated!');
+		Session::flash('message', 'Data successfully updated!');
 		return redirect(route('quotExcl.index'));
 	}
 

@@ -6,24 +6,26 @@
 	<div class="row justify-content-center">
 		<h2>Add Customer Order</h2>
 
-		{{ Form::model($sale, ['route' => ['sale.update', $sale->id], 'method' => 'PATCH', 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) }}
+		<form method="POST" action="{{ route('sale.update', $sale) }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+			@csrf
+			@method('PATCH')
 		<div class="col-sm-12 row">
 			<div class="col-sm-6">
 
 				<div class="form-group row m-2 {{ $errors->has('date_order') ? 'has-error' : '' }}">
-					{{ Form::label( 'nam', 'Date : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+					<label for="nam" class="col-form-label col-sm-4">Date : </label>
 					<div class="col-sm-8" style="position: relative;">
-						{{ Form::text('date_order', @$value, ['class' => 'form-control form-control-sm', 'id' => 'nam', 'placeholder' => 'Date', 'autocomplete' => 'off']) }}
+						<input type="text" name="date_order" value="{{ old('date_order', $sale->date_order) }}" id="nam" class="form-control form-control-sm col-sm-12 @error('date_order') is-invalid @enderror" placeholder="Date">
 					</div>
 				</div>
 				<div class="form-group row m-2 {{ $errors->has('customer_id') ? 'has-error' : '' }}">
-					{{ Form::label( 'cust', 'Customer : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+					<label for="cust" class="col-form-label col-sm-4">Customer : </label>
 					<div class="col-sm-8">
-						{{ Form::select('customer_id', [], @$value, ['id' => 'cust', 'class' => 'form-select form-select-sm', 'placeholder' => 'Please choose']) }}
+						<select name="customer_id" id="cust" class="form-select form-select-sm col-sm-12 @error('customer_id') is-invalid @enderror"></select>
 					</div>
 				</div>
 				<div class="form-group row m-2 {{ $errors->has('deliveryby_id') ? 'has-error' : '' }}">
-					{{ Form::label( 'otype', 'Order Type : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+					<label for="otype" class="col-form-label col-sm-4">Order Type : </label>
 					<div class="col-sm-8">
 						@foreach(\App\Models\Sales\OptSalesType::all() as $key)
 							<div class="form-check form-check-inline">
@@ -44,7 +46,7 @@
 					</div>
 					<div class="form-group col-sm-8" id="wraptextarea">
 						@if(!is_null($sale->special_request))
-							{{ Form::textarea('special_request', @$value, ['class' => 'form-control form-control-sm', 'id' => 'sreq', 'placeholder' => 'Special Request Remarks']) }}
+							<textarea name="special_request" id="sreq" class="form-control form-control-sm col-sm-12 @error('special_request') is-invalid @enderror" placeholder="Special Request Remarks">{{ old('special_request', $sale->special_request) }}</textarea>
 						@endif
 					</div>
 				</div>
@@ -53,30 +55,30 @@
 			<div class="col-sm-6">
 
 				<div class="form-group row m-2 {{ $errors->has('po_number') ? 'has-error' : '' }}">
-					{{ Form::label( 'pon', 'PO Number : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+					<label for="pon" class="col-form-label col-sm-4">PO Number : </label>
 					<div class="col-sm-8">
-						{{ Form::text('po_number', @$value, ['class' => 'form-control form-control-sm', 'id' => 'pon', 'placeholder' => 'PO Number', 'autocomplete' => 'off']) }}
+						<input type="text" name="po_number" value="{{ old('po_number', $sale->po_number) }}" id="pon" class="form-control form-control-sm col-sm-12 @error('po_number') is-invalid @enderror" placeholder="PO Number">
 					</div>
 				</div>
 				<div class="form-group row m-2 {{ $errors->has('delivery_at') ? 'has-error' : '' }}">
-					{{ Form::label( 'delivery', 'Estimation Delivery Date : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+					<label for="delivery" class="col-form-label col-sm-4">Estimation Delivery Date : </label>
 					<div class="col-sm-8" style="position: relative;">
-						{{ Form::text('delivery_at', @$value, ['class' => 'form-control form-control-sm', 'id' => 'delivery', 'placeholder' => 'Estimation Delivery Date', 'autocomplete' => 'off']) }}
+						<input type="text" name="delivery_at" value="{{ old('delivery_at', $sale->delivery_at) }}" id="delivery" class="form-control form-control-sm col-sm-12 @error('delivery_at') is-invalid @enderror" placeholder="Estimation Delivery Date">
 					</div>
 				</div>
 				<div class="form-group row m-2 {{ $errors->has('urgency') ? 'has-error' : '' }}">
-					{{ Form::label( 'urgency1', 'Mark As Urgent : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+					<label for="urgency1" class="col-form-label col-sm-4">Mark As Urgent : </label>
 					<div class="col-sm-8">
 						<div class="form-check">
-							{{ Form::checkbox('urgency', 1, @$value, ['class' => 'form-check-input m-1', 'id' => 'urgency1']) }}
 							<label class="form-check-label col-sm-4 " for="urgency1">
+								<input type="checkbox" name="urgency" value="1" id="urgency1" class="form-check-input @error('urgency') is-invalid @enderror" {{ ( old('urgency', $sale->urgency) == 1 )?'checked':NULL }}>
 								Yes
 							</label>
 						</div>
 					</div>
 				</div>
 				<div class="form-group row m-2 {{ $errors->has('sales_delivery_id.*') ? 'has-error' : '' }}">
-					{{ Form::label( 'devi', 'Delivery Instruction : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+					<label for="devi" class="col-form-label col-sm-4">Delivery Instruction : </label>
 					<div class="col">
 <?php
 $sdt = $sale->belongstomanydelivery()->get();
@@ -92,7 +94,7 @@ foreach($sdt as $t) {
 								</label>
 							</div>
 						@endforeach
-						{{ Form::textarea('special_delivery_instruction', @$value, ['class' => 'form-control form-control-sm m-1', 'id' => 'sdev', 'placeholder' => 'Special Delivery Instruction', 'autocomplete' => 'off']) }}
+						<textarea name="special_delivery_instruction" id="sdev" class="form-control form-control-sm col-sm-12 m-1 @error('special_delivery_instruction') is-invalid @enderror" placeholder="Special Delivery Instruction">{{ old('special_delivery_instruction', $sale->special_delivery_instruction) }}</textarea>
 					</div>
 				</div>
 			</div>
@@ -167,9 +169,9 @@ $trv = $r[$va]??[];
 
 		</div>
 		<div class="d-flex justify-content-center m-3">
-			{!! Form::submit('Add Order', ['class' => 'btn btn-sm btn-outline-secondary']) !!}
+			<button type="submit" class="btn btn-sm btn-outline-secondary">Add Order</button>
 		</div>
-		{{ Form::close() }}
+		</form>
 	</div>
 </div>
 @endsection
@@ -228,9 +230,9 @@ $.ajax({
 $('#specReq').change(function() {
 	if(this.checked == true) {
 		if ($('#sreq').length == 0) {
-			$('#wraptextarea').append(
-				'{{ Form::textarea('special_request', @$value, ['class' => 'form-control form-control-sm', 'id' => 'sreq', 'placeholder' => 'Special Request Remarks']) }}'
-			);
+			$('#wraptextarea').append(`
+				<textarea name="special_request" id="sreq" class="form-control form-control-sm col-sm-12 @error('special_request') is-invalid @enderror" placeholder="Special Request Remarks">{{ old('special_request', $sale->special_request) }}</textarea>
+			`);
 			$('#form').bootstrapValidator('addField', $('#wraptextarea').find('[name="special_request"]'));
 			// $('#wraptextarea').find('[name="special_request"]').css('border', '5px solid black');
 		}

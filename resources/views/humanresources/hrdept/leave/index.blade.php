@@ -639,11 +639,17 @@ $('#paleave').DataTable({
 /////////////////////////////////////////////////////////////////////////////////////////
 // fullcalendar cant use jquery
 var calendarEl = document.getElementById('calendar');
-var calendar = new FullCalendar.Calendar(calendarEl, {
+var calendar = new Calendar(calendarEl, {
 	aspectRatio: 1.0,
 	height: 2000,
 	initialView: 'multiMonthYear',
-	// initialView: 'dayGridMonth',
+	plugins: [
+		timeGridPlugin,
+		dayGridPlugin,
+		multiMonthPlugin,
+		momentPlugin,
+		bootstrap5Plugin
+	],
 	// multiMonthMaxColumns: 1,					// force a single column
 	headerToolbar: {
 		left: 'prev,next today',

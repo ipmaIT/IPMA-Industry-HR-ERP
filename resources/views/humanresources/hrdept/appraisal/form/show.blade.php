@@ -135,7 +135,7 @@
                   <tr>
                     <td class="td-border-left-right"></td>
                     <td align="center" width="40px" style="vertical-align:text-top;">
-                      {!! Form::radio('1' . $no . $no_sub, @$value, @$checked, []) !!}
+                      <input type="radio" name="{{ '1' . $no . $no_sub }}" value="{{ '1' . $no . $no_sub }}" >
                     </td>
                     <td width="50px" style="vertical-align:text-top;">
                       {!! $question->mark !!}m -
@@ -215,19 +215,19 @@
                   {!! $section_sub->section_sub !!}
                 </td>
                 <td align="center">
-                  {!! Form::radio('2' . $no, '1', @$checked, []) !!}
+                  <input type="radio" name="{{ '2' . $no }}" value="1">
                 </td>
                 <td align="center">
-                  {!! Form::radio('2' . $no, '2', @$checked, []) !!}
+                  <input type="radio" name="{{ '2' . $no }}" value="2">
                 </td>
                 <td align="center">
-                  {!! Form::radio('2' . $no, '3', @$checked, []) !!}
+                  <input type="radio" name="{{ '2' . $no }}" value="3">
                 </td>
                 <td align="center">
-                  {!! Form::radio('2' . $no, '4', @$checked, []) !!}
+                  <input type="radio" name="{{ '2' . $no }}" value="4">
                 </td>
                 <td align="center">
-                  {!! Form::radio('2' . $no, '5', @$checked, []) !!}
+                  <input type="radio" name="{{ '2' . $no }}" value="5">
                 </td>
               </tr>
               <?php $no++; ?>
@@ -259,7 +259,7 @@
               </tr>
               <tr>
                 <td colspan="2">
-                  {!! Form::textarea('3' . $no, @$value, ['style' => 'width:100%;', 'rows' => 4]) !!}
+                  <textarea name="{{'3' . $no}}" >{{ old('3' . $no) }}</textarea>
                 </td>
               </tr>
               <tr height="20px"></tr>
@@ -303,7 +303,7 @@
                 <tr>
                   <td></td>
                   <td width="40px">
-                    {!! Form::radio('4' . $no, @$value, @$checked, []) !!}
+                    <input type="radio" name="{{ '4' . $no }}" value="{{ '4' . $no }}">
                   </td>
                   <td>
                     {!! $main_question->main_question !!}
@@ -318,7 +318,9 @@
       <div style="height: 50px;"></div>
     @endforeach
 
-    {{ Form::open(['route' => ['appraisalformpdf.print'], 'method' => 'GET', 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) }}
+    <form method="GET" action="{{ route('appraisalformpdf.print') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="form-horizontal" enctype="multipart/form-data">
+      @csrf
+
     <div class="row">
       <div class="text-center">
         <input type="hidden" name="id" id="id" value="{{ $id }}">
@@ -326,7 +328,7 @@
         <input type="submit" class="btn btn-sm btn-outline-secondary" value="PRINT" target="_blank">
       </div>
     </div>
-    {{ Form::close() }}
+    </form>
 
     <div class="row mt-3">
       <div class="col-md-12 text-center">

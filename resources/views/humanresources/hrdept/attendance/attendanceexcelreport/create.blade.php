@@ -6,23 +6,24 @@
 	<h4 class="align-items-start">Generate Payslip Excel Report</h4>
 	<div class="row justify-content-center">
 		<div class="col-sm-6">
-			{{ Form::open(['route' => ['excelreport.store'], 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) }}
+		  <form method="POST" action="{{ route('excelreport.store') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="form-horizontal" enctype="multipart/form-data">
+		    @csrf
 			<div class="form-group row mb-3 {{ $errors->has('from') ? 'has-error' : '' }}">
-				{{ Form::label( 'from1', 'From : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="from1" class="col-sm-4 col-form-label">From : </label>
 				<div class="col-sm-8" style="position:relative;">
-					{{ Form::text('from', @$value, ['class' => 'form-control form-control-sm col-auto', 'id' => 'from1', 'placeholder' => 'From', 'autocomplete' => 'off']) }}
+					<input type="text" name="from" value="{{ old('from') }}" id="from1" class="form-control form-control-sm col-auto @error('from') is-invalid @enderror" placeholder="From">
 				</div>
 			</div>
 			<div class="form-group row mb-3 {{ $errors->has('to') ? 'has-error' : '' }}">
-				{{ Form::label( 'to1', 'To : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="to1" class="col-sm-4 col-form-label">To : </label>
 				<div class="col-sm-8" style="position:relative;">
-					{{ Form::text('to', @$value, ['class' => 'form-control form-control-sm col-auto', 'id' => 'to1', 'placeholder' => 'To', 'autocomplete' => 'off']) }}
+					<input type="text" name="to" value="{{ old('to') }}" id="to1" class="form-control form-control-sm col-auto @error('to') is-invalid @enderror" placeholder="To">
 				</div>
 			</div>
 			<div class="col-sm-12 offset-4 mb-6">
-				{!! Form::submit('Generate Excel', ['class' => 'btn btn-sm btn-outline-secondary']) !!}
+				<button type="submit" class="btn btn-sm btn-outline-secondary">Generate Excel</button>
 			</div>
-			{!! Form::close() !!}
+			</form>
 		</div>
 	</div>
 <?php

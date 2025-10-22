@@ -31,7 +31,7 @@ class QuotationItemController extends Controller
 	public function store(Request $request)
 	{
 		QuotItem::create( array_add( $request->only(['item', 'info', 'price', 'remarks']), 'active', 1 ) );
-		Session::flash('flash_message', 'Data successfully stored!');
+		Session::flash('message', 'Data successfully stored!');
 		return redirect(route('quotItem.index'));
 	}
 
@@ -48,7 +48,7 @@ class QuotationItemController extends Controller
 	public function update(Request $request, QuotItem $quotItem)
 	{
 		$quotItem->update($request->only(['item', 'info', 'price', 'remarks']));
-		Session::flash('flash_message', 'Data successfully updated!');
+		Session::flash('message', 'Data successfully updated!');
 		return redirect(route('quotItem.index'));
 	}
 

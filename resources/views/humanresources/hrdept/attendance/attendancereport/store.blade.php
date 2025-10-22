@@ -22,64 +22,66 @@ use App\Models\HumanResources\HROutstation;
 
 ?>
 <div class="container table-responsive row align-items-start justify-content-center">
-@include('humanresources.hrdept.navhr')
+	@include('humanresources.hrdept.navhr')
 	<div class="row g-3">
 		<h4>Attendance By Staff</h4>
-		{{ Form::open(['route' => 'attendancereportpdf.store', 'method' => 'GET',  'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) }}
+		<form method="GET" action="{{ route('attendancereportpdf.store') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="form-horizontal" enctype="multipart/form-data">
+			@csrf
 			<div class="col-sm-2">
 				<input type="hidden" name="from" value="{!! $request->from !!}">
 				<input type="hidden" name="to" value="{!! $request->to !!}">
 				@if($sa)
-					<?php $po = 1; ?>
-					@foreach($sa as $key)
-						<input type="hidden" id="{{ $po++ }}" name="staff_id[]" value="{!! $key->staff_id !!}">
-					@endforeach
+				<?php $po = 1; ?>
+				@foreach($sa as $key)
+				<input type="hidden" id="{{ $po++ }}" name="staff_id[]" value="{!! $key->staff_id !!}">
+				@endforeach
 				@endif
 				<input type="submit" class="form-control form-control-sm btn btn-sm btn-outline-secondary" value="Print PDF" target="_blank">
 			</div>
-		{{ Form::close() }}
+			{{ Form::close() }}
+		</form>
 		<p>&nbsp;</p>
 		@if($sa)
-			<?php $i = 0; ?>
-			@foreach($sa as $v)
-				<?php
-				$n = 0;
-				$ha = \App\Models\HumanResources\HRAttendance::where('staff_id', $v->staff_id)
-						->where(function (Builder $query) use ($request){
-							$query->whereDate('attend_date', '>=', $request->from)
-							->whereDate('attend_date', '<=', $request->to);
-						})
-						->orderBy('attend_date', 'ASC')
-						->get();
-				?>
-			<div class="d-print-table">
-				<h5>
-					{{ Login::where([['staff_id', $v->staff_id], ['active', 1]])->first()?->username }} {{ Staff::find($v->staff_id)->name }}<br />
-					{{ Staff::find($v->staff_id)->belongstomanydepartment()->wherePivot('main', 1)->first()->department }}<br />
-					{{ Staff::find($v->staff_id)->belongstorestdaygroup?->group }}
-				</h5>
-				<table id="attendancestaff_" class="table table-hover table-sm table-bordered align-middle" style="font-size:12px">
-					<thead>
-						<tr>
-							<th scope="col">ID</th>
-							<th scope="col">Name</th>
-							<th scope="col">Type</th>
-							<th scope="col">Cause</th>
-							<th scope="col">Leave</th>
-							<th scope="col">Date</th>
-							<th scope="col">In</th>
-							<th scope="col">Break</th>
-							<th scope="col">Resume</th>
-							<th scope="col">Out</th>
-							<th scope="col">Duration</th>
-							<th scope="col">Overtime</th>
-							<th scope="col">Outstation</th>
-							<th scope="col">Remarks</th>
-							<th scope="col">Exception</th>
-						</tr>
-					</thead>
-					<tbody>
-					@foreach($ha as $v1)
+		<?php $i = 0; ?>
+		@foreach($sa as $v)
+		<?php
+		$n = 0;
+		$ha = \App\Models\HumanResources\HRAttendance::where('staff_id', $v->staff_id)
+		->where(function (Builder $query) use ($request){
+			$query->whereDate('attend_date', '>=', $request->from)
+			->whereDate('attend_date', '<=', $request->to);
+		})
+		->orderBy('attend_date', 'ASC')
+		->get();
+		?>
+		<div class="d-print-table">
+			<h5>
+				{{ Login::where([['staff_id', $v->staff_id], ['active', 1]])->first()?->username }} {{ Staff::find($v->staff_id)->name }}<br />
+				{{ Staff::find($v->staff_id)->belongstomanydepartment()->wherePivot('main', 1)->first()->department }}<br />
+				{{ Staff::find($v->staff_id)->belongstorestdaygroup?->group }}
+			</h5>
+			<table id="attendancestaff_" class="table table-hover table-sm table-bordered align-middle" style="font-size:12px">
+				<thead>
+					<tr>
+						<th scope="col">ID</th>
+						<th scope="col">Name</th>
+						<th scope="col">Type</th>
+						<th scope="col">Cause</th>
+						<th scope="col">Leave</th>
+						<th scope="col">Date</th>
+						<th scope="col">In</th>
+						<th scope="col">Break</th>
+						<th scope="col">Resume</th>
+						<th scope="col">Out</th>
+						<th scope="col">Duration</th>
+						<th scope="col">Overtime</th>
+						<th scope="col">Outstation</th>
+						<th scope="col">Remarks</th>
+						<th scope="col">Exception</th>
+					</tr>
+				</thead>
+				<tbody>
+		@foreach($ha as $v1)
 <?php
 /////////////////////////////
 // to determine working hour of each user

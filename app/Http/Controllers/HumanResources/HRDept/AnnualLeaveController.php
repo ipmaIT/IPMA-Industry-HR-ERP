@@ -85,7 +85,7 @@ class AnnualLeaveController extends Controller
 	public function update(Request $request, HRLeaveAnnual $annualleave): RedirectResponse
 	{
 		$annualleave->update($request->except(['_method', '_token']));
-		Session::flash('flash_message', 'Data successfully updated!');
+		Session::flash('message', 'Data successfully updated!');
 		return Redirect::route('annualleave.index');
 	}
 

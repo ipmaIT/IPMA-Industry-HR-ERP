@@ -4,63 +4,64 @@
 <div class="col-sm-12 row">
 	@include('humanresources.hrdept.navhr')
 	<h4>Add Customer</h4>
-	{!! Form::open(['route' => ['outstationcustomer.store'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) !!}
+	<form method="POST" action="{{ route('outstationcustomer.store') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+		@csrf
 
-	<div class="form-group row mb-3 {{ $errors->has('customer') ? 'has-error' : '' }}">
-		{{Form::label('customer', 'Company Name : ', ['class' => 'col-sm-2 col-form-label'])}}
+	<div class="form-group row mb-3 @error('customer') has-error @enderror">
+		<label for="customer" class="col-form-label col-sm-2">Company Name : </label>
 		<div class="col-md-10">
-			{{ Form::text('customer', @$value, ['class' => 'form-control form-control-sm col-max', 'id' => 'customer', 'placeholder' => 'Company Name', 'autocomplete' => 'off']) }}
+			<input type="text" name="customer" value="{{ old('customer') }}" id="customer" class="form-control form-control-sm col-sm-12 @error('customer') is-invalid @enderror" placeholder="Company Name">
 		</div>
 	</div>
 
-	<div class="form-group row mb-3 {{ $errors->has('contact') ? 'has-error' : '' }}">
-		{{ Form::label( 'contact', 'Customer Name : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+	<div class="form-group row mb-3 @error('contact') has-error @enderror">
+		<label for="contact" class="col-form-label col-sm-2">Customer Name : </label>
 		<div class="col-md-10">
-			{{ Form::text('contact', @$value, ['class' => 'form-control form-control-sm col-max', 'id' => 'contact', 'placeholder' => 'Customer Name', 'autocomplete' => 'off']) }}
+			<input type="text" name="contact" value="{{ old('contact') }}" id="contact" class="form-control form-control-sm col-sm-12 @error('contact') is-invalid @enderror" placeholder="Customer Name">
 		</div>
 	</div>
 
-	<div class="form-group row mb-3 {{ $errors->has('phone') ? 'has-error' : '' }}">
-		{{ Form::label( 'phone', 'Phone Num : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+	<div class="form-group row mb-3 @error('phone') has-error @enderror">
+		<label for="phone" class="col-form-label col-sm-2">Phone Num : </label>
 		<div class="col-md-10">
-			{{ Form::text('phone', @$value, ['class' => 'form-control form-control-sm col-auto', 'id' => 'phone', 'placeholder' => 'Phone Num', 'autocomplete' => 'off']) }}
+			<input type="text" name="phone" value="{{ old('phone') }}" id="phone" class="form-control form-control-sm col-sm-12 @error('phone') is-invalid @enderror" placeholder="Phone Num">
 		</div>
 	</div>
 
-	<div class="form-group row mb-3 {{ $errors->has('fax') ? 'has-error' : '' }}">
-		{{ Form::label( 'fax', 'Fax Num : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+	<div class="form-group row mb-3 @error('fax') has-error @enderror">
+		<label for="fax" class="col-form-label col-sm-2">Fax Num : </label>
 		<div class="col-md-10">
-			{{ Form::text('fax', @$value, ['class' => 'form-control form-control-sm col-auto', 'id' => 'fax', 'placeholder' => 'Fax Num', 'autocomplete' => 'off']) }}
+			<input type="text" name="fax" value="{{ old('fax') }}" id="fax" class="form-control form-control-sm col-sm-12 @error('fax') is-invalid @enderror" placeholder="Fax Number">
 		</div>
 	</div>
 
-	<div class="form-group row mb-3 {{ $errors->has('address') ? 'has-error' : '' }}">
-		{{ Form::label( 'address', 'Address : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+	<div class="form-group row mb-3 @error('address') has-error @enderror">
+		<label for="address" class="col-form-label col-sm-2">Address : </label>
 		<div class="col-md-10">
-			{{ Form::textarea('address', @$value, ['class' => 'form-control form-control-sm col-max', 'id' => 'address', 'placeholder' => 'Address', 'autocomplete' => 'off', 'cols' => '120', 'rows' => '3']) }}
+			<textarea name="address" id="address" class="form-control form-control-sm col-sm-12 @error('address') is-invalid @enderror" placeholder="Address">{{ old('address') }}</textarea>
 		</div>
 	</div>
 
-	<div class="form-group row mb-3 {{ $errors->has('latitude') ? 'has-error' : '' }}">
-		{{ Form::label( 'latitude', 'Latitude : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+	<div class="form-group row mb-3 @error('latitude') has-error @enderror">
+		<label for="latitude" class="col-form-label col-sm-2">Latitude : </label>
 		<div class="col-md-10">
-			{{ Form::text('latitude', @$value, ['class' => 'form-control form-control-sm col-auto', 'id' => 'latitude', 'placeholder' => 'Latitude', 'autocomplete' => 'off']) }}
+			<input type="text" name="latitude" value="{{ old('latitude') }}" id="latitude" class="form-control form-control-sm col-sm-12 @error('latitude') is-invalid @enderror" placeholder="Latitude">
 		</div>
 	</div>
 
-	<div class="form-group row mb-3 {{ $errors->has('longitude') ? 'has-error' : '' }}">
-		{{ Form::label( 'longitude', 'Longitude : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+	<div class="form-group row mb-3 @error('longitude') has-error @enderror">
+		<label for="longitude" class="col-form-label col-sm-2">Longitude : </label>
 		<div class="col-md-10">
-			{{ Form::text('longitude', @$value, ['class' => 'form-control form-control-sm col-auto', 'id' => 'longitude', 'placeholder' => 'Longitude', 'autocomplete' => 'off']) }}
+			<input type="text" name="longitude" value="{{ old('longitude') }}" id="longitude" class="form-control form-control-sm col-sm-12 @error('longitude') is-invalid @enderror" placeholder="Longitude">
 		</div>
 	</div>
 
 	<div class="form-group row mb-3 g-3 p-2">
 		<div class="col-sm-10 offset-sm-2">
-			{!! Form::button('Add', ['class' => 'btn btn-sm btn-outline-secondary', 'type' => 'submit']) !!}
+			<button type="submit" class="btn btn-sm btn-outline-secondary">Add</button>
 		</div>
 	</div>
-	{{ Form::close() }}
+</form>
 
 </div>
 @endsection

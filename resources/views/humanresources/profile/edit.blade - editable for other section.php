@@ -50,7 +50,9 @@ $totalRows_children = $childrens->count();
 		<div class="col-md-10 border-right">
 			<div class="p-1 py-3">
 
-				{!! Form::model($profile, ['route' => ['profile.update', $profile->id], 'method' => 'PATCH', 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) !!}
+			<form method="POST" action="{{ route('profile.update', $profile->id) }}" accept-charset="UTF-8" id="form" class="form-horizontal" autocomplete="off" enctype="multipart/form-data">
+				@csrf
+				@method('PATCH')
 
 				<div class="row">
 					<div class="d-flex justify-content-between align-items-center">
@@ -512,7 +514,7 @@ $totalRows_children = $childrens->count();
 					</div>
 				</div>
 
-				{!! Form::close() !!}
+				</form>/
 
 				<div class="row mt-4">
 					<div class="text-center">

@@ -38,19 +38,19 @@
   </style>
 
   <?php
-  
+
   use Carbon\Carbon;
   use App\Models\Staff;
   use App\Models\HumanResources\HRAppraisalMark;
-  
+
   $staff = Staff::join('pivot_apoint_appraisals', 'pivot_apoint_appraisals.evaluatee_id', '=', 'staffs.id')->join('logins', 'logins.staff_id', '=', 'staffs.id')->where('pivot_apoint_appraisals.id', $id)->select('staffs.id as staffid', 'staffs.appraisal_category_id as catid', 'staffs.*', 'logins.*', 'pivot_apoint_appraisals.*')->first();
-  
+
   $pivotappraisal = DB::table('pivot_category_appraisals')
       ->join('option_appraisal_categories', 'option_appraisal_categories.id', '=', 'pivot_category_appraisals.category_id')
       ->where('pivot_category_appraisals.category_id', $staff->catid)
       ->orderBy('version', 'DESC')
       ->first();
-  
+
   $appraisals = DB::table('pivot_category_appraisals')
       ->where('category_id', $pivotappraisal->category_id)
       ->where('version', $pivotappraisal->version)
@@ -168,7 +168,7 @@
                     ->orderBy('mark', 'ASC')
                     ->orderBy('sort', 'ASC')
                     ->get();
-                
+
                 $mark1 = 0;
                 ?>
 
@@ -186,7 +186,7 @@
                   $loop1 = HRAppraisalMark::where('pivot_apoint_id', $id)
                       ->where('question_id', $question->id)
                       ->first();
-                  
+
                   if ($mark1 < $question->mark) {
                       $mark1 = $question->mark;
                   }
@@ -197,7 +197,7 @@
                   <tr>
                     <td class="td-border-left-right"></td>
                     <td align="center" width="40px" style="vertical-align:text-top;">
-                      {!! Form::radio('1' . $no . $no_sub, $question->id, ($loop1->question_id ?? null) == $question->id, ['required' => 'required']) !!}
+                      <input type="radio" name="1{{ $no . $no_sub }}" value="{{ $question?->id }}" {{ ($loop1?->question_id == $question?->id)?'checked':NULL }} required>
                     </td>
                     <td width="50px" style="vertical-align:text-top;">
                       {!! $question->mark !!}m -
@@ -282,7 +282,7 @@
               $loop2 = HRAppraisalMark::where('pivot_apoint_id', $id)
                   ->where('section_sub_id', $section_sub->id)
                   ->first();
-              
+
               $total_mark2 = $total_mark2 + 5;
               ?>
 
@@ -298,19 +298,19 @@
                   {!! $section_sub->section_sub !!}
                 </td>
                 <td align="center">
-                  {!! Form::radio('2' . $no, '1', ($loop2->mark ?? null) == '1', ['required' => 'required']) !!}
+                  <input type="radio" name="2{{ $no }}" value="1" {{ ($loop2?->mark == 1)?'checked':NULL }} required>
                 </td>
                 <td align="center">
-                  {!! Form::radio('2' . $no, '2', ($loop2->mark ?? null) == '2', []) !!}
+                  <input type="radio" name="2{{ $no }}" value="2" {{ ($loop2?->mark == 2)?'checked':NULL }} required>
                 </td>
                 <td align="center">
-                  {!! Form::radio('2' . $no, '3', ($loop2->mark ?? null) == '3', []) !!}
+                  <input type="radio" name="2{{ $no }}" value="3" {{ ($loop2?->mark == 3)?'checked':NULL }} required>
                 </td>
                 <td align="center">
-                  {!! Form::radio('2' . $no, '4', ($loop2->mark ?? null) == '4', []) !!}
+                  <input type="radio" name="2{{ $no }}" value="4" {{ ($loop2?->mark == 4)?'checked':NULL }} required>
                 </td>
                 <td align="center">
-                  {!! Form::radio('2' . $no, '5', ($loop2->mark ?? null) == '5', []) !!}
+                  <input type="radio" name="2{{ $no }}" value="5" {{ ($loop2?->mark == 5)?'checked':NULL }} required>
                 </td>
               </tr>
               <?php $no++; ?>
@@ -356,7 +356,7 @@
               </tr>
               <tr>
                 <td colspan="2">
-                  {!! Form::textarea('3' . $no, $loop3->remark ?? null, ['style' => 'width:100%;', 'rows' => 4, 'required' => 'required']) !!}
+                  <textarea name="3{{ $no }}" style='width:100%;' rows="4" required>{{ $loop3?->remark }}</textarea>
                 </td>
               </tr>
               <tr height="20px"></tr>
@@ -410,7 +410,7 @@
                 <tr>
                   <td></td>
                   <td width="40px">
-                    {!! Form::radio('4' . $no, $main_question->id, ($loop4->main_question_id ?? null) == $main_question->id, ['required' => 'required']) !!}
+                    <input type="radio" name="4{{ $no }}" value="{{ $main_question->id }}" {{ ($loop4?->main_question_id == $main_question?->id)?'checked':NULL }} required>
                   </td>
                   <td>
                     {!! $main_question->main_question !!}

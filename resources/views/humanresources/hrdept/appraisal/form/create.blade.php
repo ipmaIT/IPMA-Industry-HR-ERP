@@ -19,11 +19,10 @@
 
   <table height="15px"></table>
 
-  {{ Form::open(['route' => ['appraisalform.store'], 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) }}
+  <form method="POST" action="{{ route('appraisalform.store') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="form-horizontal" enctype="multipart/form-data">
+    @csrf
 
   <input type="hidden" name="category_id" value="{{ $category->id }}">
-
-
 
   <div class="row">
     <div class="col-sm-6 img1 mb-3">
@@ -61,10 +60,10 @@
   </div>
 
   <div class="d-flex justify-content-center m-3">
-		{!! Form::submit('SUBMIT', ['class' => 'btn btn-sm btn-outline-secondary']) !!}
+    <button type="submit" class="btn btn-sm btn-outline-secondary">SUBMIT</button>
 	</div>
 
-  {{ Form::close() }}
+  </form>
 
   <div class="row mt-3">
     <div class="col-md-12 text-center">
@@ -118,7 +117,7 @@ $(p1_add).click(function(){
         '</div>' +
       '</div>' +
     '</div>'
-  ); 
+  );
 
   CKEDITOR.replace('editor'+num, {
     toolbar: [
@@ -183,7 +182,7 @@ $(p1_add).click(function(){
           '</div>' +
         '</div>' +
       '</div>'
-    ); 
+    );
 
     CKEDITOR.replace('editor'+num, {
       toolbar: [
@@ -211,7 +210,7 @@ $(p1_add).click(function(){
       console.log(num);
     });
 
-    
+
     /////////////////////////////////////////////////////////////////////////////////////
     // p3
     var p3_add	= $(".p3_add"+num);
