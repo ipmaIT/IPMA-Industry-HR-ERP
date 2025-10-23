@@ -91,11 +91,11 @@ class Login extends Authenticatable // implements MustVerifyEmail
 	// }
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
-    /**
-     * Get the e-mail address where password reset links are sent.
-     *
-     * @return string
-     */
+		/**
+		 * Get the e-mail address where password reset links are sent.
+		 *
+		 * @return string
+		 */
 	public function getEmailForPasswordReset()
 	{
 		// return $this->email;
