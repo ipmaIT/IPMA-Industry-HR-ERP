@@ -41,6 +41,3 @@
 				</div>
 			</nav>
 			<!-- end navigator -->
-
-
-		<!-- </header> -->

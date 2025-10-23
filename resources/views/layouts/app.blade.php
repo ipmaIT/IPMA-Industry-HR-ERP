@@ -11,8 +11,8 @@ $currentYear = Carbon::now()->year;
 	<link href="" type="image/x-icon" rel="icon" />
 	<meta name="description" content="">
 	<title>{!! config('app.name') !!}</title>
-	<link href="{{ asset('images/logo.png') }}" type="image/x-icon" rel="icon" />
 	<meta name="keywords" content="erp system, erp" />
+	<link href="{{ asset('images/logo.png') }}" type="image/x-icon" rel="icon" />
 	<!-- CSRF Token -->
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<!-- Styles -->
