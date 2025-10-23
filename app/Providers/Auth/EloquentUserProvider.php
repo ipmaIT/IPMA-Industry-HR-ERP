@@ -29,6 +29,7 @@ class EloquentUserProvider extends UserProvider
 		//
 	}
 
+	// to prevent auto hash password by laravel when using plain or old hash driver password
 	public function rehashPasswordIfRequired($user, array $credentials, $validated = true)
 	{
 		// Disable Laravel’s auto password rehash feature
