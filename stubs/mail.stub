@@ -9,6 +9,18 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
+// mailer
+use Illuminate\Mail\Mailables\Attachment;
+use Illuminate\Mail\Mailables\Address;
+
+// load model
+
+
+// load Carbon
+use \Carbon\Carbon;
+use \Carbon\CarbonPeriod;
+use \Carbon\CarbonInterval;
+
 class {{ class }} extends Mailable
 {
     use Queueable, SerializesModels;
@@ -27,6 +39,7 @@ class {{ class }} extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
+            from: new Address(config('mail.from.address'), config('mail.from.name')),
             subject: '{{ subject }}',
         );
     }
@@ -48,6 +61,9 @@ class {{ class }} extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        return [
+            Attachment::fromPath(storage_path('app/public/pdf/').'file.pdf',
+            // Storage::path("public/pdf/file.pdf")
+        ];
     }
 }
