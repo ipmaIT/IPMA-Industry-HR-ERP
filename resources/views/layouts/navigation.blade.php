@@ -25,12 +25,12 @@
 										<li><a class="dropdown-item" href="{{ route('leave.index') }}"><i class="fa-solid fa-mug-hot"></i> Apply Leave</a></li>
 										<li><a class="dropdown-item" href="{{ route('outstationattendance.index') }}"><i class="fa-solid fa-user-plus"></i> Outstation Attendance</a></li>
 										<li><a class="dropdown-item" href="{{ route('appraisalmark.index') }}"><i class="fa-solid fa-list"></i> Appraisal</a></li>
-										<form method="POST" action="{{ route('logout') }}">
-											@csrf
-											<li>
+										<li>
+											<form method="POST" action="{{ route('logout') }}">
+												@csrf
 												<a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();"><i class="fas fa-light fa-right-from-bracket"></i> Log Out</a>
-											</li>
-										</form>
+											</form>
+										</li>
 									</ul>
 								</div>
 							@else

@@ -15,6 +15,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 // use Illuminate\Database\Eloquent\Relations\BelongsTo;
 // use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+// load helper
+use Illuminate\Support\Str;
+
 class {{ class }} extends Model
 {
     {{ factory }}
@@ -29,4 +32,13 @@ class {{ class }} extends Model
     // protected $rememberTokenName = '';
 
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // set column attribute
+    // public function setNameAttribute($value)
+    // {
+    //     $this->attributes['name'] = ucwords(Str::lower($value));
+    // }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // relationship
 }
