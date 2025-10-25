@@ -327,7 +327,7 @@ if (typeof jQuery === 'undefined') {
                     if (!updateAll || i === total - 1) {
                         $('<div/>')
                             .css('display', 'none')
-                            .addClass('invalid-feedback help-block')
+                            .addClass('help-block')
                             .attr('data-bv-validator', validatorName)
                             .attr('data-bv-for', field)
                             .attr('data-bv-result', this.STATUS_NOT_VALIDATED)
@@ -351,20 +351,11 @@ if (typeof jQuery === 'undefined') {
                     // $parent.removeClass('has-success').removeClass('has-error').addClass('has-feedback');
                     // Keep error messages which are populated from back-end
                     $parent.addClass('has-feedback');
-                    // Create feedback icon safely (prevent FA auto-replace)
-var iconElement = document.createElement('i');
-var $icon = $(iconElement)
-    .css('display', 'none')
-    .addClass('form-control-feedback')
-    .attr('data-bv-icon-for', field);
-
-// Find related help-block and insert icon inside it
-var $helpBlock = $message.find('.invalid-feedback.help-block[data-bv-for="' + field + '"]').first();
-if ($helpBlock.length) {
-    $helpBlock.prepend($icon);
-} else {
-    $icon.insertAfter($field);
-}
+                    var $icon = $('<i/>')
+                                    .css('display', 'none')
+                                    .addClass('form-control-feedback')
+                                    .attr('data-bv-icon-for', field)
+                                    .insertAfter($field);
 
                     // Place it after the container of checkbox/radio
                     // so when clicking the icon, it doesn't effect to the checkbox/radio element
