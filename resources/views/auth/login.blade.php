@@ -4,18 +4,30 @@
 	<form method="POST" action="{{ route('login') }}" id='form' class="needs-validation" autocomplete="off" enctype="multipart/form-data">
 	@csrf
 	<div class="mb-3 row">
-		<div class="form-group row {{ $errors->has('username') ? 'has-error' : '' }}">
+		<div class="form-group row @error('username') has-error @enderror">
 			<label for="username" class="col-auto col-form-label col-form-label-sm">Username : </label>
 			<div class="col-sm-6">
-				<input type="text" name="username" value="{{ old('username') }}" id="username" class="form-control form-control-sm" id="username" placeholder="Username">
+				<input type="text" name="username" value="{{ old('username') }}" id="username" class="form-control form-control-sm @error('username') is-invalid @enderror" id="username" placeholder="Username">
+				@error('username')
+					<div class="invalid-feedback">
+						{{ $message }}
+					</div>
+				@enderror
+
 			</div>
 		</div>
 	</div>
 	<div class="mb-3 row">
-		<div class="form-group row {{ $errors->has('password') ? 'has-error' : '' }}">
+		<div class="form-group row @error('password') has-error @enderror">
 			<label for="password" class="col-auto col-form-label col-form-label-sm">Password : </label>
 			<div class="col-sm-6">
-				<input type="password" name="password" class="form-control form-control-sm" id="password" placeholder="Password">
+				<input type="password" name="password" class="form-control form-control-sm @error('password') is-invalid @enderror" id="password" placeholder="Password">
+				@error('password')
+					<div class="invalid-feedback">
+						{{ $message }}
+					</div>
+				@enderror
+
 			</div>
 		</div>
 	</div>
@@ -44,11 +56,6 @@
 // validator
 $(document).ready(function() {
 	$('#form').bootstrapValidator({
-		feedbackIcons: {
-			valid: 'fas fa-light fa-check',
-			invalid: 'fas fa-sharp fa-light fa-xmark',
-			validating: 'fas fa-duotone fa-spinner-third'
-		},
 		fields: {
 			username: {
 				validators: {
