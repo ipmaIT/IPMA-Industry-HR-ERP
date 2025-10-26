@@ -108,11 +108,6 @@ $('#week1,#week2').select2({
 /////////////////////////////////////////////////////////////////////////////////////////
 // bootstrap validator
 $('#form').bootstrapValidator({
-	feedbackIcons: {
-		valid: '',
-		invalid: '',
-		validating: ''
-	},
 	fields: {
 		'week_id': {
 			validators: {

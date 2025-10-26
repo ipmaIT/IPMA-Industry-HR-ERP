@@ -90,11 +90,6 @@ $('#mar, #rel').select2({
 /////////////////////////////////////////////////////////////////////////////////////////
 // bootstrap validator
 $('#form').bootstrapValidator({
-	feedbackIcons: {
-		valid: '',
-		invalid: '',
-		validating: ''
-	},
 	fields: {
 		ot_date: {
 			validators: {

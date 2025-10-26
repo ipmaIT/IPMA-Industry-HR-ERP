@@ -76,11 +76,6 @@ $(document).on('keyup mouseup', '#ala', function () {
 // validator
 $(document).ready(function() {
 	$('#form').bootstrapValidator({
-		feedbackIcons: {
-			valid: '',
-			invalid: '',
-			validating: ''
-		},
 		fields: {
 			annual_leave: {
 				validators: {

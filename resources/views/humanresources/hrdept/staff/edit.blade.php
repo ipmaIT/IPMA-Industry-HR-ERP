@@ -1399,11 +1399,6 @@ $(crb_wrappers).on("click",".crossbackup_remove", function(e){
 /////////////////////////////////////////////////////////////////////////////////////////
 // bootstrap validator
 $('#form').bootstrapValidator({
-	feedbackIcons: {
-		valid: '',
-		invalid: '',
-		validating: ''
-	},
 	fields: {
 		username: {
 			validators: {

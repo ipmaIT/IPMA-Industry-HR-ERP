@@ -173,11 +173,6 @@ $('#date_start, #date_end').datetimepicker({
 // VALIDATOR
 $(document).ready(function() {
 	$('#form').bootstrapValidator({
-		feedbackIcons: {
-			valid: '',
-			invalid: '',
-			validating: ''
-		},
 
 		fields: {
 			'staff_id[]': {

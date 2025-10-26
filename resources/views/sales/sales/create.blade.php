@@ -446,11 +446,6 @@ $(crb_wrappers).on("click",".jdesc_remove", function(e){
 /////////////////////////////////////////////////////////////////////////////////////////
 // validator
 $('#form').bootstrapValidator({
-	feedbackIcons: {
-		valid: '',
-		invalid: '',
-		validating: ''
-	},
 	fields: {
 
 		date_order: {

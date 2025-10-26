@@ -848,11 +848,6 @@ $('#leave_id').on('change', function () {
 // validator
 $(document).ready(function() {
 	$('#form').bootstrapValidator({
-		feedbackIcons: {
-			valid: '',
-			invalid: '',
-			validating: ''
-		},
 		fields: {
 			leave_type_id: {
 				validators: {

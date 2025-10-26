@@ -1146,11 +1146,6 @@ $('.select-input').select2({
 // VALIDATOR
 $(document).ready(function() {
 	$('#form').bootstrapValidator({
-		feedbackIcons: {
-			valid: '',
-			invalid: '',
-			validating: ''
-		},
 		fields: {
 			ic: {
 				validators: {
