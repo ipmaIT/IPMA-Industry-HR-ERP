@@ -123,11 +123,6 @@ $('#ede').datetimepicker({
 // validator
 $(document).ready(function() {
 	$('#form').bootstrapValidator({
-		feedbackIcons: {
-			valid: '',
-			invalid: '',
-			validating: ''
-		},
 		fields: {
 			time_start_am: {
 				validators: {

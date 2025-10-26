@@ -2653,11 +2653,6 @@ ${suppdoc}
 // validator
 $(document).ready(function() {
 	$('#form').bootstrapValidator({
-		feedbackIcons: {
-			valid: '',
-			invalid: '',
-			validating: ''
-		},
 		fields: {
 			leave_type_id: {
 				validators: {

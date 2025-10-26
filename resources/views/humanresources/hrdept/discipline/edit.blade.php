@@ -208,11 +208,6 @@ $('#misconduct_date, #action_taken_date').datetimepicker({
 // VALIDATOR
 $(document).ready(function() {
 	$('#form').bootstrapValidator({
-		feedbackIcons: {
-			valid: '',
-			invalid: '',
-			validating: ''
-		},
 
 		fields: {
 			staff_id: {
