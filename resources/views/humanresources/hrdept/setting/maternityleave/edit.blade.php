@@ -68,11 +68,6 @@ use \Carbon\Carbon;
 // validator
 $(document).ready(function() {
 	$('#form').bootstrapValidator({
-		feedbackIcons: {
-			valid: '',
-			invalid: '',
-			validating: ''
-		},
 		fields: {
 			annual_leave: {
 				validators: {

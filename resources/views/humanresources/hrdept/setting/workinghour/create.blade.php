@@ -60,11 +60,6 @@ $('#effective_date_end').datetimepicker({
 // bootstrap validator
 
 $('#form').bootstrapValidator({
-	feedbackIcons: {
-		valid: '',
-		invalid: '',
-		validating: ''
-	},
 	fields: {
 		'effective_date_start': {
 			validators: {

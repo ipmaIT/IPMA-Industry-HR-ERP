@@ -527,11 +527,6 @@ function SwalDelete(jobdescID){
 /////////////////////////////////////////////////////////////////////////////////////////
 // validator
 $('#form').bootstrapValidator({
-	feedbackIcons: {
-		valid: '',
-		invalid: '',
-		validating: ''
-	},
 	fields: {
 
 		date_order: {

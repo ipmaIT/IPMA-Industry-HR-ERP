@@ -71,11 +71,6 @@
 // bootstrap validator
 
 $('#form').bootstrapValidator({
-	feedbackIcons: {
-		valid: '',
-		invalid: '',
-		validating: ''
-	},
 	fields: {
 		'customer': {
 			validators: {

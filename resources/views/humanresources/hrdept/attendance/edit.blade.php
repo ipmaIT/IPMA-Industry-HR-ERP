@@ -813,11 +813,6 @@ $('#leave_id,#attendance_type_id,#daytype_id').select2({
 // VALIDATION
 $(document).ready(function() {
 	$('#form').bootstrapValidator({
-		feedbackIcons: {
-			valid: '',
-			invalid: '',
-			validating: ''
-		},
 		fields: {
 
 			daytype_id: {

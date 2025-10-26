@@ -432,11 +432,6 @@ $('#date').datetimepicker({
 // VALIDATOR
 $(document).ready(function() {
 	$('#form').bootstrapValidator({
-		feedbackIcons: {
-			valid: '',
-			invalid: '',
-			validating: ''
-		},
 
 		fields: {
 			date_start: {
