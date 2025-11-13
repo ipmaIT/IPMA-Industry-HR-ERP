@@ -145,7 +145,7 @@ $evaluatees = Staff::join('logins', 'staffs.id', '=', 'logins.staff_id')
 										</div>
 										<div class="modal-body align-items-start justify-content-center">
 											<div class="row mb-1">
-												<div class="mb-1">
+												<div class="form-group mb-1">
 													<select name="appraisal_category_id{{ $staff->id }}" id="appraisal_category_id{{ $staff->id }}" class="form-control select-input form-select form-select-sm">
 														<option value="">Please choose</option>
 														@foreach($appraisal_category as $id => $name)
@@ -193,8 +193,8 @@ $evaluatees = Staff::join('logins', 'staffs.id', '=', 'logins.staff_id')
 				<div class="col-2">
 					Evaluator
 				</div>
-				<div class="col-10">
-					<select name="evaluator_id" id="evaluator_id" class="form-control select-input form-select form-select-sm">
+				<div class="form-group col-10">
+					<select name="evaluator_id" id="evaluator_id" class="form-select form-select-sm @error('evaluator_id') is-invalid @enderror">
 						<option value="">Please choose</option>
 						@foreach($evaluator as $r1 => $r2)
 						<option value="{{ $r1 }}">{{ $r2 }}</option>

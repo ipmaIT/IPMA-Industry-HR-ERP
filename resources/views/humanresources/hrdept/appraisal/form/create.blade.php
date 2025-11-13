@@ -56,6 +56,7 @@
     </div>
     <div class="p1_wrap" style="width: 96%">
       <!-- JAVASCRIPT -->
+      <!-- JAVASCRIPT -->
     </div>
   </div>
 
@@ -100,7 +101,7 @@ $(p1_add).click(function(){
             '<i class="fas fa-trash" aria-hidden="true"></i>' +
           '</button>' +
         '</div>' +
-        '<div class="col-sm-1 {{ $errors->has('p1.*.section_sort') ? 'has-error' : '' }}">' +
+        '<div class="form-group col-sm-1 {{ $errors->has('p1.*.section_sort') ? 'has-error' : '' }}">' +
           '<input type="number" name="p1'+p1_num+'['+num+'][section_sort]" class="form-control form-control-sm" placeholder="Sort" oninput="this.value = (this.value < 1) ? 1 : this.value;">' +
         '</div>' +
       '</div>' +
@@ -142,6 +143,7 @@ $(p1_add).click(function(){
 
     $('#form').bootstrapValidator('removeField', $option1);
     $('#form').bootstrapValidator('removeField', $option2);
+    $('#form').bootstrapValidator('removeField', $option3);
     console.log(num);
   });
 
@@ -165,11 +167,11 @@ $(p1_add).click(function(){
               '<i class="fas fa-trash" aria-hidden="true"></i>' +
             '</button>' +
           '</div>' +
-          '<div class="col-sm-1 {{ $errors->has('p2.*.sectionsub_sort') ? 'has-error' : '' }}">' +
+          '<div class="form-group col-sm-1 {{ $errors->has('p2.*.sectionsub_sort') ? 'has-error' : '' }}">' +
             '<input type="number" name="p2'+p1_end+p2_num+'['+num+'][sectionsub_sort]" class="form-control form-control-sm" placeholder="Sort" oninput="this.value = (this.value < 1) ? 1 : this.value;">' +
           '</div>' +
         '</div>' +
-        '<div class="mb-1 {{ $errors->has('p2.*.sectionsub_text') ? 'has-error' : '' }}">' +
+        '<div class="form-group mb-1 {{ $errors->has('p2.*.sectionsub_text') ? 'has-error' : '' }}">' +
           '<textarea id="editor'+num+'" name="p2'+p1_end+p2_num+'['+num+'][sectionsub_text]"></textarea>' +
         '</div>' +
         '<div class="row mb-1">' +
@@ -207,6 +209,7 @@ $(p1_add).click(function(){
 
       $('#form').bootstrapValidator('removeField', $option1);
       $('#form').bootstrapValidator('removeField', $option2);
+      $('#form').bootstrapValidator('removeField', $option3);
       console.log(num);
     });
 
@@ -230,14 +233,14 @@ $(p1_add).click(function(){
                 '<i class="fas fa-trash" aria-hidden="true"></i>' +
               '</button>' +
             '</div>' +
-            '<div class="col-sm-1 {{ $errors->has('p3.*.mainquestion_sort') ? 'has-error' : '' }}">' +
+            '<div class="form-group col-sm-1 {{ $errors->has('p3.*.mainquestion_sort') ? 'has-error' : '' }}">' +
               '<input type="number" name="p3'+p1_end+p2_end+p3_num+'['+num+'][mainquestion_sort]" class="form-control form-control-sm" placeholder="Sort" oninput="this.value = (this.value < 1) ? 1 : this.value;">' +
             '</div>' +
             '<div class="col-sm-1 {{ $errors->has('p3.*.mainquestion_mark') ? 'has-error' : '' }}">' +
               '<input type="number" name="p3'+p1_end+p2_end+p3_num+'['+num+'][mainquestion_mark]" class="form-control form-control-sm" placeholder="Mark" oninput="this.value = (this.value < 1) ? 1 : this.value;">' +
             '</div>' +
           '</div>' +
-          '<div class="mb-1 {{ $errors->has('p3.*.mainquestion_text') ? 'has-error' : '' }}">' +
+          '<div class="form-group mb-1 {{ $errors->has('p3.*.mainquestion_text') ? 'has-error' : '' }}">' +
             '<textarea id="editor'+num+'" name="p3'+p1_end+p2_end+p3_num+'['+num+'][mainquestion_text]"></textarea>' +
           '</div>' +
           '<div class="row mb-1">' +
@@ -278,6 +281,7 @@ $(p1_add).click(function(){
         $('#form').bootstrapValidator('removeField', $option1);
         $('#form').bootstrapValidator('removeField', $option2);
         $('#form').bootstrapValidator('removeField', $option3);
+        $('#form').bootstrapValidator('removeField', $option4);
         console.log(num);
       });
 
@@ -301,14 +305,14 @@ $(p1_add).click(function(){
                   '<i class="fas fa-trash" aria-hidden="true"></i>' +
                 '</button>' +
               '</div>' +
-              '<div class="col-sm-1 {{ $errors->has('p4.*.question_sort') ? 'has-error' : '' }}">' +
+              '<div class="form-group col-sm-1 {{ $errors->has('p4.*.question_sort') ? 'has-error' : '' }}">' +
                 '<input type="number" name="p4'+p1_end+p2_end+p3_end+p4_num+'['+num+'][question_sort]" class="form-control form-control-sm" placeholder="Sort" oninput="this.value = (this.value < 1) ? 1 : this.value;">' +
               '</div>' +
               '<div class="col-sm-1 {{ $errors->has('p4.*.question_mark') ? 'has-error' : '' }}">' +
                 '<input type="number" name="p4'+p1_end+p2_end+p3_end+p4_num+'['+num+'][question_mark]" class="form-control form-control-sm" placeholder="Mark" oninput="this.value = (this.value < 1) ? 1 : this.value;">' +
               '</div>' +
             '</div>' +
-            '<div class="mb-1 {{ $errors->has('p4.*.question_text') ? 'has-error' : '' }}">' +
+            '<div class="form-group mb-1 {{ $errors->has('p4.*.question_text') ? 'has-error' : '' }}">' +
               '<textarea id="editor'+num+'" name="p4'+p1_end+p2_end+p3_end+p4_num+'['+num+'][question_text]"></textarea>' +
             '</div>' +
           '</div>'
@@ -340,6 +344,7 @@ $(p1_add).click(function(){
           $('#form').bootstrapValidator('removeField', $option1);
           $('#form').bootstrapValidator('removeField', $option2);
           $('#form').bootstrapValidator('removeField', $option3);
+          $('#form').bootstrapValidator('removeField', $option4);
           console.log(num);
         });
       })

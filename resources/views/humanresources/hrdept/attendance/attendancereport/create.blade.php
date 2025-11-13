@@ -27,10 +27,12 @@ p {
 	<form method="GET" action="{{ route('attendancereport.store') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="form-horizontal" enctype="multipart/form-data">
 		@csrf
 		<div class="row g-3 mb-3">
+			<div class="form-group col-auto @error('from') is-invalid @enderror" style="position:relative;">
+			<div class="col-auto @error('from') is-invalid @enderror" style="position:relative;">
 			<div class="col-auto @error('from') is-invalid @enderror" style="position:relative;">
 				<input type="text" name="from" class="form-control form-control-sm" id="from" value="" placeholder="Date From">
 			</div>
-			<div class="col-auto @error('to') is-invalid @enderror" style="position:relative;">
+			<div class="form-group col-auto @error('to') is-invalid @enderror" style="position:relative;">
 				<input type="text" name="to" class="form-control form-control-sm" id="to" value="" placeholder="Date To">
 			</div>
 			<div class="col-auto">

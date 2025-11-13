@@ -145,12 +145,13 @@ $appraisals = DB::table('pivot_category_appraisals')
                 </div>
                 <div class="modal-body align-items-start justify-content-center">
                   <div class="row mb-1">
+                    <div class="form-group col-sm-2 {{ $errors->has('section_sort') ? 'has-error' : '' }}">
                     <div class="col-sm-2 {{ $errors->has('section_sort') ? 'has-error' : '' }}">
                       <input type="number" name="section_sort{{ $section->id }}" id="section_sort{{ $section->id }}" class="form-control form-control-sm" placeholder="Sort" value="{{ $section->sort }}" oninput="this.value = (this.value < 1) ? 1 : this.value;">
                     </div>
                   </div>
                   <div class="row mb-1">
-                    <div class="mb-1 {{ $errors->has('section_text') ? 'has-error' : '' }}">
+                    <div class="form-group mb-1 {{ $errors->has('section_text') ? 'has-error' : '' }}">
                       <textarea name="section_text{{ $section->id }}" id="section_text{{ $section->id }}" class="form-control form-control-sm">{!! $section->section !!}</textarea>
                     </div>
                   </div>
@@ -214,12 +215,12 @@ $appraisals = DB::table('pivot_category_appraisals')
                 </div>
                 <div class="modal-body align-items-start justify-content-center">
                   <div class="row mb-1">
-                    <div class="col-sm-2 {{ $errors->has('section_sub_sort') ? 'has-error' : '' }}">
+                    <div class="form-group col-sm-2 {{ $errors->has('section_sub_sort') ? 'has-error' : '' }}">
                       <input type="number" name="section_sub_sort{{ $section_sub->id }}" id="section_sub_sort{{ $section_sub->id }}" class="form-control form-control-sm" placeholder="Sort" value="{{ $section_sub->sort }}" oninput="this.value = (this.value < 1) ? 1 : this.value;">
                     </div>
                   </div>
                   <div class="row mb-1">
-                    <div class="mb-1 {{ $errors->has('section_sub_text') ? 'has-error' : '' }}">
+                    <div class="form-group mb-1 {{ $errors->has('section_sub_text') ? 'has-error' : '' }}">
                       <textarea name="section_sub_text{{ $section_sub->id }}" id="section_sub_text{{ $section_sub->id }}" class="form-control form-control-sm">{!! $section_sub->section_sub !!}</textarea>
                     </div>
                   </div>
