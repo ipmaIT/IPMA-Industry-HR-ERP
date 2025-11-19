@@ -81,7 +81,6 @@ if ($leaves->count()) {
 
 				<div class="row mt-3"></div>
 
-				<div class="form-group row mt-2">
 				<div class="row mt-2">
 					<div class="col-md-3">
 						<label for="id" class="col-form-label">ID : </label>
@@ -91,7 +90,7 @@ if ($leaves->count()) {
 					</div>
 				</div>
 
-				<div class="form-group row mt-2">
+				<div class="row mt-2">
 					<div class="col-md-3">
 						<label for="name" class="col-form-label">Name : </label>
 					</div>
@@ -100,7 +99,7 @@ if ($leaves->count()) {
 					</div>
 				</div>
 
-				<div class="form-group row mt-2">
+				<div class="row mt-2">
 					<div class="col-md-3">
 						<label for="date" class="col-form-label">Date : </label>
 					</div>
@@ -109,7 +108,7 @@ if ($leaves->count()) {
 					</div>
 				</div>
 
-				<div class="form-group row mt-2">
+				<div class="row mt-2">
 					<div class="col-md-3">
 						<label for="daytype_id" class="col-form-label">Day Type : </label>
 					</div>
@@ -123,7 +122,7 @@ if ($leaves->count()) {
 					</div>
 				</div>
 
-				<div class="form-group row mt-2">
+				<div class="row mt-2">
 					<div class="col-md-3">
 						<label for="attendance_type_id" class="col-form-label">Cause : </label>
 					</div>
@@ -137,7 +136,7 @@ if ($leaves->count()) {
 					</div>
 				</div>
 
-				<div class="form-group row mt-2">
+				<div class="row mt-2">
 					<div class="col-md-3">
 						<label for="leave_id" class="col-form-label">Leave : </label>
 					</div>
@@ -151,7 +150,7 @@ if ($leaves->count()) {
 					</div>
 				</div>
 
-				<div class="form-group row mt-2">
+				<div class="row mt-2">
 					<div class="col-md-3">
 						<label for="in" class="col-form-label">In : </label>
 					</div>
@@ -160,7 +159,7 @@ if ($leaves->count()) {
 					</div>
 				</div>
 
-				<div class="form-group row mt-2">
+				<div class="row mt-2">
 					<div class="col-md-3">
 						<label for="break" class="col-form-label">Break : </label>
 					</div>
@@ -169,7 +168,7 @@ if ($leaves->count()) {
 					</div>
 				</div>
 
-				<div class="form-group row mt-2">
+				<div class="row mt-2">
 					<div class="col-md-3">
 						<label for="from1" class="col-form-label">Resume : </label>
 					</div>
@@ -178,7 +177,7 @@ if ($leaves->count()) {
 					</div>
 				</div>
 
-				<div class="form-group row mt-2">
+				<div class="row mt-2">
 					<div class="col-md-3">
 						<label for="out" class="col-form-label">Out : </label>
 					</div>
@@ -187,7 +186,7 @@ if ($leaves->count()) {
 					</div>
 				</div>
 
-				<div class="form-group row mt-2">
+				<div class="row mt-2">
 					<div class="col-md-3">
 						<label for="time_work_hour" class="col-form-label">Duration : </label>
 					</div>
@@ -196,7 +195,7 @@ if ($leaves->count()) {
 					</div>
 				</div>
 
-				<div class="form-group row mt-2">
+				<div class="row mt-2">
 					<div class="col-md-3">
 						<label for="remarks" class="col-form-label">Remarks : </label>
 					</div>
@@ -205,7 +204,7 @@ if ($leaves->count()) {
 					</div>
 				</div>
 
-				<div class="form-group row mt-2">
+				<div class="row mt-2">
 					<div class="col-md-3">
 						<label for="hr_remarks" class="col-form-label">HR Remarks : </label>
 					</div>
@@ -214,7 +213,7 @@ if ($leaves->count()) {
 					</div>
 				</div>
 
-				<div class="form-group row mt-2">
+				<div class="row mt-2">
 					<div class="col-md-3">
 						&nbsp;
 					</div>
@@ -814,8 +813,8 @@ $('#leave_id,#attendance_type_id,#daytype_id').select2({
 // VALIDATION
 $(document).ready(function() {
 	$('#form').bootstrapValidator({
-		excluded: [':hidden'],
 		fields: {
+
 			daytype_id: {
 				validators: {
 					notEmpty: {

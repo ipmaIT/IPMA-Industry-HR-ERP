@@ -37,7 +37,6 @@ use App\Models\HumanResources\HROutstation;
 				@endforeach
 				@endif
 				<input type="submit" class="form-control form-control-sm btn btn-sm btn-outline-secondary" value="Print PDF" target="_blank">
-				<input type="submit" class="btn btn-sm btn-outline-secondary" value="Print PDF" target="_blank">
 			</div>
 		</form>
 		<p>&nbsp;</p>

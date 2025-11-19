@@ -32,7 +32,6 @@ use App\Models\HumanResources\HRAttendance;
     @csrf
 
 	<div class="row g-3 mb-3">
-		<div class="form-group col-auto">
 		<div class="col-auto">
 			<input type="text" name="date" value="{{ $selected_date }}" id="date" class="form-control form-control-sm col-auto @error('date') is-invalid @enderror">
 		</div>
