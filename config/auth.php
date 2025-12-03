@@ -15,7 +15,7 @@ return [
 
 	'defaults' => [
 		'guard' => 'web',
-		'passwords' => 'web',		// password broker
+		'passwords' => 'webpass',		// password broker
 	],
 
 	/*
@@ -95,7 +95,7 @@ return [
 	*/
 
 	'passwords' => [
-		'web' => [		// password broker
+		'webpass' => [		// password broker
 			'provider' => 'weblogin',
 			'table' => 'password_reset_tokens',
 			'expire' => 60,

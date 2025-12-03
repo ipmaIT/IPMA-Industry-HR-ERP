@@ -1,54 +1,66 @@
 @extends('layouts.app')
 
 @section('content')
-	<form method="POST" action="{{ route('login') }}" id='form' class="needs-validation" autocomplete="off" enctype="multipart/form-data">
+<form method="POST" action="{{ route('login') }}" id='form' class="needs-validation" autocomplete="off" enctype="multipart/form-data">
 	@csrf
-	<div class="mb-3 row">
-		<div class="form-group row @error('username') has-error @enderror">
-			<label for="username" class="col-auto col-form-label col-form-label-sm">Username : </label>
-			<div class="col-sm-6">
-				<input type="text" name="username" value="{{ old('username') }}" id="username" class="form-control form-control-sm @error('username') is-invalid @enderror" id="username" placeholder="Username">
-				@error('username')
-					<div class="invalid-feedback">
-						{{ $message }}
-					</div>
-				@enderror
+	<div class="card">
+		<div class="card-header">
+			<h3>Sign In</h3>
+		</div>
+		<div class="card-body">
 
-			</div>
-		</div>
-	</div>
-	<div class="mb-3 row">
-		<div class="form-group row @error('password') has-error @enderror">
-			<label for="password" class="col-auto col-form-label col-form-label-sm">Password : </label>
-			<div class="col-sm-6">
-				<input type="password" name="password" class="form-control form-control-sm @error('password') is-invalid @enderror" id="password" placeholder="Password">
-				@error('password')
-					<div class="invalid-feedback">
-						{{ $message }}
-					</div>
-				@enderror
+			<div class="form-group row m-2 @error('username') has-error @enderror">
+				<label for="username" class="col-sm-4 col-form-label col-form-label-sm">Username : </label>
+				<div class="col-sm-6 my-auto">
+					<input type="text" name="username" value="{{ old('username') }}" id="username" class="form-control form-control-sm @error('username') is-invalid @enderror" id="username" placeholder="Username">
+					@error('username')
+						<div class="invalid-feedback">
+							{{ $message }}
+						</div>
+					@enderror
 
+				</div>
 			</div>
+
+			<div class="form-group row m-2 @error('password') has-error @enderror">
+				<label for="password" class="col-sm-4 col-form-label col-form-label-sm">Password : </label>
+				<div class="col-sm-6 my-auto">
+					<input type="password" name="password" class="form-control form-control-sm @error('password') is-invalid @enderror" id="password" placeholder="Password">
+					@error('password')
+						<div class="invalid-feedback">
+							{{ $message }}
+						</div>
+					@enderror
+
+				</div>
+			</div>
+
+			<div class="mb-3 row col-sm-6 offset-sm-4">
+				<div class="pretty p-svg p-round p-plain p-jelly">
+					<input type="checkbox" name="remember" value="{{ old('remember') }}" class="form-check-input form-check-input-sm" id="remember_me">
+					<div class="state p-success">
+						<span class="svg"><i class="bi bi-check"></i></span>
+						<label for="remember_me">{{ __('Remember me') }}</label>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+		<div class="card-footer">
+
+			<div class="flex items-center justify-end mt-4">
+				<button type="submit" class="btn btn-sm btn-outline-secondary">Login</button>
+				@if (Route::has('password.request'))
+					<a class="" href="{{ route('password.request') }}">
+						{{ __('Forgot your password?') }}
+					</a>
+				@endif
+			</div>
+
 		</div>
 	</div>
-	<div class="mb-3 row">
-		<div class="pretty p-svg p-round p-plain p-jelly">
-			<input type="checkbox" name="remember" value="{{ old('remember') }}" class="form-check-input form-check-input-sm" id="remember_me">
-			<div class="state p-success">
-				<span class="svg"><i class="bi bi-check"></i></span>
-				<label for="remember_me">{{ __('Remember me') }}</label>
-			</div>
-		</div>
-	</div>
-	<div class="flex items-center justify-end mt-4">
-		<button type="submit" class="btn btn-sm btn-outline-secondary">Login</button>
-		@if (Route::has('password.request'))
-			<a class="" href="{{ route('password.request') }}">
-				{{ __('Forgot your password?') }}
-			</a>
-		@endif
-	</div>
-	</form>
+</form>
 @endsection
 
 @section('js')
