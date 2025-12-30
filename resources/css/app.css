@@ -31,7 +31,9 @@
 @import "../../node_modules/@mdi/font/css/materialdesignicons.css";
 
 /*jquery ui*/
+
 @import "../../node_modules/jquery-ui/dist/themes/cupertino/jquery-ui.css";
+@import '../../node_modules/jquery-ui/dist/themes/cupertino/theme.css';
 
 /*pretty checkbox*/
 @import "../../node_modules/pretty-checkbox/dist/pretty-checkbox.css";
@@ -46,7 +48,8 @@
 @import "../../node_modules/sweetalert2/dist/sweetalert2.css";
 
 /*jquery validators*/
-@import "./bootstrapValidator4/css/bootstrapValidator.css";
+/*@import "./bootstrapValidator4/css/bootstrapValidator.css";*/
+@import "./bootstrapValidator5.css";
 
 @import "../../node_modules/pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css";
 
