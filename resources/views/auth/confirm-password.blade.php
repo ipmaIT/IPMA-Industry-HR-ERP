@@ -1,27 +1,33 @@
-<x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
-    </div>
+@extends('layouts.app')
 
-    <form method="POST" action="{{ route('password.confirm') }}">
-        @csrf
-
-        <!-- Password -->
-        <div>
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <div class="flex justify-end mt-4">
-            <x-primary-button>
-                {{ __('Confirm') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+@section('content')
+<form method="POST" action="{{ route('password.confirm') }}">
+	@csrf
+	<div class="card">
+		<div class="card-header">
+			<h3>Password Confirmation</h3>
+		</div>
+		<div class="card-body">
+			<p>{{ __('This is a secure area of the application. Please confirm your password before continuing.') }}</p>
+			<div class="form-group row m-1 @error('password') has-error @enderror">
+				<label for="pass" class="col-form-label col-sm-2">Password : </label>
+				<div class="col-sm-6 my-auto">
+					<input type="password" name="password" value="{{ old('password', @$variable->password) }}" id="pass" class="form-control form-control-sm @error('password') is-invalid @enderror" placeholder="Password">
+					@error('password')
+						<div class="invalid-feedback">
+							{{ $message }}
+						</div>
+					@enderror
+				</div>
+			</div>
+		</div>
+		<div class="card-footer">
+			<div class="flex justify-content-end">
+				<button type="submit" class="'btn btn-sm btn-outline-secondary">Confirm</button>
+			</div>
+		</div>
+	</div>
+</form>
+@endsection
+@section('js')
+@endsection

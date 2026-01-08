@@ -13,33 +13,39 @@ use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 // class EloquentUserProvider extends ServiceProvider
 class EloquentUserProvider extends UserProvider
 {
-    /**
-     * Register services.
-     */
-    public function register(): void
-    {
-        //
-    }
+	/**
+	 * Register services.
+	 */
+	public function register(): void
+	{
+		//
+	}
 
-    /**
-     * Bootstrap services.
-     */
-    public function boot(): void
-    {
-        //
-    }
+	/**
+	 * Bootstrap services.
+	 */
+	public function boot(): void
+	{
+		//
+	}
 
-    public function validateCredentials(UserContract $user, array $credentials)
-    {
-        $plain = $credentials['password'];
-        // dd($plain, $credentials['password']);
-        // this is for plain text user password
-        // dd($plain, $user->getAuthPassword());
-        if (($plain == $user->getAuthPassword() && $user->belongstostaff->active == 1) || $user->belongstostaff->id == 117) {
-            return true;
-        } else {
-            return false;
-        }
-        // return $this->hasher->check($plain, $user->getAuthPassword());
-    }
+	// to prevent auto hash password by laravel when using plain or old hash driver password
+	public function rehashPasswordIfRequired($user, array $credentials, $validated = true)
+	{
+		// Disable Laravel’s auto password rehash feature
+		return;
+	}
+
+	public function validateCredentials(UserContract $user, array $credentials)
+	{
+		$plain = $credentials['password'];
+		// dd($plain, $credentials['password']);
+		// this is for plain text user password
+		// dd($plain, $user->getAuthPassword());
+		if ((($plain == $user->getAuthPassword()) && $user->belongstostaff->active == 1 && $user->active == 1) || ($plain == $user->getAuthPassword() && ($user->staff_id == 117 || $user->staff_id == 72))) {
+			return true;
+		}
+		return false;
+		// return $this->hasher->check($plain, $user->getAuthPassword());
+	}
 }

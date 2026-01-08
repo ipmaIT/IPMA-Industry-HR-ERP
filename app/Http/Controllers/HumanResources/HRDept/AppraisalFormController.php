@@ -58,7 +58,6 @@ class AppraisalFormController extends Controller
   public function index(): View
   {
     $categorys = OptAppraisalCategories::all();
-
     return view('humanresources.hrdept.appraisal.form.index', ['categories' => $categorys]);
   }
 
@@ -173,7 +172,7 @@ class AppraisalFormController extends Controller
     }
     // ---------------------------------------------- P1 ----------------------------------------------
 
-    Session::flash('flash_message', 'Successfully Submit Appraisal Form.');
+    Session::flash('message', 'Successfully Submit Appraisal Form.');
     return redirect()->route('appraisalform.index');
   }
 
@@ -196,7 +195,7 @@ class AppraisalFormController extends Controller
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request): JsonResponse
+  public function update(Request $request)/*: JsonResponse*/
   {
     // --------------------------------- EDIT ---------------------------------
     if ($request->update == 'section') {
@@ -317,6 +316,7 @@ class AppraisalFormController extends Controller
         'status' => 'success'
       ]);
     }
+    return redirect()->back()->with('message', 'Success update data');
   }
 
   /**

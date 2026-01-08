@@ -10,7 +10,9 @@
 
 	<div class="col-md-10 row">
 		<div class="col-md-12">
-			{!! Form::model($profile, ['route' => ['profile.update', $profile->id], 'method' => 'PATCH', 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) !!}
+			<form method="POST" action="{{ route('profile.update', $profile->id) }}" accept-charset="UTF-8" id="form" class="form-horizontal" autocomplete="off" enctype="multipart/form-data">
+				@csrf
+				@method('PATCH')
 			<input type="hidden" name="login_id" id="login_id" value="{{ $profile->hasmanylogin()->where('active', 1)->first()->id }}">
 
 			<div class="row m-2">
@@ -30,23 +32,23 @@
 			<div class="row m-2">
 				<label for="ic" class="form-label col-sm-4">New Password</label>
 				<div class="col-sm-8 {{ $errors->has('password') ? 'has-error' : '' }}">
-					{!! Form::password('password', ['class' => 'form-control form-control-sm', 'id' => 'password', 'placeholder' => 'Password', 'data-toggle' => 'password']) !!}
+					<input class="form-control form-control-sm" id="password" placeholder="Password" data-toggle="password" name="password" type="password" value="">
 				</div>
 			</div>
 
 			<div class="row m-2">
 				<label for="ic" class="form-label col-sm-4">Confirm Password</label>
 				<div class="col-sm-8 {{ $errors->has('confirm_password') ? 'has-error' : '' }}">
-					{!! Form::password('password_confirmation', ['class' => 'form-control form-control-sm', 'id' => 'password_confirmation', 'placeholder' => 'Confirm Password']) !!}
+					<input class="form-control form-control-sm" id="password_confirmation" placeholder="Confirm Password" name="password_confirmation" type="password" value="">
 				</div>
 			</div>
 
 			<div class="row m-2">
 				<div class="col-sm-8 offset-sm-4">
-					{!! Form::button('Save', ['class' => 'btn btn-sm btn-outline-secondary', 'type' => 'submit']) !!}
+					<button class="btn btn-sm btn-outline-secondary" type="submit">Save</button>
 				</div>
 			</div>
-			{!! Form::close() !!}
+			</form>
 		</div>
 	</div>
 </div>

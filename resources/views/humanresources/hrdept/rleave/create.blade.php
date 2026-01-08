@@ -37,24 +37,27 @@ $staffs = Staff::join('logins', 'staffs.id', '=', 'logins.staff_id')
 	@include('humanresources.hrdept.navhr')
 	<h4>Add Replacement Leave</h4>
 
-	{{ Form::open(['route' => ['rleave.store'], 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) }}
+	<form method="POST" action="{{ route('rleave.store') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+		@csrf
 
 	<div class="row mt-3">
 		<div class="col-md-2">
-			{{Form::label('name', 'Name')}}
+			<label for="name" class="col-form-label col-auto">Name : </label>
 		</div>
-		<div class="col-md-10 {{ $errors->has('staff_id') ? 'has-error' : '' }}">
-			<p>
-				<input type="checkbox" id="checkAll"> <label for="checkAll">Check All</label>&nbsp;&nbsp;&nbsp;&nbsp;
-				<input type="checkbox" id="checkG1"> <label for="checkG1">Check Group 1</label>&nbsp;&nbsp;&nbsp;&nbsp;
-				<input type="checkbox" id="checkG2"> <label for="checkG2">Check Group 2</label>&nbsp;&nbsp;&nbsp;&nbsp;
-			</p>
+		<div class="col-md-10 @error('staff_id.*') has-error @enderror">
+			<div class="form-check form-check-inline">
+				<label for="checkAll" class="form-check-label mx-5"><input type="checkbox" id="checkAll" class="form-check-input"> Check All</label>
+				<label for="checkG1" class="form-check-label mx-5"><input type="checkbox" id="checkG1" class="form-check-input"> Check Group 1</label>
+				<label for="checkG2" class="form-check-label mx-5"><input type="checkbox" id="checkG2" class="form-check-input"> Check Group 2</label>
+			</div>
 			<div class="scrollable-div">
 				@foreach ($staffs as $staff)
-				<p>
-					<input type="checkbox" class="staff group{{ $staff->restday_group_id }}" name="staff_id[]" id="staff_id" value="{{ $staff->staffID }}">
-					<label>{{ $staff->username }} - Group {{ $staff->restday_group_id }} - {{ $staff->name }}</label>
-				</p>
+				<div class="form-check m-2 ">
+					<label class="form-check-label @error('staff_id.*') has-error @enderror" for="staff_id_{{ $staff->id }}">
+						<input type="checkbox" class="form-check-input staff group{{ $staff->restday_group_id }} @error('staff_id.*') is-invalid @enderror" name="staff_id[]" id="staff_id_{{ $staff->id }}" value="{{ $staff->staffID }}">
+						{{ $staff->username }} - Group {{ $staff->restday_group_id }} - {{ $staff->name }}
+					</label>
+				</div>
 				@endforeach
 			</div>
 		</div>
@@ -62,47 +65,52 @@ $staffs = Staff::join('logins', 'staffs.id', '=', 'logins.staff_id')
 
 	<div class="row mt-3">
 		<div class="col-md-2">
-			{{Form::label('date_start', 'Date Start')}}
+			<label for="date_start" class="col-form-label col-auto">Date Start : </label>
 		</div>
 		<div class="col-md-10 {{ $errors->has('date_start') ? 'has-error' : '' }}">
-			{{ Form::text('date_start', @$value, ['class' => 'form-control form-control-sm col-auto', 'id' => 'date_start', 'placeholder' => 'Date Start', 'autocomplete' => 'off']) }}
+			<input type="text" name="date_start" value="{{ old('date_start') }}" id="date_start" class="form-control form-control-sm col-sm-12 @error('date_start') is-invalid @enderror" placeholder="Date Start">
 		</div>
 	</div>
 
 	<div class="row mt-3">
 		<div class="col-md-2">
-			{{Form::label('date_end', 'Date End')}}
+			<label for="date_end" class="col-form-label col-auto">Date End : </label>
 		</div>
 		<div class="col-md-10 {{ $errors->has('date_end') ? 'has-error' : '' }}">
-			{{ Form::text('date_end', @$value, ['class' => 'form-control form-control-sm col-auto', 'id' => 'date_end', 'placeholder' => 'Date End', 'autocomplete' => 'off']) }}
+			<input type="text" name="date_end" value="{{ old('date_end') }}" id="date_end" class="form-control form-control-sm col-sm-12 @error('date_end') is-invalid @enderror" placeholder="Date End">
 		</div>
 	</div>
 
 	<div class="row mt-3">
 		<div class="col-md-2">
-			{{Form::label('customer_id', 'Customer')}}
+			<label for="customer_id" class="col-form-label col-auto">Customer : </label>
 		</div>
 		<div class="col-md-10">
-			{{Form::select('customer_id', Customer::pluck('customer', 'id')->toArray(), @$value, ['class' => 'form-control customer_id', 'id' => 'customer_id', 'placeholder' => ''])}}
+			<select name="customer_id" id="customer_id" class="form-select form-select-sm col-sm-12 customer_id @error('customer_id') is-invalid @enderror">
+				<option value="">Please choose</option>
+				@foreach(Customer::pluck('customer', 'id')->toArray() as $k1 => $v1)
+					<option value="{{ $k1 }}" {{ (old('customer_id') == $k1)?'selected':NULL }}>{{ $v1 }}</option>
+				@endforeach
+			</select>
 		</div>
 	</div>
 
 	<div class="row mt-3">
 		<div class="col-md-2">
-			{{Form::label('reason', 'Reason')}}
+			<label for="reason" class="col-form-label col-auto">Reason : </label>
 		</div>
 		<div class="col-md-10 {{ $errors->has('reason') ? 'has-error' : '' }}">
-			{!! Form::text( 'reason', @$value, ['class' => 'form-control', 'id' => 'reason', 'placeholder' => 'Please Insert'] ) !!}
+			<textarea name="reason" id="reason" class="form-control form-control-sm col-sm-12 @error('reason') is-invalid @enderror" placeholder="Reason">{{ old('reason') }}</textarea>
 		</div>
 	</div>
 
 	<div class="row mt-3">
 		<div class="col-md-12 text-center">
-			{!! Form::submit('SUBMIT', ['class' => 'btn btn-sm btn-outline-secondary']) !!}
+			<button type="submit" class="btn btn-sm btn-outline-secondary">Submit</button>
 		</div>
 	</div>
 
-	{!! Form::close() !!}
+	</form>
 
 	<div class="row mt-3">
 		<div class="col-md-12 text-center">
@@ -165,14 +173,9 @@ $('#date_start, #date_end').datetimepicker({
 // VALIDATOR
 $(document).ready(function() {
 	$('#form').bootstrapValidator({
-		feedbackIcons: {
-			valid: '',
-			invalid: '',
-			validating: ''
-		},
 
 		fields: {
-			staff_id: {
+			'staff_id[]': {
 				validators: {
 					notEmpty: {
 						message: 'Please select a staff.'

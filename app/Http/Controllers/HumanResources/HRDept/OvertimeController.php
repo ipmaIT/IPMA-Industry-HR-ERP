@@ -103,7 +103,7 @@ class OvertimeController extends Controller
 				'remark' => $remark,
 			]);
 		}
-		Session::flash('flash_message', 'Successfully Add Staff Overtime');
+		Session::flash('message', 'Successfully Add Staff Overtime');
 		return redirect()->route('overtime.index');
 	}
 
@@ -144,7 +144,7 @@ class OvertimeController extends Controller
 
 		$overtime->save();
 
-		Session::flash('flash_message', 'Successfully Update Staff Overtime');
+		Session::flash('message', 'Successfully Update Staff Overtime');
 		return redirect()->route('overtime.index');
 	}
 

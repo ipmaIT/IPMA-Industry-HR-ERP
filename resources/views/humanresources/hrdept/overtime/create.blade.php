@@ -53,10 +53,11 @@ $staffs = Staff::join('logins', 'staffs.id', '=', 'logins.staff_id')
 
 	<h4 class="align-items-start">Add Overtime Staff</h4>
 
-	{{ Form::open(['route' => ['overtime.store'], 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) }}
+	<form method="POST" action="{{ route('overtime.store') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+		@csrf
 
 	<div class="form-group row mb-3 {{ $errors->has('staff_id') ? 'has-error' : '' }}">
-		{{ Form::label( 'rel', 'Staff : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+		<label for="rel" class="col-form-label col-sm-2">Staff : </label>
 		<div class="col-md-10">
 			<div class="scrollable-div">
 
@@ -99,7 +100,7 @@ $staffs = Staff::join('logins', 'staffs.id', '=', 'logins.staff_id')
 				?>
 				@if( $ha )
 				<div class="form-check mb-1 g-3">
-					<input class="form-check-input" name="staff_id[]" type="checkbox" value="{{ $k->staffID }}" id="staff_{{ $k->staffID }}">
+					<input class="form-check-input @error('staff_id.*') is-invalid @enderror" name="staff_id[]" type="checkbox" value="{{ $k->staffID }}" id="staff_{{ $k->staffID }}">
 					<label class="form-check-label" for="staff_{{ $k->staffID }}">{{ $k->username }} - {{ $k->name }}</label>
 				</div>
 				@endif
@@ -110,33 +111,33 @@ $staffs = Staff::join('logins', 'staffs.id', '=', 'logins.staff_id')
 	</div>
 
 	<div class="form-group row mb-3 {{ $errors->has('overtime_range_id') ? 'has-error' : '' }}">
-		{{ Form::label( 'mar', 'Overtime : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+		<label for="mar" class="col-form-label col-sm-2">Overtime : </label>
 		<div class="col-sm-10">
-			<select name="overtime_range_id" id="mar" class="form-select form-select-sm col-sm-8" placeholder="Please Select"></select>
+			<select name="overtime_range_id" id="mar" class="form-select form-select-sm col-sm-8 @error('overtime_range_id') is-invalid @enderror" placeholder="Please Select"></select>
 		</div>
 	</div>
 
 	<div class="form-group row mb-3 {{ $errors->has('ot_date') ? 'has-error' : '' }}">
-		{{ Form::label( 'nam', 'Date Overtime : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+		<label for="nam" class="col-form-label col-sm-2">Date Overtime : </label>
 		<div class="col-md-10" style="position: relative">
-			{{ Form::text('ot_date', @$value, ['class' => 'form-control form-control-sm col-auto', 'id' => 'nam', 'placeholder' => 'Date Overtime', 'autocomplete' => 'off']) }}
+			<input type="text" name="name" value="{{ old('ot_date') }}" id="nam" class="form-control form-control-sm col-sm-12 @error('ot_date') is-invalid @enderror" placeholder="Date Overtime">
 		</div>
 	</div>
 
 	<div class="form-group row mb-3 {{ $errors->has('ot_date') ? 'has-error' : '' }}">
-		{{ Form::label( 'rem', 'Remarks : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+		<label for="rem" class="col-form-label col-sm-2">Remarks : </label>
 		<div class="col-sm-10">
-			{{ Form::textarea('remark', @$value, ['class' => 'form-control form-control-sm col-auto', 'id' => 'rem', 'placeholder' => 'Remarks', 'autocomplete' => 'off', 'cols' => '120', 'rows' => '3']) }}
+			<textarea name="remark" id="rem" class="form-control form-control-sm col-sm-12 @error('remark') is-invalid @enderror">{{ old('remark') }}</textarea>
 		</div>
 	</div>
 
 	<div class="form-group row mb-3 g-3 p-2">
 		<div class="col-sm-10 offset-sm-2">
-			{!! Form::submit('Add Overtime Staff', ['class' => 'btn btn-sm btn-outline-secondary']) !!}
+			<button type="submit" class="btn btn-sm btn-outline-secondary">Add Overtime Staff</button>
 		</div>
 	</div>
 
-	{{ Form::close() }}
+	</form>
 </div>
 @endsection
 
@@ -217,11 +218,6 @@ $('#nam').datetimepicker({
 /////////////////////////////////////////////////////////////////////////////////////////
 // bootstrap validator
 $('#form').bootstrapValidator({
-	feedbackIcons: {
-		valid: '',
-		invalid: '',
-		validating: ''
-	},
 	fields: {
 		ot_date: {
 			validators: {

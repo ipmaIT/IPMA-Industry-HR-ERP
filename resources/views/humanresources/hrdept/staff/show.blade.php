@@ -414,26 +414,37 @@ $mcupl = $staff->hasmanyleave()?->get();
 	<h4 class="align-items-center">Attendance</h4>
 	<div class="table-responsive">
 
-		{{ Form::open(['route' => ['staff.show', $staff->id], 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) }}
+		<form method="POST" action="{{ route('staff.show', $staff->id) }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+			@csrf
 
 		<table width="100%">
 			<tr>
 				<td></td>
 				<td width="100px">
-					{{ Form::select('year', $group_year, @$year, ['class' => 'form-control form-control-sm form-select', 'id' => 'year', 'placeholder' => '', 'autocomplete' => 'off']) }}
+					<select name="year" id="year" class="form-select form-select-sm @error('year') is-invalid @enderror">
+						<option value="">Please choose</option>
+						@foreach($group_year as $k1 => $v1)
+							<option value="{{ $k1 }}" {{ (old('year', @$year) == $k1)?'selected':NULL }}>{{ $v1 }}</option>
+						@endforeach
+					</select>
 				</td>
 				<td width="5px"></td>
 				<td width="80px">
-					{{ Form::select('month', $group_month, @$month, ['class' => 'form-control form-control-sm form-select', 'id' => 'month', 'placeholder' => '', 'autocomplete' => 'off']) }}
+					<select name="month" id="month" class="form-select form-select-sm @error('month') is-invalid @enderror">
+						<option value="">Please choose</option>
+						@foreach($group_month as $k1 => $v1)
+							<option value="{{ $k1 }}" {{ (old('month', @$month) == $k1)?'selected':NULL }}>{{ $v1 }}</option>
+						@endforeach
+					</select>
 				</td>
 				<td width="5px"></td>
 				<td width="70px">
-					{!! Form::submit('SEARCH', ['class' => 'form-control form-control-sm btn btn-sm btn-outline-secondary']) !!}
+					<button type="submit" class="btn btn-sm btn-outline-secondary">Search</button>
 				</td>
 			</tr>
 		</table>
 
-		{!! Form::close() !!}
+		</form>
 
 		<table id="attendance" class="table table-hover table-sm align-middle" style="font-size:12px">
 			<thead>
@@ -1320,10 +1331,16 @@ function SwalDelete(ackID, ackSoftcopy, ackTable){
 /////////////////////////////////////////////////////////////////////////////////////////
 // fullcalendar
 var calendarEl = document.getElementById('calendar');
-var calendar = new FullCalendar.Calendar(calendarEl, {
+var calendar = new Calendar(calendarEl, {
 	aspectRatio: 1.0,
 	height: 2000,
-	// plugins: [multiMonthPlugin],
+	plugins: [
+		timeGridPlugin,
+		dayGridPlugin,
+		multiMonthPlugin,
+		momentPlugin,
+		bootstrap5Plugin
+	],
 	initialView: 'multiMonthYear',
 	// initialView: 'dayGridMonth',
 	// multiMonthMaxColumns: 1,					// force a single column
@@ -1363,10 +1380,6 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
 });
 calendar.render();
 
-/////////////////////////////////////////////////////////////////////////////////////////
-@endsection
-
-@section('nonjquery')
 /////////////////////////////////////////////////////////////////////////////////////////
 // const data = [
 // 					{ month: 'January', percentage: 90.59, workdays: 31, leaves: 1, absents: 1, working_days: 25 },

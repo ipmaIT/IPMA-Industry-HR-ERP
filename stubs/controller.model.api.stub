@@ -1,17 +1,59 @@
 <?php
-
 namespace {{ namespace }};
-
-use {{ namespacedModel }};
 use {{ rootNamespace }}Http\Controllers\Controller;
+
+// for controller output
+use Illuminate\Http\JsonResponse;
+// use Illuminate\Http\RedirectResponse;
+// use Illuminate\Support\Facades\Redirect;
+// use Illuminate\Http\Response;
+// use Illuminate\View\View;
+
+// models
+use {{ namespacedModel }};
+
+// load db facade
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
+
+
+// load validation
 use {{ namespacedRequests }}
+use Illuminate\Support\Facades\Validator;
+
+// load batch and queue
+use Illuminate\Bus\Batch;
+use Illuminate\Support\Facades\Bus;
+
+// load email & notification
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;// more email
+
+// load pdf
+// use Barryvdh\DomPDF\Facade\Pdf;
+
+// load helper
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
+
+// load Carbon library
+use \Carbon\Carbon;
+use \Carbon\CarbonPeriod;
+use \Carbon\CarbonInterval;
+
+use Session;
+use Throwable;
+use Exception;
+use Log;
 
 class {{ class }} extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
         //
     }
@@ -19,7 +61,7 @@ class {{ class }} extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store({{ storeRequest }} $request)
+    public function store({{ storeRequest }} $request): JsonResponse
     {
         //
     }
@@ -27,7 +69,7 @@ class {{ class }} extends Controller
     /**
      * Display the specified resource.
      */
-    public function show({{ model }} ${{ modelVariable }})
+    public function show({{ model }} ${{ modelVariable }}): JsonResponse
     {
         //
     }
@@ -35,7 +77,7 @@ class {{ class }} extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update({{ updateRequest }} $request, {{ model }} ${{ modelVariable }})
+    public function update({{ updateRequest }} $request, {{ model }} ${{ modelVariable }}): JsonResponse
     {
         //
     }
@@ -43,7 +85,7 @@ class {{ class }} extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy({{ model }} ${{ modelVariable }})
+    public function destroy({{ model }} ${{ modelVariable }}): JsonResponse
     {
         //
     }

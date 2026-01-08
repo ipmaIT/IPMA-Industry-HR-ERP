@@ -230,22 +230,24 @@ if ($me1) {																				// hod
 												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 											</div>
 											<div class="modal-body">
-												{{ Form::model($s, ['route' => ['staff.activate', $s->id], 'method' => 'PATCH', 'id' => 'form', 'files' => true, ]) }}
+												<form method="POST" action="{{ route('staff.activate', $s) }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+													@csrf
+													@method('PATCH')
 												<div class="form-group row mb-3 {{ $errors->has('username') ? 'has-error' : '' }}">
-													{{ Form::label( 'user', 'Username : ', ['class' => 'col-sm-3 col-form-label'] ) }}
+													<label for="user" class="col-form-label col-sm-3">Username : </label>
 													<div class="col-auto" style="position: relative">
-														{{ Form::text('username', @$value, ['class' => 'form-control form-control-sm col-auto', 'id' => 'user', 'placeholder' => 'Username', 'autocomplete' => 'off']) }}
+														<input type="text" name="username" value="{{ old('username', @$s->username) }}" id="user" class="form-control form-control-sm @error('username') is-invalid @enderror" placeholder="Username" required>
 													</div>
 												</div>
 												<div class="form-group row mb-3 {{ $errors->has('password') ? 'has-error' : '' }}">
-													{{ Form::label( 'pass', 'Password : ', ['class' => 'col-sm-3 col-form-label'] ) }}
+													<label for="pass" class="col-form-label col-sm-3">Password : </label>
 													<div class="col-auto" style="position: relative">
-														{{ Form::text('password', @$value, ['class' => 'form-control form-control-sm col-auto', 'id' => 'pass', 'placeholder' => 'Password', 'autocomplete' => 'off']) }}
+														<input type="text" name="password" value="{{ old('password', @$s->password) }}" id="pass" class="form-control form-control-sm col-sm-12 @error('password') is-invalid @enderror" placeholder="Password" required>
 													</div>
 												</div>
 											<!-- 	<div class="form-group row mb-3 g-3 p-2">
 													<div class="col-sm-10 offset-sm-2">
-														{!! Form::button('Edit Data', ['class' => 'btn btn-sm btn-outline-secondary', 'type' => 'submit']) !!}
+														<button type="submit" class="btn btn-sm btn-outline-secondary">Edit Data</button>
 													</div>
 												</div> -->
 											</div>
@@ -253,7 +255,7 @@ if ($me1) {																				// hod
 												<button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
 												<button type="submit" class="btn btn-sm btn-outline-secondary">Save Changes</button>
 											</div>
-												{{ Form::close() }}
+												</form>
 										</div>
 									</div>
 								</div>

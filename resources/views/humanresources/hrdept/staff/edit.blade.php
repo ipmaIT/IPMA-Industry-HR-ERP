@@ -14,40 +14,43 @@ use App\Models\HumanResources\HRLeaveApprovalFlow;
 <div class="container row justify-content-center align-items-start">
 @include('humanresources.hrdept.navhr')
 	<h4 class="align-items-start">Edit Staff</h4>
-	{{ Form::model($staff, ['route' => ['staff.update', $staff->id], 'method' => 'PATCH', 'id' => 'form', 'autocomplete' => 'off', 'class' => 'form-horizontal', 'files' => true]) }}
+	<form method="POST" action="{{ route('staff.update', $staff) }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+		@csrf
+		@method('PATCH')
 
 	<div class="col-sm-12 row">
 		<div class="col-sm-6">
 
 			<div class="form-group row m-2 {{ $errors->has('name') ? 'has-error' : '' }}">
-				{{ Form::label( 'nam', 'Name : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="nam" class="col-form-label col-sm-4">Name : </label>
 				<div class="col-sm-7">
-					{{ Form::text('name', @$value, ['class' => 'form-control form-control-sm', 'id' => 'nam', 'placeholder' => 'Name', 'autocomplete' => 'off']) }}
+					<input type="text" name="name" value="{{ old('name', $staff->name) }}" id="nam" class="form-control form-control-sm col-sm-12 @error('name') is-invalid @enderror" placeholder="Name">
 				</div>
 			</div>
 
 			<div class="form-group row m-2 {{ $errors->has('ic') ? 'has-error' : '' }}">
-				{{ Form::label( 'ic', 'Identity Card/Passport : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="ic" class="col-form-label col-sm-4">Identity Card/Passport : </label>
 				<div class="col-sm-7">
-					{{ Form::text('ic', @$value, ['class' => 'form-control form-control-sm', 'id' => 'ic', 'placeholder' => 'Identity Card/Passport', 'autocomplete' => 'off']) }}
+					<input type="text" name="ic" value="{{ old('ic', $staff->ic) }}" id="ic" class="form-control form-control-sm col-sm-12 @error('ic') is-invalid @enderror" placeholder="Identity Card/Passport">
 				</div>
 			</div>
 
 			<div class="form-group row m-2 {{ $errors->has('dob') ? 'has-error' : '' }}" style="position: relative">
-				{{ Form::label( 'dob', 'Date Of Birth : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="dob" class="col-form-label col-sm-4">Date Of Birth : </label>
 				<div class="col-sm-7">
-					{{ Form::text('dob', @$value, ['class' => 'form-control form-control-sm', 'id' => 'dob', 'placeholder' => 'Date Of Birth', 'autocomplete' => 'off']) }}
+					<input type="text" name="dob" value="{{ old('dob', $staff->dob) }}" id="dob" class="form-control form-control-sm col-sm-12 @error('dob') is-invalid @enderror" placeholder="Date Of Birth">
 				</div>
 			</div>
 
 			<div class="form-group row m-2 {{ $errors->has('gender_id') ? 'has-error' : '' }}">
-				{{ Form::label( 'gender', 'Gender : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="gender" class="col-form-label col-sm-4">Gender : </label>
 				<div class="col-sm-7">
 					<?php $i=0 ?>
 					@foreach(\App\Models\HumanResources\OptGender::orderBy('id')->get() as $g)
 					<div class="form-check form-check-inline">
-						{{ Form::radio('gender_id', $g->id, @$value, ['class' => 'form-check-input', 'id' => 'gen_'.$i]) }}
-						{{ Form::label('gen_'.$i, $g->gender, ['class' => 'form-check-label']) }}
+						<label for="gen_{{ $i }}" class="col-form-label mx-2">
+							<input type="radio" name="gender_id" value="{{ $g->id }}" id="gen_{{ $i }}" class="form-check-input @error('gender_id') is-invalid @enderror" {{ ( old('gender_id', $staff->gender_id) == $g->id )?'checked':NULL }}>
+						{{ $g->gender }}</label>
 					</div>
 					<?php $i++ ?>
 					@endforeach
@@ -55,121 +58,141 @@ use App\Models\HumanResources\HRLeaveApprovalFlow;
 			</div>
 
 			<div class="form-group row m-2 {{ $errors->has('marital_status_id') ? 'has-error' : '' }}">
-				{{ Form::label( 'mar', 'Marital Status : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="mar" class="col-form-label col-sm-4">Marital Status : </label>
 				<div class="col-sm-7">
-					{{ Form::select('marital_status_id', OptMaritalStatus::pluck('marital_status', 'id')->toArray(), @$value, ['class' => 'form-control form-select', 'id' => 'mar', 'placeholder' => 'Marital Status', 'autocomplete' => 'off']) }}
+					<select name="marital_status_id" id="mar" class="form-select form-select-sm col-sm-12 @error('marital_status_id') is-invalid @enderror">
+						<option value="">Please choose</option>
+						@foreach(OptMaritalStatus::pluck('marital_status', 'id')->toArray() as $k1 => $v1)
+							<option value="{{ $k1 }}" {{ (old('marital_status_id', $staff->marital_status_id) == $k1)?'selected':NULL }}>{{ $v1 }}</option>
+						@endforeach
+					</select>
 				</div>
 			</div>
 
 			<div class="form-group row m-2 {{ $errors->has('email') ? 'has-error' : '' }}">
-				{{ Form::label( 'ema', 'Email : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="ema" class="col-form-label col-sm-4">Email : </label>
 				<div class="col-sm-7">
-					{{ Form::text('email', @$value, ['class' => 'form-control form-control-sm', 'id' => 'ema', 'placeholder' => 'Email', 'autocomplete' => 'off']) }}
+					<input type="text" name="email" value="{{ old('email', $staff->email) }}" id="id" class="form-control form-control-sm col-sm-12 @error('email') is-invalid @enderror" placeholder="Name">
 				</div>
 			</div>
 
 			<div class="form-group row m-2 {{ $errors->has('address') ? 'has-error' : '' }}">
-				{{ Form::label( 'add', 'Address : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="add" class="col-form-label col-sm-4">Address : </label>
 				<div class="col-sm-7">
-					{{ Form::textarea('address', @$value, ['class' => 'form-control form-control-sm', 'id' => 'add', 'placeholder' => 'Address', 'autocomplete' => 'off']) }}
+					<textarea name="address" id="add" class="form-control form-control-sm col-sm-12 @error('address') is-invalid @enderror" placeholder="Address">{{ old('address', $staff->address) }}</textarea>
 				</div>
 			</div>
 
 			<div class="form-group row m-2 {{ $errors->has('mobile') ? 'has-error' : '' }}">
-				{{ Form::label( 'mob', 'Mobile : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="mob" class="col-form-label col-sm-4">Mobile : </label>
 				<div class="col-sm-7">
-					{{ Form::text('mobile', @$value, ['class' => 'form-control form-control-sm', 'id' => 'mob', 'placeholder' => 'Mobile', 'autocomplete' => 'off']) }}
+					<input type="text" name="mobile" value="{{ old('mobile', $staff->mobile) }}" id="mob" class="form-control form-control-sm col-sm-12 @error('mobile') is-invalid @enderror" placeholder="Mobile">
 				</div>
 			</div>
 
 			<div class="form-group row m-2 {{ $errors->has('phone') ? 'has-error' : '' }}">
-				{{ Form::label( 'pho', 'Phone : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="pho" class="col-form-label col-sm-4">Phone : </label>
 				<div class="col-sm-7">
-					{{ Form::text('phone', @$value, ['class' => 'form-control form-control-sm', 'id' => 'pho', 'placeholder' => 'Phone', 'autocomplete' => 'off']) }}
+					<input type="text" name="phone" value="{{ old('phone', $staff->phone) }}" id="pho" class="form-control form-control-sm col-sm-12 @error('phone') is-invalid @enderror" placeholder="Phone">
 				</div>
 			</div>
 
 			<div class="form-group row m-2 {{ $errors->has('religion_id') ? 'has-error' : '' }}">
-				{{ Form::label( 'rel', 'Religion : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="rel" class="col-form-label col-sm-4">Religion : </label>
 				<div class="col-sm-7">
-					{{ Form::select('religion_id', OptReligion::pluck('religion', 'id')->toArray(), @$value, ['class' => 'form-control form-select form-select-sm', 'id' => 'rel', 'placeholder' => 'Religion', 'autocomplete' => 'off']) }}
+					<select name="religion_id" id="rel" class="form-select form-select-sm col-sm-12 @error('religion_id') is-invalid @enderror">
+						<option value="">Please choose</option>
+						@foreach(OptReligion::pluck('religion', 'id')->toArray() as $k1 => $v1)
+							<option value="{{ $k1 }}" {{ (old('religion_id', $staff->religion_id) == $k1)?'selected':NULL }}>{{ $v1 }}</option>
+						@endforeach
+					</select>
 				</div>
 			</div>
 
 			<div class="form-group row m-2 {{ $errors->has('race_id') ? 'has-error' : '' }}">
-				{{ Form::label( 'rac', 'Race : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="rac" class="col-form-label col-sm-4">Race : </label>
 				<div class="col-sm-7">
-					{{ Form::select('race_id', OptRace::pluck('race', 'id')->toArray(), @$value, ['class' => 'form-control form-select', 'id' => 'rac', 'placeholder' => 'Race', 'autocomplete' => 'off']) }}
+					<select name="race_id" id="rac" class="form-select form-select-sm col-sm-12 @error('race_id') is-invalid @enderror">
+						<option value="">Please choose</option>
+						@foreach(OptRace::pluck('race', 'id')->toArray() as $k1 => $v1)
+							<option value="{{ $k1 }}" {{ (old('race_id', $staff->race_id) == $k1)?'selected':NULL }}>{{ $v1 }}</option>
+						@endforeach
+					</select>
 				</div>
 			</div>
 
 			<div class="form-group row m-2 {{ $errors->has('nationality_id') ? 'has-error' : '' }}">
-				{{ Form::label( 'nat', 'Nationality : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="nat" class="col-form-label col-sm-4">Nationality : </label>
 				<div class="col-sm-7">
-					{{ Form::select('nationality_id', OptCountry::pluck('country', 'id')->toArray(), @$value, ['class' => 'form-control form-select', 'id' => 'nat', 'placeholder' => 'Nationality', 'autocomplete' => 'off']) }}
+					<select name="nationality_id" id="nat" class="form-select form-select-sm col-sm-12 @error('nationality_id') is-invalid @enderror">
+						<option value="">Please choose</option>
+						@foreach(OptCountry::pluck('country', 'id')->toArray() as $k1 => $v1)
+							<option value="{{ $k1 }}" {{ (old('nationality_id', $staff->nationality_id) == $k1)?'selected':NULL }}>{{ $v1 }}</option>
+						@endforeach
+					</select>
 				</div>
 			</div>
 
 			<div class="form-group row m-2 {{ $errors->has('cimb_account') ? 'has-error' : '' }}">
-				{{ form::label( 'cia', 'CIMB Account : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="cia" class="col-form-label col-sm-4">CIMB Account : </label>
 				<div class="col-sm-7">
-					{{ form::text('cimb_account', @$value, ['class' => 'form-control form-control-sm', 'id' => 'cia', 'placeholder' => 'CIMB Account', 'autocomplete' => 'off']) }}
+					<input type="text" name="cimb_account" value="{{ old('cimb_account', $staff->cimb_account) }}" id="cia" class="form-control form-control-sm col-sm-12 @error('cimb_account') is-invalid @enderror" placeholder="CIMB Account">
 				</div>
 			</div>
 
 			<div class="form-group row m-2 {{ $errors->has('epf_account') ? 'has-error' : '' }}">
-				{{ form::label( 'epf', 'EPF Account : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="epf" class="col-form-label col-sm-4">EPF Account : </label>
 				<div class="col-sm-7">
-					{{ form::text('epf_account', @$value, ['class' => 'form-control form-control-sm', 'id' => 'epf', 'placeholder' => 'EPF Account', 'autocomplete' => 'off']) }}
+					<input type="text" name="epf_account" value="{{ old('epf_account', $staff->epf_account) }}" id="epf" class="form-control form-control-sm col-sm-12 @error('epf_account') is-invalid @enderror" placeholder="EPF Account">
 				</div>
 			</div>
 
 			<div class="form-group row m-2 {{ $errors->has('income_tax_no') ? 'has-error' : '' }}">
-				{{ form::label( 'itn', 'Income Tax No : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="itn" class="col-form-label col-sm-4">Income Tax No : </label>
 				<div class="col-sm-7">
-					{{ form::text('income_tax_no', @$value, ['class' => 'form-control form-control-sm', 'id' => 'itn', 'placeholder' => 'Income Tax No', 'autocomplete' => 'off']) }}
+					<input type="text" name="income_tax_no" value="{{ old('income_tax_no', $staff->income_tax_no) }}" id="itn" class="form-control form-control-sm col-sm-12 @error('income_tax_no') is-invalid @enderror" placeholder="Income Tax No">
 				</div>
 			</div>
 
 			<div class="form-group row m-2 {{ $errors->has('socso_no') ? 'has-error' : '' }}">
-				{{ form::label( 'son', 'SOCSO No : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="son" class="col-form-label col-sm-4">SOCSO No : </label>
 				<div class="col-sm-7">
-					{{ form::text('socso_no', @$value, ['class' => 'form-control form-control-sm', 'id' => 'son', 'placeholder' => 'SOCSO No', 'autocomplete' => 'off']) }}
+					<input type="text" name="socso_no" value="{{ old('socso_no', $staff->socso_no) }}" id="son" class="form-control form-control-sm col-sm-12 @error('socso_no') is-invalid @enderror" placeholder="SOCSO No">
 				</div>
 			</div>
 
 			<div class="form-group row m-2 {{ $errors->has('weight') ? 'has-error' : '' }}">
-				{{ form::label( 'wei', 'Weight : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="wei" class="col-form-label col-sm-4">Weight : </label>
 				<div class="col-sm-7">
-					{{ form::text('weight', @$value, ['class' => 'form-control form-control-sm', 'id' => 'wei', 'placeholder' => 'Weight', 'autocomplete' => 'off']) }}
+					<input type="text" name="weight" value="{{ old('weight', $staff->weight) }}" id="wei" class="form-control form-control-sm col-sm-12 @error('weight') is-invalid @enderror" placeholder="Weight">
 				</div>
 			</div>
 
 			<div class="form-group row m-2 {{ $errors->has('height') ? 'has-error' : '' }}">
-				{{ form::label( 'hei', 'Height : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="hei" class="col-form-label col-sm-4">Height : </label>
 				<div class="col-sm-7">
-					{{ form::text('height', @$value, ['class' => 'form-control form-control-sm', 'id' => 'hei', 'placeholder' => 'Height', 'autocomplete' => 'off']) }}
+					<input type="text" name="height" value="{{ old('height', $staff->height) }}" id="hei" class="form-control form-control-sm col-sm-12 @error('height') is-invalid @enderror" placeholder="Height">
 				</div>
 			</div>
 
 			<div class="form-group row m-2 {{ $errors->has('join') ? 'has-error' : '' }}">
-				{{ form::label( 'jpo', 'Date Join : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="jpo" class="col-form-label col-sm-4">Date Join : </label>
 				<div class="col-sm-7">
-					{{ form::text('join', @$value, ['class' => 'form-control form-control-sm', 'id' => 'jpo', 'placeholder' => 'Date Join', 'autocomplete' => 'off']) }}
+					<input type="text" name="join" value="{{ old('join', $staff->join) }}" id="jpo" class="form-control form-control-sm col-sm-12 @error('join') is-invalid @enderror" placeholder="Date Join">
 				</div>
 			</div>
 
 			<div class="form-group row m-2 {{ $errors->has('confirmed') ? 'has-error' : '' }}">
-				{{ form::label( 'jpo', 'Date Confirm : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="jpo" class="col-form-label col-sm-4">Date Confirm : </label>
 				<div class="col-sm-7">
-					{{ form::text('confirmed', @$value, ['class' => 'form-control form-control-sm', 'id' => 'jpo', 'placeholder' => 'Date Confirm', 'autocomplete' => 'off']) }}
+					<input type="text" name="confirmed" value="{{ old('confirmed', $staff->confirmed) }}" id="jpo" class="form-control form-control-sm col-sm-12 @error('confirmed') is-invalid @enderror" placeholder="Date Confirm">
 				</div>
 			</div>
 
 			<div class="form-group row m-2 {{ $errors->has('image') ? 'has-error' : '' }}">
-				{{ Form::label( 'ima', 'Image : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="ima" class="col-form-label col-sm-4">Image : </label>
 				<div class="col-sm-7 supportdoc">
-					{{ Form::file( 'image', ['class' => 'form-control form-control-sm form-control-file', 'id' => 'ima', 'placeholder' => 'Image']) }}
+					<input type="file" name="image" value="{{ old('image', $staff->image) }}" id="ima" class="form-control form-control-sm form-control-file @error('image') is-invalid @enderror" placeholder="Image">
 				</div>
 			</div>
 
@@ -197,7 +220,7 @@ use App\Models\HumanResources\HRLeaveApprovalFlow;
 									</button>
 								</div>
 								<div class="col-sm-11 form-group {{ $errors->has('staffspouse.*.spouse') ? 'has-error' : '' }}">
-									{{ Form::hidden('staffspouse['.$i.'][id]', $spouse->id) }}
+									<input type="hidden" name="staffspouse[{{ $i }}][id]" value="{{ $spouse->id }}">
 									<input type="text" name="staffspouse[{{ $i }}][spouse]" id="spo" value="{{ $spouse->spouse }}" class="form-control form-control-sm" placeholder="Spouse">
 								</div>
 								<div class="col-sm-1"></div>
@@ -238,7 +261,7 @@ use App\Models\HumanResources\HRLeaveApprovalFlow;
 									</button>
 								</div>
 								<div class="col-sm-11 form-group {{ $errors->has('staffchildren.*.children') ? 'has-error' : '' }}">
-									{{ Form::hidden('staffchildren['.$i.'][id]', $child->id) }}
+									<input type="hidden" name="staffchildren[{{ $i }}][id]" value="{{ $child->id }}">
 									<input type="text" name="staffchildren[{{ $i }}][children]" value="{{ $child->children }}" id="chi_{{ $i }}" class="form-control form-control-sm" placeholder="Children">
 								</div>
 								<div class="col-sm-1"></div>
@@ -315,7 +338,7 @@ use App\Models\HumanResources\HRLeaveApprovalFlow;
 									</button>
 								</div>
 								<div class="col-sm-11 form-group {{ $errors->has('staffemergency.*.contact_person') ? 'has-error' : '' }}">
-									{{ Form::hidden('staffemergency['.$i.'][id]', $emerg->id) }}
+									<input type="hidden" name="staffemergency[{{ $i }}][id]" value="{{ $emerg->id }}">
 									<input type="text" name="staffemergency[{{ $i }}][contact_person]" value="{{ $emerg->contact_person }}" id="ecp_{{ $i }}" class="form-control form-control-sm" placeholder="Emergency Contact">
 								</div>
 								<div class="col-sm-1"></div>
@@ -345,87 +368,117 @@ use App\Models\HumanResources\HRLeaveApprovalFlow;
 		<div class="col-sm-6 container">
 
 			<div class="row mb-3 form-group {{ $errors->has('authorise_id') ? 'has-error' : '' }}">
-			{{ Form::label( '&nbsp;', '&nbsp;', ['class' => 'col-sm-4 col-form-label'] ) }}
-
 				<div class="col-sm-7 form-check">
 					<div class="pretty p-icon p-curve p-tada">
 						<input type="hidden" name="authorise_id" value="">
-						{{ Form::checkbox('authorise_id', 1, @$value, ['class' => 'form-check-input', 'id' => 'auth']) }}
+						<input type="checkbox" name="authorise_id" value="1" id="authjj" class="form-check-input @error('authorise_id') is-invalid @enderror" {{ ( old('authorise_id', $staff->authorise_id) == 1 )?'checked':NULL }}>
 						<div class="state p-primary-o">
 							<i class="icon mdi mdi-check-all"></i>
-							<label class="form-check-label" for="auth">System Administrator</label>
+							<label class="form-check-label" for="authjj">System Administrator</label>
 						</div>
 					</div>
 				</div>
 			</div>
 
 			<div class="form-group row mb-3 {{ $errors->has('status_id') ? 'has-error' : '' }}">
-				{{ Form::label( 'sta', 'Staff Status : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="sta" class="col-form-label col-sm-4">Staff Status : </label>
 				<div class="col-sm-7">
-					{{ Form::select('status_id', \App\Models\HumanResources\OptStatus::pluck('status', 'id')->toArray(), $staff->status_id, ['class' => 'form-select form-select-sm', 'id' => 'sta', 'placeholder' => 'Please Select']) }}
+					<select name="status_id" id="sta" class="form-select form-select-sm col-sm-12 @error('status_id') is-invalid @enderror">
+						<option value="">Please choose</option>
+						@foreach(\App\Models\HumanResources\OptStatus::pluck('status', 'id')->toArray() as $k1 => $v1)
+							<option value="{{ $k1 }}" {{ (old('status_id', $staff->status_id) == $k1)?'selected':NULL }}>{{ $v1 }}</option>
+						@endforeach
+					</select>
 				</div>
 			</div>
 
 			<div class="form-group row mb-3 {{ $errors->has('username') ? 'has-error' : '' }}">
-				{{ Form::label( 'unam', 'Username : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="unam" class="col-form-label col-sm-4">Username : </label>
 				<div class="col-sm-7">
-					{{ Form::text('username', $staff->hasmanylogin()->where('active', 1)->first()->username, ['class' => 'form-control form-control-sm', 'id' => 'unam', 'placeholder' => 'Username']) }}
+					<input type="text" name="username" value="{{ old('username', $staff->hasmanylogin()->where('active', 1)->first()->username) }}" id="unam" class="form-control form-control-sm col-sm-12 @error('username') is-invalid @enderror" placeholder="Username">
 				</div>
 			</div>
 
 			<div class="form-group row mb-3 {{ $errors->has('password') ? 'has-error' : '' }}">
-				{{ Form::label( 'pas', 'Password : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="pas" class="col-form-label col-sm-4">Password : </label>
 				<div class="col-sm-7">
-					{{ Form::text('password', @$value, ['class' => 'form-control form-control-sm', 'id' => 'pas', 'placeholder' => 'Password', 'autocomplete' => 'off']) }}
+					<input type="text" name="password" value="{{ old('password', $staff->password) }}" id="pas" class="form-control form-control-sm col-sm-12 @error('password') is-invalid @enderror" placeholder="Password">
 					<div id="passHelp" class="form-text">Insert password if only need to be change. Otherwise, just leave it.</div>
 				</div>
 			</div>
 
 			<div class="form-group row mb-3 {{ $errors->has('category_id') ? 'has-error' : '' }}">
-				{{ Form::label( 'cat', 'Category : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="cat" class="col-form-label col-sm-4">Category : </label>
 				<div class="col-sm-7">
-					{{ Form::select('category_id', \App\Models\HumanResources\OptCategory::pluck('category', 'id')->toArray(), $staff->belongstomanydepartment()->wherePivot('main', 1)->first()->category_id, ['class' => 'form-select form-select-sm', 'id' => 'cat', 'placeholder' => 'Please Select']) }}
+					<select name="category_id" id="cat" class="form-select form-select-sm col-sm-12 @error('category_id') is-invalid @enderror">
+						<option value="">Please choose</option>
+						@foreach(\App\Models\HumanResources\OptCategory::pluck('category', 'id')->toArray() as $k1 => $v1)
+							<option value="{{ $k1 }}" {{ (old('category_id', $staff->belongstomanydepartment()->wherePivot('main', 1)->first()->category_id) == $k1)?'selected':NULL }}>{{ $v1 }}</option>
+						@endforeach
+					</select>
 				</div>
 			</div>
 
 			<div class="form-group row mb-3 {{ $errors->has('branch_id') ? 'has-error' : '' }}">
-				{{ Form::label( 'bra', 'Branch : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="bra" class="col-form-label col-sm-4">Branch : </label>
 				<div class="col-sm-7">
-					{{ Form::select('branch_id', \App\Models\HumanResources\OptBranch::pluck('location', 'id')->toArray(), $staff->belongstomanydepartment()->wherePivot('main', 1)->first()->branch_id, ['class' => 'form-select form-select-sm', 'id' => 'bra', 'placeholder' => 'Please Select']) }}
+					<select name="branch_id" id="bra" class="form-select form-select-sm col-sm-12 @error('branch_id') is-invalid @enderror">
+						<option value="">Please choose</option>
+						@foreach(\App\Models\HumanResources\OptBranch::pluck('location', 'id')->toArray() as $k1 => $v1)
+							<option value="{{ $k1 }}" {{ (old('branch_id', $staff->belongstomanydepartment()->wherePivot('main', 1)->first()->branch_id) == $k1)?'selected':NULL }}>{{ $v1 }}</option>
+						@endforeach
+					</select>
 				</div>
 			</div>
 
 			<div class="form-group row mb-3 {{ $errors->has('pivot_dept_id') ? 'has-error' : '' }}">
-				{{ Form::label( 'dep', 'Department : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="dep" class="col-form-label col-sm-4">Department : </label>
 				<div class="col-sm-7">
-					{{ Form::select('pivot_dept_id', \App\Models\HumanResources\DepartmentPivot::pluck('department', 'id')->toArray(), $staff->belongstomanydepartment()->wherePivot('main', 1)->first()->id, ['class' => 'form-select form-select-sm', 'id' => 'dep', 'placeholder' => 'Please Select']) }}
+					<select name="pivot_dept_id" id="dep" class="form-select form-select-sm col-sm-12 @error('pivot_dept_id') is-invalid @enderror">
+						<option value="">Please choose</option>
+						@foreach(\App\Models\HumanResources\DepartmentPivot::pluck('department', 'id')->toArray() as $k1 => $v1)
+							<option value="{{ $k1 }}" {{ (old('pivot_dept_id', $staff->belongstomanydepartment()->wherePivot('main', 1)->first()->id) == $k1)?'selected':NULL }}>{{ $v1 }}</option>
+						@endforeach
+					</select>
 				</div>
 			</div>
 
 			<div class="form-group row mb-3 {{ $errors->has('div_id') ? 'has-error' : '' }}">
-				{{ Form::label( 'him', 'Management : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="him" class="col-form-label col-sm-4">Management : </label>
 				<div class="col-sm-7">
-					{{ Form::select('div_id', \App\Models\HumanResources\OptDivision::pluck('div', 'id')->toArray(), $staff->div_id, ['class' => 'form-select form-select-sm', 'id' => 'him', 'placeholder' => 'Please Select']) }}
+					<select name="div_id" id="him" class="form-select form-select-sm col-sm-12 @error('div_id') is-invalid @enderror">
+						<option value="">Please choose</option>
+						@foreach(\App\Models\HumanResources\OptDivision::pluck('div', 'id')->toArray() as $k1 => $v1)
+							<option value="{{ $k1 }}" {{ (old('div_id', $staff->div_id) == $k1)?'selected':NULL }}>{{ $v1 }}</option>
+						@endforeach
+					</select>
 				</div>
 			</div>
 
 			<div class="form-group row mb-3 {{ $errors->has('restday_group_id') ? 'has-error' : '' }}">
-				{{ Form::label( 'rdg', 'Rest Day Group : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="rdg" class="col-form-label col-sm-4">Rest Day Group : </label>
 				<div class="col-sm-7">
-					{{ Form::select('restday_group_id', \App\Models\HumanResources\OptRestdayGroup::pluck('group', 'id')->toArray(), $staff->belongstorestdaygroup()->first()?->restday_group_id, ['class' => 'form-select form-select-sm', 'id' => 'rdg', 'placeholder' => 'Please Select']) }}
+					<select name="restday_group_id" id="rdg" class="form-select form-select-sm col-sm-12 @error('restday_group_id') is-invalid @enderror">
+						<option value="">Please choose</option>
+						@foreach(\App\Models\HumanResources\OptRestdayGroup::pluck('group', 'id')->toArray() as $k1 => $v1)
+							<option value="{{ $k1 }}" {{ (old('restday_group_id', $staff->restday_group_id) == $k1)?'selected':NULL }}>{{ $v1 }}</option>
+						@endforeach
+					</select>
 				</div>
 			</div>
 
 			<div class="form-group row mb-3 {{ $errors->has('leave_flow_id') ? 'has-error' : '' }}">
-			{{ Form::label( 'flow', 'Leave Flow Approval : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+				<label for="flow" class="col-form-label col-sm-4">Leave Flow Approval : </label>
 
-				<div class="col-sm-7 form-check">
+				<div class="col-sm-7">
 				@foreach(HRLeaveApprovalFlow::all() as $k)
-					<div class="pretty p-icon p-curve p-tada mb-2">
-						<input type="radio" name="leave_flow_id" class="form-check-input" value="{{ $k->id }}" {{ ($staff->leave_flow_id == $k->id)?'checked':NULL }} id="auth">
-						<div class="state p-primary-o">
-							<i class="icon mdi mdi-check"></i>
-							<label class="form-check-label" for="auth">{{ $k->description }}</label>
+					<div class="form-check form-check-inline">
+						<div class="pretty p-icon p-curve p-tada mb-2">
+							<input type="radio" name="leave_flow_id" class="form-check-input" value="{{ $k->id }}" {{ ($staff->leave_flow_id == $k->id)?'checked':NULL }} id="auth">
+							<div class="state p-primary-o">
+								<i class="icon mdi mdi-check"></i>
+								<label class="form-check-label" for="auth">{{ $k->description }}</label>
+							</div>
 						</div>
 					</div>
 				@endforeach
@@ -472,10 +525,10 @@ use App\Models\HumanResources\HRLeaveApprovalFlow;
 	</div>
 
 	<div class="d-flex justify-content-center m-3">
-		{!! Form::submit('Update Staff', ['class' => 'btn btn-sm btn-outline-secondary']) !!}
+		<button type="submit" class="btn btn-sm btn-outline-secondary">Update Staff</button>
 	</div>
 
-	{{ Form::close() }}
+	</form>
 </div>
 @endsection
 
@@ -718,7 +771,7 @@ $('#gen_1').on('change', function () {
 						'<div class="form-group row mb-3 {{ $errors->has('maternity_leave') ? 'has-error' : '' }}">' +
 							'<label for="matl" id="matl" class="col-sm-4 col-form-label">Maternity Leave : </label>' +
 							'<div class="col-auto">' +
-								'{{ Form::text('maternity_leave', @$value, ['class' => 'form-control form-control-sm col-auto', 'id' => 'matl', 'placeholder' => 'Maternity Leave', 'autocomplete' => 'off']) }}' +
+								'<input type="text" name="maternity_leave" value="{{ old('maternity_leave', $staff->maternity_leave) }}" id="matl" class="form-control form-control-sm col-sm-12 @error('maternity_leave') is-invalid @enderror" placeholder="Maternity Leave">' +
 							'</div>' +
 						'</div>' +
 					'</div>'
@@ -1346,11 +1399,6 @@ $(crb_wrappers).on("click",".crossbackup_remove", function(e){
 /////////////////////////////////////////////////////////////////////////////////////////
 // bootstrap validator
 $('#form').bootstrapValidator({
-	feedbackIcons: {
-		valid: '',
-		invalid: '',
-		validating: ''
-	},
 	fields: {
 		username: {
 			validators: {

@@ -10,40 +10,42 @@ use \Carbon\Carbon;
 <div class="col-sm-12 row">
 	@include('humanresources.hrdept.navhr')
 	<h4>Edit Annual Leave Entitlement Year {{ $annualleave->year }} for {{ $annualleave->belongstostaff->name }}</h4>
-	{{ Form::model($annualleave, ['route' => ['annualleave.update', $annualleave->id], 'method' => 'PATCH', 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) }}
+	<form method="POST" action="{{ route('annualleave.update', $annualleave) }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+		@csrf
+		@method('PATCH')
 
 		<div class="form-group row {{ $errors->has('annual_leave') ? 'has-error' : '' }} mb-3 g-3">
-			{{ Form::label( 'alt', 'Annual Leave : ', ['class' => 'col-sm-3 col-form-label'] ) }}
+			<label for="alt" class="col-form-label col-sm-3">Annual Leave : </label>
 			<div class=" col-sm-2">
-				{{ Form::text('annual_leave', @$value, ['class' => 'form-control form-control-sm', 'id' => 'alt', 'placeholder' => 'Annual Leave Initialize', 'autocomplete' => 'off', 'readOnly']) }}
+				<input type="text" name="annual_leave" value="{{ old('annual_leave', $annualleave->annual_leave) }}" id="alt" class="form-control form-control-sm col-sm-12 @error('annual_leave') is-invalid @enderror" placeholder="Annual Leave Initialize">
 			</div>
 		</div>
 
 		<div class="form-group row {{ $errors->has('annual_leave_adjustment') ? 'has-error' : '' }} mb-3 g-3">
-			{{ Form::label( 'ala', 'Annual Leave Adjustment : ', ['class' => 'col-sm-3 col-form-label'] ) }}
+			<label for="ala" class="col-form-label col-sm-3">Annual Leave Adjustment : </label>
 			<div class=" col-sm-2">
-				{{ Form::number('annual_leave_adjustment', @$value, ['class' => 'form-control form-control-sm', 'id' => 'ala', 'placeholder' => 'Annual Leave Adjustment', 'step' => '0.5', 'autocomplete' => 'off']) }}
+				<input type="number" name="annual_leave_adjustment" value="{{ old('annual_leave_adjustment', $annualleave->annual_leave_adjustment) }}" id="ala" class="form-control form-control-sm col-sm-12 @error('annual_leave_adjustment') is-invalid @enderror" placeholder="Annual Leave Adjustment" step="0.5">
 			</div>
 		</div>
 
 		<div class="form-group row {{ $errors->has('annual_leave_utilize') ? 'has-error' : '' }} mb-3 g-3">
-			{{ Form::label( 'alu', 'Annual Leave Utilize : ', ['class' => 'col-sm-3 col-form-label'] ) }}
+			<label for="alu" class="col-form-label col-sm-3">Annual Leave Utilize : </label>
 			<div class=" col-sm-2">
-				{{ Form::text('annual_leave_utilize', @$value, ['class' => 'form-control form-control-sm', 'id' => 'alu', 'placeholder' => 'Annual Leave Utilize', 'autocomplete' => 'off', 'readOnly']) }}
+				<input type="text" name="annual_leave" value="{{ old('annual_leave', $annualleave->annual_leave) }}" id="alu" class="form-control form-control-sm col-sm-12 @error('annual_leave') is-invalid @enderror" placeholder="Annual Leave Initialize">
 			</div>
 		</div>
 
 		<div class="form-group row {{ $errors->has('annual_leave_balance') ? 'has-error' : '' }} mb-3 g-3">
-			{{ Form::label( 'alb', 'Annual Leave Balance : ', ['class' => 'col-sm-3 col-form-label'] ) }}
+			<label for="alb" class="col-form-label col-sm-3">Annual Leave Balance : </label>
 			<div class=" col-sm-2">
-				{{ Form::text('annual_leave_balance', @$value, ['class' => 'form-control form-control-sm', 'id' => 'alb', 'placeholder' => 'Annual Leave Balance', 'autocomplete' => 'off', 'readOnly']) }}
+				<input type="text" name="annual_leave" value="{{ old('annual_leave', $annualleave->annual_leave) }}" id="alb" class="form-control form-control-sm col-sm-12 @error('annual_leave') is-invalid @enderror" placeholder="Annual Leave Initialize">
 			</div>
 		</div>
 
 		<div class="form-group row {{ $errors->has('remarks') ? 'has-error' : '' }} mb-3 g-3">
-			{{ Form::label( 'rem', 'Remarks : ', ['class' => 'col-sm-3 col-form-label'] ) }}
+			<label for="rem" class="col-form-label col-sm-3">Remarks : </label>
 			<div class=" col-sm-4">
-				{{ Form::textarea('remarks', @$value, ['class' => 'form-control form-control-sm', 'id' => 'rem', 'placeholder' => 'Remarks', 'autocomplete' => 'off']) }}
+				<textarea name="remarks" id="rem" class="form-control form-control-sm col-sm-12 @error('remarks') is-invalid @enderror" placeholder="Remarks">{{ old('remarks', $annualleave->remarks) }}</textarea>
 			</div>
 		</div>
 
@@ -51,11 +53,11 @@ use \Carbon\Carbon;
 
 		<div class="form-group row  mb-3 g-3">
 			<div class="col-sm-10 offset-sm-3">
-				{!! Form::button('Submit', ['class' => 'btn btn-sm btn-outline-secondary', 'type' => 'submit']) !!}
+				<button type="submit" class="btn btn-sm btn-outline-secondary">Submit</button>
 			</div>
 		</div>
 
-	{{ Form::close() }}
+	</form>
 
 </div>
 @endsection
@@ -64,19 +66,16 @@ use \Carbon\Carbon;
 /////////////////////////////////////////////////////////////////////////////////////////
 // counting annual leave
 $(document).on('keyup mouseup', '#ala', function () {
-	var balance = (($(this).val() * 100)/100) + {{ $annualleave->annual_leave_balance }};
-	$('#alb').val(balance);
+	let adjustment = parseFloat($(this).val()) || 0;
+	let currentBalance = parseFloat({{ $annualleave->annual_leave_balance }}) || 0;
+	let newBalance = currentBalance + adjustment;
+	$('#alb').val(newBalance.toFixed(1));
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // validator
 $(document).ready(function() {
 	$('#form').bootstrapValidator({
-		feedbackIcons: {
-			valid: '',
-			invalid: '',
-			validating: ''
-		},
 		fields: {
 			annual_leave: {
 				validators: {

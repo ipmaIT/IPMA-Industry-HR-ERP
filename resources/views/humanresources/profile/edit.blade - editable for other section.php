@@ -50,7 +50,9 @@ $totalRows_children = $childrens->count();
 		<div class="col-md-10 border-right">
 			<div class="p-1 py-3">
 
-				{!! Form::model($profile, ['route' => ['profile.update', $profile->id], 'method' => 'PATCH', 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) !!}
+			<form method="POST" action="{{ route('profile.update', $profile) }}" accept-charset="UTF-8" id="form" class="form-horizontal" autocomplete="off" enctype="multipart/form-data">
+				@csrf
+				@method('PATCH')
 
 				<div class="row">
 					<div class="d-flex justify-content-between align-items-center">
@@ -70,11 +72,11 @@ $totalRows_children = $childrens->count();
 							<div class="row mt-3">
 								<div class="col-md-6 {{ $errors->has('ic') ? 'has-error' : '' }}">
 									<label for="ic" class="labels">IC</label>
-									{!! Form::text( 'ic', @$value, ['class' => 'form-control', 'id' => 'ic', 'placeholder' => 'Please Insert'] ) !!}
+									<input type="text" name="ic" value="{{ old('ic', @$profile->ic) }}" id="ic" class="form-control form-control-sm col-sm-12 @error('ic') is-invalid @enderror" placeholder="Identity Card/Passport">
 								</div>
 								<div class="col-md-6 {{ $errors->has('mobile') ? 'has-error' : '' }}">
 									<label for="mobile" class="labels">PHONE NUMBER</label>
-									{!! Form::text( 'mobile', @$value, ['class' => 'form-control', 'id' => 'mobile', 'placeholder' => 'Please Insert'] ) !!}
+									<input type="text" name="mobile" value="{{ old('mobile', @$profile->mobile) }}" id="mobile" class="form-control form-control-sm col-sm-12 @error('mobile') is-invalid @enderror" placeholder="Mobile">
 								</div>
 							</div>
 
@@ -512,7 +514,7 @@ $totalRows_children = $childrens->count();
 					</div>
 				</div>
 
-				{!! Form::close() !!}
+				</form>
 
 				<div class="row mt-4">
 					<div class="text-center">
@@ -1144,11 +1146,6 @@ $('.select-input').select2({
 // VALIDATOR
 $(document).ready(function() {
 	$('#form').bootstrapValidator({
-		feedbackIcons: {
-			valid: '',
-			invalid: '',
-			validating: ''
-		},
 		fields: {
 			ic: {
 				validators: {

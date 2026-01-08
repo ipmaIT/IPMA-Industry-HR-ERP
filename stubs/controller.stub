@@ -1,28 +1,36 @@
 <?php
-
 namespace {{ namespace }};
-
 use {{ rootNamespace }}Http\Controllers\Controller;
 
 // for controller output
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
-use Illuminate\Http\JsonResponse;
 
 // models
-
+// use {{ namespacedModel }};
 
 // load db facade
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
+// load validation
+use {{ namespacedRequests }}
+use Illuminate\Support\Facades\Validator;
 
 // load batch and queue
 use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
+
+// load email & notification
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
+// more email & notification
+
+// load pdf
+// use Barryvdh\DomPDF\Facade\Pdf;
 
 // load helper
 use Illuminate\Support\Arr;
@@ -45,7 +53,7 @@ class {{ class }} extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index()
     {
         //
     }
@@ -53,7 +61,7 @@ class {{ class }} extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): View
+    public function create()
     {
         //
     }
@@ -61,7 +69,7 @@ class {{ class }} extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
         //
     }
@@ -69,7 +77,7 @@ class {{ class }} extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id): View
+    public function show(string $id)
     {
         //
     }
@@ -77,7 +85,7 @@ class {{ class }} extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id): View
+    public function edit(string $id)
     {
         //
     }
@@ -85,7 +93,7 @@ class {{ class }} extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id): RedirectResponse
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -93,7 +101,7 @@ class {{ class }} extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id): RedirectResponse
+    public function destroy(string $id)
     {
         //
     }

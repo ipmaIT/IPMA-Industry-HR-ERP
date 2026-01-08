@@ -62,10 +62,10 @@ use App\Http\Controllers\HumanResources\HRDept\OutstationCustomerController;
 
 Route::resources([
 	'leave' => HRLeaveController::class,
-	'profile' => ProfileController::class,
+	// 'profile' => ProfileController::class,
 	'hrdept' => HRDeptController::class,								// only for links
-	'staff' => StaffController::class,
-	'attendance' => AttendanceController::class,
+	// 'staff' => StaffController::class,
+	// 'attendance' => AttendanceController::class,
 	'hrleave' => LeaveController::class,
 	'spouse' => SpouseController::class,
 	'children' => ChildrenController::class,
@@ -97,10 +97,10 @@ Route::resources([
 	'appraisalexcelreport' => AppraisalExcelReportController::class,
 	'appraisalexcelmarkreport' => AppraisalExcelMarkReportController::class,
 	'attendanceremark' => AttendanceRemarkController::class,
-	'appraisalform' => AppraisalFormController::class,
+	// 'appraisalform' => AppraisalFormController::class,
 	'appraisalapoint' => AppraisalApointController::class,
 	'appraisallist' => AppraisalListController::class,
-	'appraisalmark' => AppraisalMarkController::class,
+	// 'appraisalmark' => AppraisalMarkController::class,
 	'cicategory' => ConditionalIncentiveCategoryController::class,
 	'cicategoryitem' => ConditionalIncentiveCategoryItemController::class,
 	'cicategorystaff' => ConditionalIncentiveStaffController::class,
@@ -122,24 +122,45 @@ Route::get('/attendancereportpdf/store', [AttendanceReportPDFController::class, 
 Route::get('/attendanceupload/create', [AttendanceUploadController::class, 'create'])->name('attendanceupload.create');
 Route::post('/attendanceupload', [AttendanceUploadController::class, 'store'])->name('attendanceupload.store');
 
-Route::get('/overtimereport', [OvertimeReportController::class, 'index'])->name('overtimereport.index');
-Route::post('/overtimereport', [OvertimeReportController::class, 'index'])->name('overtimereport.index');
+// Route::get('/overtimereport', [OvertimeReportController::class, 'index'])->name('overtimereport.index');
+// Route::post('/overtimereport', [OvertimeReportController::class, 'index'])->name('overtimereport.index');
+Route::any('/overtimereport', [OvertimeReportController::class, 'index'])->name('overtimereport.index');
 Route::get('/overtimereport/print', [OvertimeReportController::class, 'print'])->name('overtimereport.print');
 
-Route::get('/attendancedailyreport', [AttendanceDailyReportController::class, 'index'])->name('attendancedailyreport.index');
-Route::post('/attendancedailyreport', [AttendanceDailyReportController::class, 'index'])->name('attendancedailyreport.index');
+// Route::get('/attendancedailyreport', [AttendanceDailyReportController::class, 'index'])->name('attendancedailyreport.index');
+// Route::post('/attendancedailyreport', [AttendanceDailyReportController::class, 'index'])->name('attendancedailyreport.index');
+Route::any('/attendancedailyreport', [AttendanceDailyReportController::class, 'index'])->name('attendancedailyreport.index');
 Route::get('/attendancedailyreport/print', [AttendanceDailyReportController::class, 'print'])->name('attendancedailyreport.print');
 
-Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
-Route::post('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+// Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+// Route::post('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+Route::any('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+Route::get('/attendance/edit/{attendance}', [AttendanceController::class, 'edit'])->name('attendance.edit');
+Route::patch('/attendance/update/{attendance}', [AttendanceController::class, 'update'])->name('attendance.update');
 
-Route::get('/appraisalform/create/{id}', [AppraisalFormController::class, 'create'])->name('appraisalform.create');
+Route::get('appraisalform', [AppraisalFormController::class, 'index'])->name('appraisalform.index');
+Route::any('/appraisalform/create/{id}', [AppraisalFormController::class, 'create'])->name('appraisalform.create');
+Route::post('appraisalform', [AppraisalFormController::class, 'store'])->name('appraisalform.store');
+Route::get('appraisalform/{appraisalform}', [AppraisalFormController::class, 'show'])->name('appraisalform.show');
+Route::get('appraisalform/{appraisalform}/edit', [AppraisalFormController::class, 'edit'])->name('appraisalform.edit');
+Route::patch('appraisalform/{appraisalform}', [AppraisalFormController::class, 'update'])->name('appraisalform.update');
+Route::delete('appraisalform/{appraisalform}', [AppraisalFormController::class, 'destroy'])->name('appraisalform.destroy');
 
-Route::get('/staff/show/{staff}', [StaffController::class, 'show'])->name('staff.show');
-Route::post('/staff/show/{staff}', [StaffController::class, 'show'])->name('staff.show');
+Route::get('staff', [StaffController::class, 'index'])->name('staff.index');
+Route::get('staff/create', [StaffController::class, 'create'])->name('staff.create');
+Route::post('staff', [StaffController::class, 'store'])->name('staff.store');
+Route::any('staff/{staff}', [StaffController::class, 'show'])->name('staff.show');
+Route::get('staff/{staff}/edit', [StaffController::class, 'edit'])->name('staff.edit');
+Route::patch('staff/{staff}', [StaffController::class, 'update'])->name('staff.update');
+Route::delete('staff/{staff}', [StaffController::class, 'destroy'])->name('staff.destroy');
 
-Route::get('/profile/show/{profile}', [ProfileController::class, 'show'])->name('profile.show');
-Route::post('/profile/show/{profile}', [ProfileController::class, 'show'])->name('profile.show');
+Route::get('profile', [ProfileController::class, 'index'])->name('profile.index');
+Route::get('profile/create', [ProfileController::class, 'create'])->name('profile.create');
+Route::post('profile', [ProfileController::class, 'store'])->name('profile.store');
+Route::any('profile/{profile}', [ProfileController::class, 'show'])->name('profile.show');
+Route::get('profile/{profile}/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::patch('profile/{profile}', [ProfileController::class, 'update'])->name('profile.update');
+Route::delete('profile/{profile}', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 Route::get('/outstationduration', [OutstationDurationController::class, 'index'])->name('outstationduration.index');
 
@@ -154,8 +175,15 @@ Route::patch('/attendancepayslipexcelsetting/update/{attendancepayslipexcelsetti
 
 Route::get('/attendanceabsentindicator/index', [AttendanceAbsentIndicatorController::class, 'index'])->name('attendanceabsentindicator.index');
 
-Route::get('/appraisalmark/create/{id}', [AppraisalMarkController::class, 'create'])->name('appraisalmark.create');
-Route::get('/appraisalmark/show/{id}', [AppraisalMarkController::class, 'show'])->name('appraisalmark.show');
+// Route::get('/appraisalmark/create/{id}', [AppraisalMarkController::class, 'create'])->name('appraisalmark.create');
+// Route::get('/appraisalmark/show/{id}', [AppraisalMarkController::class, 'show'])->name('appraisalmark.show');
+Route::get('appraisalmark', [AppraisalMarkController::class, 'index'])->name('appraisalmark.index');
+Route::any('appraisalmark/create/{appraisalmark}', [AppraisalMarkController::class, 'create'])->name('appraisalmark.create');
+Route::post('appraisalmark', [AppraisalMarkController::class, 'store'])->name('appraisalmark.store');
+Route::any('appraisalmark/{appraisalmark}', [AppraisalMarkController::class, 'show'])->name('appraisalmark.show');
+Route::get('appraisalmark/{appraisalmark}/edit', [AppraisalMarkController::class, 'edit'])->name('appraisalmark.edit');
+Route::patch('appraisalmark/{appraisalmark}', [AppraisalMarkController::class, 'update'])->name('appraisalmark.update');
+Route::delete('appraisalmark/{appraisalmark}', [AppraisalMarkController::class, 'destroy'])->name('appraisalmark.destroy');
 
 Route::get('/cicategorystaffcheckreport/create', [ConditionalIncentiveStaffCheckingReportController::class, 'create'])->name('cicategorystaffcheckreport.create');
 Route::post('/cicategorystaffcheckreport/store', [ConditionalIncentiveStaffCheckingReportController::class, 'store'])->name('cicategorystaffcheckreport.store');

@@ -8,6 +8,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+// auditable model
+use App\Traits\Auditable;
+
 use Illuminate\Database\Eloquent\SoftDeletes;
 // use Illuminate\Database\Eloquent\Relations\HasOne;
 // use Illuminate\Database\Eloquent\Relations\HasOneThrough;
@@ -25,7 +28,7 @@ class Login extends Authenticatable // implements MustVerifyEmail
 {
 	// protected $connection = 'mysql';
 	protected $table = 'logins';
-	use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+	use HasApiTokens, HasFactory, Notifiable, SoftDeletes, Auditable;
 
 	 /**
 	 * The attributes that are mass assignable.
@@ -91,11 +94,11 @@ class Login extends Authenticatable // implements MustVerifyEmail
 	// }
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
-    /**
-     * Get the e-mail address where password reset links are sent.
-     *
-     * @return string
-     */
+		/**
+		 * Get the e-mail address where password reset links are sent.
+		 *
+		 * @return string
+		 */
 	public function getEmailForPasswordReset()
 	{
 		// return $this->email;

@@ -46,14 +46,14 @@ $time_end_pm = \Carbon\Carbon::parse($working_hour->time_end_pm)->format('H:i');
 
 // $leave = App\Models\HumanResources\HRLeave::join('option_leave_types', 'hr_leaves.leave_type_id', '=', 'option_leave_types.id')->where('date_time_start', '<=', $attendance->attend_date)->where('date_time_end', '>=', $attendance->attend_date)->where('staff_id', '=', $staff->id)->pluck('option_leave_types.leave_type_code', 'hr_leaves.id')->sortKeys()->toArray();
 $leaves = HRLeave::where('staff_id', $attendance->belongstostaff->id)
-			->whereDate('date_time_start', '<=', $attendance->attend_date)
-			->whereDate('date_time_end', '>=', $attendance->attend_date)
-			->where(function (Builder $query){
-				$query->whereIn('leave_status_id', [5,6])
-				->orWhereNull('leave_status_id');
-			})
-			->orderBy('date_time_start', 'DESC')
-			->get();
+->whereDate('date_time_start', '<=', $attendance->attend_date)
+->whereDate('date_time_end', '>=', $attendance->attend_date)
+->where(function (Builder $query){
+	$query->whereIn('leave_status_id', [5,6])
+	->orWhereNull('leave_status_id');
+})
+->orderBy('date_time_start', 'DESC')
+->get();
 			// ->ddRawSql();
 			// ->pluck('HR9-'.str_pad('leave_no',5,'0',STR_PAD_LEFT).'/'.'leave_year', 'id');
 // dd($leave);
@@ -72,146 +72,164 @@ if ($leaves->count()) {
 	<div class="d-flex justify-content-center align-items-start">
 		<div class="col-md-7">
 
-			{!! Form::model($attendance, ['route' => ['attendance.update', $attendance->id], 'method' => 'PATCH', 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) !!}
-			<input type="hidden" name="staff_id" value="<?php echo $staff->id; ?>">
+			<form method="POST" action="{{ route('attendance.update', $attendance->id) }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+				@csrf
+				@method('PATCH')
+				<input type="hidden" name="staff_id" value="<?php echo $staff->id; ?>">
 
-			<h5>Attendance Edit</h5>
+				<h5>Attendance Edit</h5>
 
-			<div class="row mt-3"></div>
+				<div class="row mt-3"></div>
 
-			<div class="row mt-2">
-				<div class="col-md-3">
-					{!! Form::label( 'id', 'ID', ['class' => 'form-control border-0'] ) !!}
+				<div class="row mt-2">
+					<div class="col-md-3">
+						<label for="id" class="col-form-label">ID : </label>
+					</div>
+					<div class="col-md-9">
+						<input type="text" name="id" value="{{ $login->username }}" id="id" class="form-control form-control-sm" readonly>
+					</div>
 				</div>
-				<div class="col-md-9">
-					{!! Form::label( 'id', @$login->username, ['class' => 'form-control'] ) !!}
-				</div>
-			</div>
 
-			<div class="row mt-2">
-				<div class="col-md-3">
-					{!! Form::label( 'name', 'NAME', ['class' => 'form-control border-0'] ) !!}
+				<div class="row mt-2">
+					<div class="col-md-3">
+						<label for="name" class="col-form-label">Name : </label>
+					</div>
+					<div class="col-md-9">
+						<input type="text" name="name" value="{{ $staff->name }}" id="name" class="form-control form-control-sm" readonly>
+					</div>
 				</div>
-				<div class="col-md-9">
-					{!! Form::label( 'name', @$staff->name, ['class' => 'form-control'] ) !!}
-				</div>
-			</div>
 
-			<div class="row mt-2">
-				<div class="col-md-3">
-					{!! Form::label( 'date', 'DATE', ['class' => 'form-control border-0'] ) !!}
+				<div class="row mt-2">
+					<div class="col-md-3">
+						<label for="date" class="col-form-label">Date : </label>
+					</div>
+					<div class="col-md-9">
+						<input type="text" name="attend_date" value="{{ old('attend_date', $attendance->attend_date) }}" id="date" class="form-control form-control-sm @error('attend_date') is-invalid @enderror" readonly>
+					</div>
 				</div>
-				<div class="col-md-9">
-					{!! Form::text( 'attend_date', @$attendance->attend_date, ['class' => 'form-control', 'id' => 'attend_date', 'readonly' => 'readonly']) !!}
-				</div>
-			</div>
 
-			<div class="row mt-2">
-				<div class="col-md-3">
-					{!! Form::label( 'day_type', 'DAY TYPE', ['class' => 'form-control border-0'] ) !!}
+				<div class="row mt-2">
+					<div class="col-md-3">
+						<label for="daytype_id" class="col-form-label">Day Type : </label>
+					</div>
+					<div class="col-md-9 {{ $errors->has('daytype_id') ? 'has-error' : '' }}">
+						<select name="daytype_id" id="daytype_id" class="form-select form-select-sm @error('daytype_id') is-invalid @enderror">
+							<option value="">Please choose</option>
+							@foreach($day_type as $k => $v)
+							<option value="{{ $k }}" {{ ($k == $attendance->daytype_id)?'selected':NULL }}>{{ $v }}</option>
+							@endforeach
+						</select>
+					</div>
 				</div>
-				<div class="col-md-9 {{ $errors->has('daytype_id') ? 'has-error' : '' }}">
-					{!! Form::select( 'daytype_id', $day_type, @$value, ['class' => 'form-control select-input', 'id' => 'daytype_id', 'placeholder' => 'Please Select'] ) !!}
-				</div>
-			</div>
 
-			<div class="row mt-2">
-				<div class="col-md-3">
-					{!! Form::label( 'attendance_type', 'CAUSE', ['class' => 'form-control border-0'] ) !!}
+				<div class="row mt-2">
+					<div class="col-md-3">
+						<label for="attendance_type_id" class="col-form-label">Cause : </label>
+					</div>
+					<div class="col-md-9 {{ $errors->has('attendance_type_id') ? 'has-error' : '' }}">
+						<select name="attendance_type_id" id="attendance_type_id" class="form-select form-select-sm @error('attendance_type_id') is-invalid @enderror">
+							<option value="">Please choose</option>
+							@foreach($tcms as $k => $v)
+							<option value="{{ $k }}" {{ ($k == $attendance->attendance_type_id)?'selected':NULL }}>{{ $v }}</option>
+							@endforeach
+						</select>
+					</div>
 				</div>
-				<div class="col-md-9 {{ $errors->has('attendance_type_id') ? 'has-error' : '' }}">
-					{!! Form::select( 'attendance_type_id', $tcms, @$value, ['class' => 'form-control select-input', 'id' => 'attendance_type_id', 'placeholder' => ''] ) !!}
-				</div>
-			</div>
 
-			<div class="row mt-2">
-				<div class="col-md-3">
-					{!! Form::label( 'leave_id', 'LEAVE', ['class' => 'form-control border-0'] ) !!}
+				<div class="row mt-2">
+					<div class="col-md-3">
+						<label for="leave_id" class="col-form-label">Leave : </label>
+					</div>
+					<div class="col-md-9 {{ $errors->has('leave_id') ? 'has-error' : '' }}">
+						<select name="leave_id" id="leave_id" class="form-select form-select-sm @error('leave_id') is-invalid @enderror">
+							<option value="">Please choose</option>
+							@foreach($leave as $k => $v)
+							<option value="{{ $k }}" {{ ($k == $attendance->leave_id)?'selected':NULL }}>{{ $v }}</option>
+							@endforeach
+						</select>
+					</div>
 				</div>
-				<div class="col-md-9 {{ $errors->has('leave_id') ? 'has-error' : '' }}">
-					{!! Form::select( 'leave_id', $leave, @$value, ['class' => 'form-control', 'id' => 'leave_id', 'placeholder' => 'Please Choose'] ) !!}
-				</div>
-			</div>
 
-			<div class="row mt-2">
-				<div class="col-md-3">
-					{!! Form::label( 'in', 'IN', ['class' => 'form-control border-0'] ) !!}
+				<div class="row mt-2">
+					<div class="col-md-3">
+						<label for="in" class="col-form-label">In : </label>
+					</div>
+					<div class="col-md-9 {{ $errors->has('in') ? 'has-error' : '' }}">
+						<input type="text" name="in" value="{{ old('in', $attendance->in) }}" id="in" class="form-control form-control-sm @error('in') is-invalid @enderror" placeholder="In">
+					</div>
 				</div>
-				<div class="col-md-9 {{ $errors->has('in') ? 'has-error' : '' }}">
-					{!! Form::text( 'in', @$attendance->in, ['class' => 'form-control in-input', 'id' => 'in'] ) !!}
-				</div>
-			</div>
 
-			<div class="row mt-2">
-				<div class="col-md-3">
-					{!! Form::label( 'break', 'BREAK', ['class' => 'form-control border-0'] ) !!}
+				<div class="row mt-2">
+					<div class="col-md-3">
+						<label for="break" class="col-form-label">Break : </label>
+					</div>
+					<div class="col-md-9 {{ $errors->has('break') ? 'has-error' : '' }}">
+						<input type="text" name="break" value="{{ old('break', $attendance->break) }}" id="break" class="form-control form-control-sm @error('break') is-invalid @enderror" placeholder="Break">
+					</div>
 				</div>
-				<div class="col-md-9 {{ $errors->has('break') ? 'has-error' : '' }}">
-					{!! Form::text( 'break', @$attendance->break, ['class' => 'form-control break-input', 'id' => 'break'] ) !!}
-				</div>
-			</div>
 
-			<div class="row mt-2">
-				<div class="col-md-3">
-					{!! Form::label( 'resume', 'RESUME', ['class' => 'form-control border-0'] ) !!}
+				<div class="row mt-2">
+					<div class="col-md-3">
+						<label for="from1" class="col-form-label">Resume : </label>
+					</div>
+					<div class="col-md-9 {{ $errors->has('resume') ? 'has-error' : '' }}">
+						<input type="text" name="resume" value="{{ old('resume', $attendance->resume) }}" id="resume" class="form-control form-control-sm @error('resume') is-invalid @enderror" placeholder="Resume">
+					</div>
 				</div>
-				<div class="col-md-9 {{ $errors->has('resume') ? 'has-error' : '' }}">
-					{!! Form::text( 'resume', @$attendance->resume, ['class' => 'form-control resume-input', 'id' => 'resume'] ) !!}
-				</div>
-			</div>
 
-			<div class="row mt-2">
-				<div class="col-md-3">
-					{!! Form::label( 'out', 'OUT', ['class' => 'form-control border-0'] ) !!}
+				<div class="row mt-2">
+					<div class="col-md-3">
+						<label for="out" class="col-form-label">Out : </label>
+					</div>
+					<div class="col-md-9 {{ $errors->has('out') ? 'has-error' : '' }}">
+						<input type="text" name="out" value="{{ old('out', $attendance->out) }}" id="out" class="form-control form-control-sm @error('out') is-invalid @enderror" placeholder="Out">
+					</div>
 				</div>
-				<div class="col-md-9 {{ $errors->has('out') ? 'has-error' : '' }}">
-					{!! Form::text( 'out', @$attendance->out, ['class' => 'form-control out-input', 'id' => 'out'] ) !!}
-				</div>
-			</div>
 
-			<div class="row mt-2">
-				<div class="col-md-3">
-					{!! Form::label( 'duration', 'DURATION', ['class' => 'form-control border-0'] ) !!}
+				<div class="row mt-2">
+					<div class="col-md-3">
+						<label for="time_work_hour" class="col-form-label">Duration : </label>
+					</div>
+					<div class="col-md-9 {{ $errors->has('time_work_hour') ? 'has-error' : '' }}">
+						<input type="text" name="time_work_hour" value="{{ old('time_work_hour', $attendance->time_work_hour) }}" id="time_work_hour" class="form-control form-control-sm @error('time_work_hour') is-invalid @enderror" placeholder="Duration">
+					</div>
 				</div>
-				<div class="col-md-9 {{ $errors->has('time_work_hour') ? 'has-error' : '' }}">
-					{!! Form::text( 'time_work_hour', @$time_work_hour, ['class' => 'form-control duration-input', 'id' => 'time_work_hour'] ) !!}
-				</div>
-			</div>
 
-			<div class="row mt-2">
-				<div class="col-md-3">
-					{!! Form::label( 'remarks', 'REMARK', ['class' => 'form-control border-0'] ) !!}
+				<div class="row mt-2">
+					<div class="col-md-3">
+						<label for="remarks" class="col-form-label">Remarks : </label>
+					</div>
+					<div class="col-md-9 {{ $errors->has('remark') ? 'has-error' : '' }}">
+						<input type="text" name="remarks" value="{{ old('remarks', $attendance->remarks) }}" id="remarks" class="form-control form-control-sm @error('remarks') is-invalid @enderror" placeholder="Remarks">
+					</div>
 				</div>
-				<div class="col-md-9 {{ $errors->has('remark') ? 'has-error' : '' }}">
-					{!! Form::text( 'remarks', @$attendance->remarks, ['class' => 'form-control', 'id' => 'remarks', 'placeholder' => ''] ) !!}
-				</div>
-			</div>
 
-			<div class="row mt-2">
-				<div class="col-md-3">
-					{!! Form::label( 'hr_remark', 'HR REMARK', ['class' => 'form-control border-0'] ) !!}
+				<div class="row mt-2">
+					<div class="col-md-3">
+						<label for="hr_remarks" class="col-form-label">HR Remarks : </label>
+					</div>
+					<div class="col-md-9 {{ $errors->has('hr_remark') ? 'has-error' : '' }}">
+						<input type="text" name="hr_remarks" value="{{ old('hr_remarks', $attendance->hr_remarks) }}" id="hr_remarks" class="form-control form-control-sm @error('hr_remarks') is-invalid @enderror" placeholder="HR Remarks">
+					</div>
 				</div>
-				<div class="col-md-9 {{ $errors->has('hr_remark') ? 'has-error' : '' }}">
-					{!! Form::text( 'hr_remarks', @$attendance->hr_remark, ['class' => 'form-control', 'id' => 'hr_remark', 'placeholder' => ''] ) !!}
-				</div>
-			</div>
 
-			<div class="row mt-2">
-				<div class="col-md-3">
-					{!! Form::label( 'exception', 'EXCEPTION', ['class' => 'form-control border-0'] ) !!}
+				<div class="row mt-2">
+					<div class="col-md-3">
+						&nbsp;
+					</div>
+					<div class="col-md-9 form-check {{ $errors->has('exception') ? 'has-error' : '' }}">
+						<input type="checkbox" name="exception" value="1" id="exception" class="form-check-input @error('exception') is-invalid @enderror" {{ ($attendance->exception)?'checked':NULL }}>
+						<label for="exception" class="form-check-label">Exception</label>
+					</div>
 				</div>
-				<div class="col-md-9 {{ $errors->has('exception') ? 'has-error' : '' }}">
-					{{ Form::checkbox('exception', 1, null, ['id' => 'exception']) }}
-				</div>
-			</div>
 
-			<div class="row mt-4">
-				<div class="text-center">
-					{!! Form::button('Update', ['class' => 'btn btn-sm btn-outline-secondary', 'type' => 'submit']) !!}
+				<div class="row mt-4">
+					<div class="text-center">
+						<button type="submit" class="btn btn-sm btn-outline-secondary">Update</button>
+					</div>
 				</div>
-			</div>
 
-			{{ Form::close() }}
+			</form>
 
 			<div class="row mt-4 text-center">
 				<a href="{{ url()->previous() }}">
@@ -362,7 +380,7 @@ $('#in').datetimepicker({
 
 
 // DATE PICKER BREAK
-$('.break-input').datetimepicker({
+$('#break').datetimepicker({
 	icons: {
 		time: "fas fas-regular fa-clock fa-beat",
 		date: "fas fas-regular fa-calendar fa-beat",
@@ -496,7 +514,7 @@ $('.break-input').datetimepicker({
 
 
 // DATE PICKER RESUME
-$('.resume-input').datetimepicker({
+$('#resume').datetimepicker({
 	icons: {
 		time: "fas fas-regular fa-clock fa-beat",
 		date: "fas fas-regular fa-calendar fa-beat",
@@ -630,7 +648,7 @@ $('.resume-input').datetimepicker({
 
 
 // DATE PICKER OUT
-$('.out-input').datetimepicker({
+$('#out').datetimepicker({
 	icons: {
 		time: "fas fas-regular fa-clock fa-beat",
 		date: "fas fas-regular fa-calendar fa-beat",
@@ -764,7 +782,7 @@ $('.out-input').datetimepicker({
 
 
 // DATE PICKER DURATION
-$('.duration-input').datetimepicker({
+$('#time_work_hour').datetimepicker({
 	icons: {
 		time: "fas fas-regular fa-clock fa-beat",
 		date: "fas fas-regular fa-calendar fa-beat",
@@ -795,11 +813,6 @@ $('#leave_id,#attendance_type_id,#daytype_id').select2({
 // VALIDATION
 $(document).ready(function() {
 	$('#form').bootstrapValidator({
-		feedbackIcons: {
-			valid: '',
-			invalid: '',
-			validating: ''
-		},
 		fields: {
 
 			daytype_id: {

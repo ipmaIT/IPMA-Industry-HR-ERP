@@ -10,48 +10,50 @@ use \Carbon\Carbon;
 <div class="col-sm-12 row">
 	@include('humanresources.hrdept.navhr')
 	<h4>Edit Working Hour</h4>
-	{{ Form::model($workinghour, ['route' => ['workinghour.update', $workinghour->id], 'method' => 'PATCH', 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) }}
+	<form method="POST" action="{{ route('workinghour.update', $workinghour) }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+		@csrf
+		@method('PATCH')
 
 			<div class="form-group row {{ $errors->has('time') ? 'has-error' : '' }} mb-3 g-3">
-				{{ Form::label( 'dstart1', 'Time : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+				<label for="dstart1" class="col-form-label col-sm-2">Time : </label>
 				<div class=" col-sm-2">
-					{{ Form::text('time_start_am', @$value, ['class' => 'form-control', 'id' => 'tsa', 'placeholder' => 'Date Start', 'autocomplete' => 'off']) }}
+					<input type="text" name="time_start_am" value="{{ old('time_start_am', $workinghour->time_start_am) }}" id="tsa" class="form-control form-control-sm col-sm-12 @error('time_start_am') is-invalid @enderror" placeholder="1st Half Time Start">
 				</div>
 				<div class="col-sm-2">
-					{{ Form::text('time_end_am', @$value, ['class' => 'form-control', 'id' => 'tea', 'placeholder' => 'Date Start', 'autocomplete' => 'off']) }}
+					<input type="text" name="time_end_am" value="{{ old('time_end_am', $workinghour->time_end_am) }}" id="tea" class="form-control form-control-sm col-sm-12 @error('time_end_am') is-invalid @enderror" placeholder="1st Half Time End">
 				</div>
 				<div class="col-sm-2">
-					{{ Form::text('time_start_pm', @$value, ['class' => 'form-control', 'id' => 'tsp', 'placeholder' => 'Date Start', 'autocomplete' => 'off']) }}
+					<input type="text" name="time_start_pm" value="{{ old('time_start_pm', $workinghour->time_start_pm) }}" id="tsp" class="form-control form-control-sm col-sm-12 @error('time_start_pm') is-invalid @enderror" placeholder="2nd Half Time Start">
 				</div>
 				<div class="col-sm-2">
-					{{ Form::text('time_end_pm', @$value, ['class' => 'form-control', 'id' => 'tep', 'tep' => 'Date Start', 'autocomplete' => 'off']) }}
+					<input type="text" name="time_end_pm" value="{{ old('time_end_pm', $workinghour->time_end_pm) }}" id="tep" class="form-control form-control-sm col-sm-12 @error('time_end_pm') is-invalid @enderror" placeholder="2nd Half Time End">
 				</div>
 			</div>
 
 			<div class="form-group row {{ $errors->has('date') ? 'has-error' : '' }}  mb-3 g-3">
-				{{ Form::label( 'dstart2', 'Effective Date : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+				<label for="dstart2" class="col-form-label col-sm-2">Effective Date : </label>
 				<div class="col-sm-5">
-					{{ Form::text('effective_date_start', @$value, ['class' => 'form-control col-auto', 'id' => 'eds', 'placeholder' => 'Effective Date Start', 'autocomplete' => 'off']) }}
+					<input type="text" name="effective_date_start" value="{{ old('effective_date_start', $workinghour->effective_date_start) }}" id="eds" class="form-control form-control-sm col-sm-12 @error('effective_date_start') is-invalid @enderror" placeholder="Effective Date Start">
 				</div>
 				<div class="col-sm-5">
-					{{ Form::text('effective_date_end', @$value, ['class' => 'form-control col-auto', 'id' => 'ede', 'placeholder' => 'Effective Date End', 'autocomplete' => 'off']) }}
+					<input type="text" name="effective_date_end" value="{{ old('effective_date_end', $workinghour->effective_date_end) }}" id="ede" class="form-control form-control-sm col-sm-12 @error('effective_date_end') is-invalid @enderror" placeholder="Effective Date End">
 				</div>
 			</div>
 
 			<div class="form-group row {{ $errors->has('time') ? 'has-error' : '' }}  mb-3 g-3">
-				{{ Form::label( 'dstart3', 'Remarks : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+				<label for="dstart3" class="col-form-label col-sm-2">Remarks : </label>
 				<div class="col-sm-10">
-					{{ Form::text('remarks', @$value, ['class' => 'form-control', 'id' => 'dstart', 'placeholder' => 'Remarks', 'autocomplete' => 'off', 'disabled' => 'disabled']) }}
+					<textarea name="remarks" id="dstart3" class="form-control form-control-sm col-sm-12 @error('remarks') is-invalid @enderror" placeholder="Remarks">{{ old('remarks', $workinghour->remarks) }}</textarea>
 				</div>
 			</div>
 
 			<div class="form-group row  mb-3 g-3">
 				<div class="col-sm-10 offset-sm-2">
-					{!! Form::button('Submit', ['class' => 'btn btn-sm btn-outline-secondary', 'type' => 'submit']) !!}
+					<button type="submit" class="btn btn-sm btn-outline-secondary">Submit</button>
 				</div>
 			</div>
 
-	{{ Form::close() }}
+	</form>
 
 </div>
 @endsection
@@ -121,11 +123,6 @@ $('#ede').datetimepicker({
 // validator
 $(document).ready(function() {
 	$('#form').bootstrapValidator({
-		feedbackIcons: {
-			valid: '',
-			invalid: '',
-			validating: ''
-		},
 		fields: {
 			time_start_am: {
 				validators: {

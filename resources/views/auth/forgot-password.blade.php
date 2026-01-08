@@ -1,19 +1,31 @@
 @extends('layouts.app')
 @section('content')
-<div class="mb-3 row text-sm">
-    {{ __('Forgot your password? No problem. Just let us know your username and we will email you a password reset link that will allow you to choose a new one.') }}
-</div>
-{{ Form::open(['route' => ['password.email'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) }}
-<div class="mb-3 row">
-    <div class="form-group row {{ $errors->has('username') ? 'has-error' : '' }}">
-        {!! Form::label('username', 'Username : ', ['class' => 'col-sm-2 col-form-label col-form-label-sm']) !!}
-        <div class="col-sm-10">
-            {{ Form::text('username', @$value, ['class' => 'form-control form-control-sm col-auto', 'id' => 'username', 'placeholder' => 'Username']) }}
-        </div>
-    </div>
-</div>
-{!! Form::submit('Email Password Reset Link', ['class' => 'btn btn-sm btn-outline-secondary']) !!}
-{{ Form::close() }}
+<form method="POST" action="{{ route('password.email') }}" id='form' autocomplete="off" enctype="multipart/form-data">
+	@csrf
+	<div class="card">
+		<div class="card-header">
+			<h3>Forgot Password</h3>
+		</div>
+		<div class="card-body">
+			<p>Forgot your password? No problem. Just let us know your username and we will email you a password reset link that will allow you to choose a new one.</p>
+			<div class="form-group row m-1 @error('username') has-error @enderror">
+				<label for="username" class="col-form-label col-sm-2">Username : </label>
+				<div class="col-sm-6 my-auto">
+					<input type="text" name="username" value="{{ old('username', @$variable->username) }}" id="username" class="form-control form-control-sm @error('username') is-invalid @enderror" placeholder="Username">
+					@error('username')
+						<div class="invalid-feedback">
+							{{ $message }}
+						</div>
+					@enderror
+				</div>
+			</div>
+		</div>
+		<div class="card-footer">
+			<button type="submit" class="btn btn-sm btn-outline-secondary m-0 col-auto">Email Password Reset Link</button>
+		</div>
+	</div>
+</form>
 @endsection
+
 @section('js')
 @endsection

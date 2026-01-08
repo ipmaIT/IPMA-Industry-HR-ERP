@@ -1,14 +1,13 @@
 <?php
-
 namespace {{ namespace }};
-
 use {{ rootNamespace }}Http\Controllers\Controller;
 
 // for controller output
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
-use Illuminate\Http\JsonResponse;
 
 // models
 use {{ namespacedModel }};
@@ -17,15 +16,21 @@ use {{ namespacedModel }};
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
-use Illuminate\Support\Facades\Http;
-use Illuminate\Http\Request;
 
 // load validation
 use {{ namespacedRequests }}
+use Illuminate\Support\Facades\Validator;
 
 // load batch and queue
 use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
+
+// load email & notification
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;// more email
+
+// load pdf
+// use Barryvdh\DomPDF\Facade\Pdf;
 
 // load helper
 use Illuminate\Support\Arr;
@@ -96,7 +101,7 @@ class {{ class }} extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy({{ model }} ${{ modelVariable }}): RedirectResponse
+    public function destroy({{ model }} ${{ modelVariable }}): JsonResponse
     {
         //
     }

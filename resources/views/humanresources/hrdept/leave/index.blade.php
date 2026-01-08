@@ -192,7 +192,9 @@ if ($me1) {																				// hod
 									<div class="modal fade" id="uploaddoc_{{ $ul->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="uploaddocLabel_{{ $ul->id }}" aria-hidden="true">
 										<div class="modal-dialog">
 											<div class="modal-content">
-												{{ Form::open(['route' => ['uploaddoc', $ul->id], 'method' => 'patch', 'id' => 'form', 'autocomplete' => 'off', 'files' => true,  'data-toggle' => 'validator']) }}
+												<form method="POST" action="{{ route('uploaddoc', $ul->id) }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+													@csrf
+													@method('PATCH')
 												<div class="modal-header">
 													<h1 class="modal-title fs-5" id="uploaddocLabel_{{ $ul->id }}">Upload Supporting Document</h1>
 													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -200,25 +202,25 @@ if ($me1) {																				// hod
 												<div class="modal-body text-center">
 
 													<div class="form-group row m-2 {{ $errors->has('document') ? 'has-error' : '' }}">
-														{{ Form::label( 'doc', 'Upload Supporting Document : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+														<label for="doc" class="col-form-label col-sm-4">Upload Supporting Document : </label>
 														<div class="col-sm-8">
-															{{ Form::file( 'document', ['class' => 'form-control form-control-sm form-control-file', 'id' => 'doc', 'placeholder' => 'Supporting Document']) }}
+															<input type="file" name="document" value="{{ old('document') }}" id="doc" class="form-control form-control-sm col-sm-12 @error('document') is-invalid @enderror" placeholder="Supporting Document">
 														</div>
 													</div>
 
 													<div class="form-group row m-2 {{ $errors->has('amend_note') ? 'has-error' : '' }}">
-														{{ Form::label( 'rem', 'Remarks : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+														<label for="rem" class="col-form-label col-sm-4">Remarks : </label>
 														<div class="col-sm-8">
-															{{ Form::textarea( 'amend_note', @$value, ['class' => 'form-control form-control-sm', 'id' => 'rem', 'placeholder' => 'Remarks']) }}
+															<textarea name="amend_note" id="rem" class="form-control form-control-sm col-sm-12 @error('amend_note') is-invalid @enderror" placeholder="Remarks">{{ old('amend_note') }}</textarea>
 														</div>
 													</div>
 
 												</div>
 												<div class="modal-footer">
 														<button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-														{{ Form::submit('Submit', ['class' => 'btn btn-sm btn-outline-secondary']) }}
+														<button type="submit" class="btn btn-sm btn-outline-secondary">Submit</button>
 												</div>
-												{{ Form::close() }}
+												</form>
 											</div>
 										</div>
 									</div>
@@ -357,7 +359,9 @@ if ($me1) {																				// hod
 									<div class="modal fade" id="uploaddoc_{{ $ul->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="uploaddocLabel_{{ $ul->id }}" aria-hidden="true">
 										<div class="modal-dialog">
 											<div class="modal-content">
-												{{ Form::open(['route' => ['uploaddoc', $ul->id], 'method' => 'patch', 'id' => 'form', 'autocomplete' => 'off', 'files' => true,  'data-toggle' => 'validator']) }}
+												<form method="POST" action="{{ route('uploaddoc', $ul->id) }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+													@csrf
+													@method('PATCH')
 												<div class="modal-header">
 													<h1 class="modal-title fs-5" id="uploaddocLabel_{{ $ul->id }}">Upload Supporting Document</h1>
 													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -365,25 +369,25 @@ if ($me1) {																				// hod
 												<div class="modal-body text-center">
 
 													<div class="form-group row m-2 {{ $errors->has('document') ? 'has-error' : '' }}">
-														{{ Form::label( 'doc', 'Upload Supporting Document : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+														<label for="doc" class="col-form-label col-sm-4">Upload Supporting Document : </label>
 														<div class="col-sm-8">
-															{{ Form::file( 'document', ['class' => 'form-control form-control-sm form-control-file', 'id' => 'doc', 'placeholder' => 'Supporting Document']) }}
+															<input type="file" name="document" value="{{ old('document') }}" id="doc" class="form-control form-control-sm col-sm-12 @error('document') is-invalid @enderror" placeholder="Supporting Document">
 														</div>
 													</div>
 
 													<div class="form-group row m-2 {{ $errors->has('amend_note') ? 'has-error' : '' }}">
-														{{ Form::label( 'rem', 'Remarks : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+														<label for="rem" class="col-form-label col-sm-4">Remarks : </label>
 														<div class="col-sm-8">
-															{{ Form::textarea( 'amend_note', @$value, ['class' => 'form-control form-control-sm', 'id' => 'rem', 'placeholder' => 'Remarks']) }}
+															<textarea name="amend_note" id="rem" class="form-control form-control-sm col-sm-12 @error('amend_note') is-invalid @enderror" placeholder="Remarks">{{ old('amend_note') }}</textarea>
 														</div>
 													</div>
 
 												</div>
 												<div class="modal-footer">
 														<button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-														{{ Form::submit('Submit', ['class' => 'btn btn-sm btn-outline-secondary']) }}
+														<button type="submit" class="btn btn-sm btn-outline-secondary">Submit</button>
 												</div>
-												{{ Form::close() }}
+												</form>
 											</div>
 										</div>
 									</div>
@@ -522,7 +526,9 @@ if ($me1) {																				// hod
 									<div class="modal fade" id="uploaddoc_{{ $ul->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="uploaddocLabel_{{ $ul->id }}" aria-hidden="true">
 										<div class="modal-dialog">
 											<div class="modal-content">
-												{{ Form::open(['route' => ['uploaddoc', $ul->id], 'method' => 'patch', 'id' => 'form', 'autocomplete' => 'off', 'files' => true,  'data-toggle' => 'validator']) }}
+												<form method="POST" action="{{ route('uploaddoc', $ul->id) }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+													@csrf
+													@method('PATCH')
 												<div class="modal-header">
 													<h1 class="modal-title fs-5" id="uploaddocLabel_{{ $ul->id }}">Upload Supporting Document</h1>
 													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -530,25 +536,25 @@ if ($me1) {																				// hod
 												<div class="modal-body text-center">
 
 													<div class="form-group row m-2 {{ $errors->has('document') ? 'has-error' : '' }}">
-														{{ Form::label( 'doc', 'Upload Supporting Document : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+														<label for="doc" class="col-form-label col-sm-2">Upload Supporting Document : </label>
 														<div class="col-sm-8">
-															{{ Form::file( 'document', ['class' => 'form-control form-control-sm form-control-file', 'id' => 'doc', 'placeholder' => 'Supporting Document']) }}
+															<input type="file" name="document" value="{{ old('document') }}" id="doc" class="form-control form-control-sm col-auto @error('document') is-invalid @enderror" placeholder="Supporting Document">
 														</div>
 													</div>
 
 													<div class="form-group row m-2 {{ $errors->has('amend_note') ? 'has-error' : '' }}">
-														{{ Form::label( 'rem', 'Remarks : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+														<label for="rem" class="col-form-label col-sm-2">Remarks : </label>
 														<div class="col-sm-8">
-															{{ Form::textarea( 'amend_note', @$value, ['class' => 'form-control form-control-sm', 'id' => 'rem', 'placeholder' => 'Remarks']) }}
+															<textarea name="amend_note" id="rem" class="form-control form-control-sm @error('amend_note') is-invalid @enderror" placeholder="Remarks">{{ old('amend_note', @$variable->amend_note) }}</textarea>
 														</div>
 													</div>
 
 												</div>
 												<div class="modal-footer">
 														<button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-														{{ Form::submit('Submit', ['class' => 'btn btn-sm btn-outline-secondary']) }}
+														<button type="submit" class="btn btn-sm btn-outline-secondary">Submit</button>
 												</div>
-												{{ Form::close() }}
+												</form>
 											</div>
 										</div>
 									</div>
@@ -639,11 +645,17 @@ $('#paleave').DataTable({
 /////////////////////////////////////////////////////////////////////////////////////////
 // fullcalendar cant use jquery
 var calendarEl = document.getElementById('calendar');
-var calendar = new FullCalendar.Calendar(calendarEl, {
+var calendar = new Calendar(calendarEl, {
 	aspectRatio: 1.0,
 	height: 2000,
 	initialView: 'multiMonthYear',
-	// initialView: 'dayGridMonth',
+	plugins: [
+		timeGridPlugin,
+		dayGridPlugin,
+		multiMonthPlugin,
+		momentPlugin,
+		bootstrap5Plugin
+	],
 	// multiMonthMaxColumns: 1,					// force a single column
 	headerToolbar: {
 		left: 'prev,next today',

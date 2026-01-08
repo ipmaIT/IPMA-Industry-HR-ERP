@@ -97,7 +97,7 @@ class DisciplineController extends Controller
 			]);
 		}
 
-		Session::flash('flash_message', 'Successfully Added Discipline.');
+		Session::flash('message', 'Successfully Added Discipline.');
 		return redirect()->route('discipline.index');
 	}
 
@@ -161,7 +161,7 @@ class DisciplineController extends Controller
 			]);
 		}
 
-		Session::flash('flash_message', 'Data successfully updated!');
+		Session::flash('message', 'Data successfully updated!');
 		return Redirect::route('discipline.index', $discipline);
 	}
 

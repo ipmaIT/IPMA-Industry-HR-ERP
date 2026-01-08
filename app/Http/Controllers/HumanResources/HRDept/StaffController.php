@@ -288,7 +288,7 @@ class StaffController extends Controller
 			}
 		}
 
-		Session::flash('flash_message', 'Successfully Edit Staff.');
+		Session::flash('message', 'Successfully Edit Staff.');
 		return redirect()->route('staff.index');
 	}
 

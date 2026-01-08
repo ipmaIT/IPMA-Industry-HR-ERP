@@ -31,96 +31,103 @@ $customer = App\Models\Customer::pluck('customer', 'id')->sortKeys()->toArray();
   @include('humanresources.hrdept.navhr')
   <h4>Edit Replacement Leave</h4>
 
-  {{ Form::model($rleave, ['route' => ['rleave.update', $rleave->id], 'method' => 'PATCH', 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) }}
+  <form method="POST" action="{{ route('rleave.update', $rleave) }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+    @csrf
+    @method('PATCH')
 
   <div class="row mt-3">
     <div class="col-md-2">
-      {{Form::label('id', 'ID')}}
+      <label for="id" class="col-form-label col-auto">ID : </label>
     </div>
     <div class="col-md-10">
-      {{Form::label('id', @$rleave->belongstostaff->hasmanylogin()->where('logins.active', 1)->first()->username)}}
+      <label for="id" class="col-form-label col-auto">{{ @$rleave->belongstostaff->hasmanylogin()->first()->username }}</label>
     </div>
   </div>
 
   <div class="row mt-3">
     <div class="col-md-2">
-      {{Form::label('name', 'Name')}}
+      <label for="name" class="col-form-label col-auto">Name : </label>
     </div>
     <div class="col-md-10">
-      {{Form::label('name', @$rleave->belongstostaff()->first()->name)}}
+      <label for="id" class="col-form-label col-auto">{{ @$rleave->belongstostaff()->first()->name }}</label>
     </div>
   </div>
 
   <div class="row mt-3">
     <div class="col-md-2">
-      {{Form::label('date_start', 'Date Start')}}
+      <label for="date_start" class="col-form-label col-auto">Date Start : </label>
     </div>
-    <div class="col-md-10 {{ $errors->has('date_start') ? 'has-error' : '' }}">
-      {{ Form::text('date_start', @$rleave->date_start, ['class' => 'form-control form-control-sm col-auto', 'id' => 'date_start', 'autocomplete' => 'off']) }}
-    </div>
-  </div>
-
-  <div class="row mt-3">
-    <div class="col-md-2">
-      {{Form::label('date_end', 'Date End')}}
-    </div>
-    <div class="col-md-10 {{ $errors->has('date_end') ? 'has-error' : '' }}">
-      {{ Form::text('date_end', @$rleave->date_end, ['class' => 'form-control form-control-sm col-auto', 'id' => 'date_end', 'autocomplete' => 'off']) }}
+    <div class="col-md-10 @error('date_start') has-error @enderror">
+      <input type="text" name="date_start" value="{{ old('date_start', $rleave->date_start) }}" id="id" class="form-control form-control-sm col-sm-12 @error('date_start') is-invalid @enderror" placeholder="Date Start">
     </div>
   </div>
 
   <div class="row mt-3">
     <div class="col-md-2">
-      {{Form::label('leave_total', 'Total Day')}} <i class="bi bi-question-circle" data-toggle="tooltip" title="Total day for replacement leave."></i>
+      <label for="date_end" class="col-form-label col-auto">Date End : </label>
     </div>
-    <div class="col-md-10 {{ $errors->has('leave_total') ? 'has-error' : '' }}">
-      {{ Form::text('leave_total', @$rleave->leave_total, ['class' => 'form-control form-control-sm col-auto', 'id' => 'leave_total', 'autocomplete' => 'off']) }}
-    </div>
-  </div>
-
-  <div class="row mt-3">
-    <div class="col-md-2">
-      {{Form::label('leave_utilize', 'Total Utilize')}} <i class="bi bi-question-circle" data-toggle="tooltip" title="Total day used in leave."></i>
-    </div>
-    <div class="col-md-10 {{ $errors->has('leave_utilize') ? 'has-error' : '' }}">
-      {{ Form::text('leave_utilize', @$rleave->leave_utilize, ['class' => 'form-control form-control-sm col-auto', 'id' => 'leave_utilize', 'autocomplete' => 'off']) }}
+    <div class="col-md-10 @error('date_end') has-error @enderror">
+      <input type="text" name="date_end" value="{{ old('date_end', $rleave->date_end) }}" id="id" class="form-control form-control-sm col-sm-12 @error('date_end') is-invalid @enderror" placeholder="Date End">
     </div>
   </div>
 
   <div class="row mt-3">
     <div class="col-md-2">
-      {{Form::label('leave_balance', 'Total Balance')}} <i class="bi bi-question-circle" data-toggle="tooltip" title="Total balance left after used."></i>
+      <label for="leave_total" class="col-form-label col-auto">Total Day <i class="bi bi-question-circle" data-toggle="tooltip" title="Total day for replacement leave."></i> : </label>
     </div>
-    <div class="col-md-10 {{ $errors->has('leave_balance') ? 'has-error' : '' }}">
-      {{ Form::text('leave_balance', @$rleave->leave_balance, ['class' => 'form-control form-control-sm col-auto', 'id' => 'leave_balance', 'autocomplete' => 'off']) }}
-    </div>
-  </div>
-
-  <div class="row mt-3">
-    <div class="col-md-2">
-      {{Form::label('customer_id', 'Customer')}}
-    </div>
-    <div class="col-md-10">
-      {!! Form::select( 'customer_id', $customer, @$value, ['class' => 'form-control select-input', 'id' => 'customer_id', 'placeholder' => 'Please Select'] ) !!}
+    <div class="col-md-10 @error('leave_total') has-error @enderror">
+      <input type="text" name="leave_total" value="{{ old('leave_total', $rleave->leave_total) }}" id="id" class="form-control form-control-sm col-sm-12 @error('leave_total') is-invalid @enderror" placeholder="Total Day">
     </div>
   </div>
 
   <div class="row mt-3">
     <div class="col-md-2">
-      {{Form::label('reason', 'Reason')}}
+      <label for="leave_utilize" class="col-form-label col-auto">Total Utilize <i class="bi bi-question-circle" data-toggle="tooltip" title="Total day used in leave."></i> : </label>
     </div>
-    <div class="col-md-10 {{ $errors->has('reason') ? 'has-error' : '' }}">
-      {!! Form::text( 'reason', @$rleave->reason, ['class' => 'form-control', 'id' => 'reason', 'placeholder' => 'Please Insert'] ) !!}
+    <div class="col-md-10 @error('leave_utilize') has-error @enderror">
+      <input type="text" name="leave_utilize" value="{{ old('leave_utilize', $rleave->leave_utilize) }}" id="id" class="form-control form-control-sm col-sm-12 @error('leave_utilize') is-invalid @enderror" placeholder="Total Utilize">
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-2">
+      <label for="leave_balance" class="col-form-label col-auto">Total Balance : </label>
+    </div>
+    <div class="col-md-10 @error('leave_balance') has-error @enderror">
+      <input type="text" name="leave_balance" value="{{ old('leave_balance', $rleave->leave_balance) }}" id="id" class="form-control form-control-sm col-sm-12 @error('leave_balance') is-invalid @enderror" placeholder="Total Balance">
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-2">
+      <label for="customer_id" class="col-form-label col-auto">Customer : </label>
+    </div>
+    <div class="col-md-10 @error('customer_id') has-error @enderror">
+      <select name="customer_id" id="customer_id" class="form-select form-select-sm col-sm-12 @error('customer_id') is-invalid @enderror">
+        <option value="">Please choose</option>
+        @foreach($customer as $k1 => $v1)
+          <option value="{{ $k1 }}" {{ (old('customer_id', $rleave->customer_id) == $k1)?'selected':NULL }}>{{ $v1 }}</option>
+        @endforeach
+      </select>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-2">
+      <label for="id" class="col-form-label col-auto">Reason : </label>
+    </div>
+    <div class="col-md-10 @error('reason') has-error @enderror">
+      <textarea name="reason" id="reason" class="form-control form-control-sm col-sm-12 @error('reason') is-invalid @enderror" placeholder="Reason">{{ old('reason', $rleave->reason) }}</textarea>
     </div>
   </div>
 
   <div class="row mt-3">
     <div class="col-md-12 text-center">
-      {!! Form::submit('UPDATE', ['class' => 'btn btn-sm btn-outline-secondary']) !!}
+      <button type="submit" class="btn btn-sm btn-outline-secondary">Update</button>
     </div>
   </div>
 
-  {!! Form::close() !!}
+  </form>
 
   <div class="row mt-3">
     <div class="col-md-12 text-center">
@@ -153,7 +160,7 @@ $(".group2").prop('checked', this.checked);
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // SELECTION
-$('.select-input').select2({
+$('#customer_id').select2({
 placeholder: 'Please Select',
 width: '100%',
 allowClear: true,

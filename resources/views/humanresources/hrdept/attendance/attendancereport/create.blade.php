@@ -9,36 +9,37 @@ use Illuminate\Database\Eloquent\Builder;
 	.scrollable-div {
 		/* Set the width height as needed */
 /*		width: 100%;*/
-		height: 400px;
-		background-color: blanchedalmond;
-		/* Add scrollbars when content overflows */
-		overflow: auto;
-	}
+height: 400px;
+background-color: blanchedalmond;
+/* Add scrollbars when content overflows */
+overflow: auto;
+}
 
-	p {
-		margin-top: 4px;
-		margin-bottom: 4px;
-	}
+p {
+	margin-top: 4px;
+	margin-bottom: 4px;
+}
 </style>
 <div class="container table-responsive row align-items-start justify-content-center">
-@include('humanresources.hrdept.navhr')
+	@include('humanresources.hrdept.navhr')
 	<h4>Attendance Report</h4>
 
-	{{ Form::open(['route' => 'attendancereport.store', 'method' => 'GET',  'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) }}
-	<div class="row g-3 mb-3">
-		<div class="col-auto @error('from') is-invalid @enderror" style="position:relative;">
-			<input type="text" name="from" class="form-control form-control-sm" id="from" value="" placeholder="Date From">
+	<form method="GET" action="{{ route('attendancereport.store') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="form-horizontal" enctype="multipart/form-data">
+		@csrf
+		<div class="row g-3 mb-3">
+			<div class="col-auto @error('from') is-invalid @enderror" style="position:relative;">
+				<input type="text" name="from" class="form-control form-control-sm" id="from" value="" placeholder="Date From">
+			</div>
+			<div class="col-auto @error('to') is-invalid @enderror" style="position:relative;">
+				<input type="text" name="to" class="form-control form-control-sm" id="to" value="" placeholder="Date To">
+			</div>
+			<div class="col-auto">
+				<input type="submit" class="form-control form-control-sm btn btn-sm btn-outline-secondary" id="to" value="Submit">
+			</div>
 		</div>
-		<div class="col-auto @error('to') is-invalid @enderror" style="position:relative;">
-			<input type="text" name="to" class="form-control form-control-sm" id="to" value="" placeholder="Date To">
+		<div class="g-3 mb-3 py-3 scrollable-div col-sm 5 wrap_checkbox @error('staff_id') is-invalid @enderror">
 		</div>
-		<div class="col-auto">
-			<input type="submit" class="form-control form-control-sm btn btn-sm btn-outline-secondary" id="to" value="Submit">
-		</div>
-	</div>
-	<div class="g-3 mb-3 py-3 scrollable-div col-sm 5 wrap_checkbox @error('staff_id') is-invalid @enderror">
-	</div>
-	{{ Form::close() }}
+	</form>
 </div>
 @endsection
 

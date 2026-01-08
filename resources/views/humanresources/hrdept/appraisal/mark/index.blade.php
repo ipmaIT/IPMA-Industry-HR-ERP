@@ -4,19 +4,12 @@
 <?php
 $user = \Auth::user()->belongstostaff->id;
 
-$latest_year = DB::table('pivot_apoint_appraisals')
-  ->select('year')
-  ->distinct()
-  ->orderBy('year', 'DESC')
-  ->first();
-
 $appraisals = DB::table('pivot_apoint_appraisals')
   ->join('logins', 'logins.staff_id', '=', 'pivot_apoint_appraisals.evaluatee_id')
   ->join('staffs', 'staffs.id', '=', 'pivot_apoint_appraisals.evaluatee_id')
   ->where('pivot_apoint_appraisals.evaluator_id', $user)
   ->where('staffs.active', 1)
   ->where('logins.active', 1)
-  ->where('pivot_apoint_appraisals.year', '=', $latest_year->year)
   //->whereNull('pivot_apoint_appraisals.finalise_date')
   ->whereNull('pivot_apoint_appraisals.deleted_at')
   ->select('pivot_apoint_appraisals.id as apointid', 'staffs.name', 'logins.username', 'staffs.appraisal_category_id', 'pivot_apoint_appraisals.finalise_date')
@@ -27,7 +20,7 @@ $appraisals = DB::table('pivot_apoint_appraisals')
 <div class="container">
   <div class="row mt-3">
     <div class="col-md-2">
-      <h4>Appraisal</h4>
+      <h4>Appraisal </h4>
     </div>
   </div>
 

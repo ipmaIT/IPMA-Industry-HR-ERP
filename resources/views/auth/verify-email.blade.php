@@ -1,4 +1,15 @@
-<x-guest-layout>
+@extends('layouts.app')
+
+@section('content')
+<div class="card">
+    <div class="card-header">
+    </div>
+    <div class="card-body">
+    </div>
+    <div class="card-footer">
+    </div>
+</div>
+
     <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
         {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
     </div>
@@ -28,4 +39,8 @@
             </button>
         </form>
     </div>
-</x-guest-layout>
+@endsection
+
+@section('js')
+@endsection
+

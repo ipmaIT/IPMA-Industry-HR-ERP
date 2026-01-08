@@ -12,60 +12,67 @@ foreach ($s as $v) {
 <div class="container row align-items-start justify-content-center">
 	@include('humanresources.hrdept.navhr')
 	<h4>Add Remarks Attendance</h4>
-	{!! Form::model($attendanceremark, ['route' => ['attendanceremark.update', $attendanceremark->id], 'method' => 'PATCH', 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) !!}
+  <form method="POST" action="{{ route('attendanceremark.update', $attendanceremark->id) }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+  @csrf
+  @method('PATCH')
 
 	<div class="form-group row m-3 {{ $errors->has('staff_id') ? 'has-error' : NULL }}">
-		{{Form::label('staff', 'Staff : ', ['class' => 'col-sm-4 form-label'])}}
+		<label for="sta" class="col-sm-4 col-form-label">Staff : </label>
 		<div class="col-md-8">
-			{{ Form::select('staff_id', $ls, @$value, ['id' => 'staff', 'class' => 'form-select form-select-sm', 'placeholder' => 'Please choose']) }}
+			<select name="staff_id" id="sta" class="form-select form-select-sm">
+				<option value="">Please choose</option>
+				@foreach($ls as $k => $v)
+				<option value="{{ $k }}" {{ ($k == old('staff_id', $attendanceremark->staff_id))?'selected':NULL }}>{{ $v }}</option>
+				@endforeach
+			</select>
 		</div>
 	</div>
 
 	<div class="form-group row m-3 {{ $errors->has('date_from') ? 'has-error' : NULL }}">
-		{{Form::label('from', 'From : ', ['class' => 'col-sm-4 form-label'])}}
+		<label for="from" class="col-sm-4 col-form-label">From : </label>
 		<div class="col-md-8" style="position: relative;">
-			{{ Form::text('date_from', @$value, ['id' => 'from', 'class' => 'form-control form-control-sm', 'placeholder' => 'Date From']) }}
+			<input type="text" name="date_from" value="{{ old('date_from', $attendanceremark->date_from) }}" id="from" class="form-control form-control-sm @error('date_from') 'is-invalid' @enderror" placeholder="Date From">
 		</div>
 	</div>
 
 	<div class="form-group row m-3 {{ $errors->has('date_to') ? 'has-error' : NULL }}">
-		{{Form::label('to', 'To : ', ['class' => 'col-sm-4 form-label'])}}
+		<label for="to" class="col-sm-4 col-form-label">To : </label>
 		<div class="col-md-8" style="position: relative;">
-			{{ Form::text('date_to', @$value, ['id' => 'to', 'class' => 'form-control form-control-sm', 'placeholder' => 'Date To']) }}
+			<input type="text" name="date_to" value="{{ old('date_to', $attendanceremark->date_to) }}" id="to" class="form-control form-control-sm @error('date_to') 'is-invalid' @enderror" placeholder="Date To">
 		</div>
 	</div>
 
 	<div class="form-group row m-3 {{ $errors->has('attendance_remarks') ? 'has-error' : NULL }}">
-		{{Form::label('ar', 'Attendance Remarks : ', ['class' => 'col-sm-4 form-label'])}}
+		<label for="ar" class="col-sm-4 col-form-label">Attendance Remarks : </label>
 		<div class="col-md-8">
-			{{ Form::textarea('attendance_remarks', @$value, ['id' => 'ar', 'class' => 'form-control form-control-sm', 'placeholder' => 'Attendance Remarks']) }}
+			<textarea name="attendance_remarks" id="ar" class="form-control form-control-sm @error('attendance_remarks') 'is-invalid' @enderror">{{ old('attendance_remarks', $attendanceremark->attendance_remarks) }}</textarea>
 		</div>
 	</div>
 
 	<div class="form-group row m-3 {{ $errors->has('hr_attendance_remarks') ? 'has-error' : NULL }}">
-		{{Form::label('hrar', 'HR Attendance Remarks : ', ['class' => 'col-sm-4 form-label'])}}
+		<label for="hrar" class="col-sm-4 col-form-label">HR Attendance Remarks : </label>
 		<div class="col-md-8">
-			{{ Form::textarea('hr_attendance_remarks', @$value, ['id' => 'hrar', 'class' => 'form-control form-control-sm', 'placeholder' => 'HR Attendance Remarks']) }}
+			<textarea name="hr_attendance_remarks" id="hrar" class="form-control form-control-sm @error('hr_attendance_remarks') 'is-invalid' @enderror">{{ old('hr_attendance_remarks', $attendanceremark->hr_attendance_remarks) }}</textarea>
 		</div>
 	</div>
 
 	<div class="form-group row m-3 {{ $errors->has('remarks') ? 'has-error' : NULL }}">
-		{{Form::label('rem', 'Remarks : ', ['class' => 'col-sm-4 form-label'])}}
+		<label for="rem" class="col-sm-4 col-form-label">Remarks : </label>
 		<div class="col-md-8">
-			{{ Form::textarea('remarks', @$value, ['id' => 'rem', 'class' => 'form-control form-control-sm', 'placeholder' => 'Remarks']) }}
+			<textarea name="remarks" id="rem" class="form-control form-control-sm @error('remarks') 'is-invalid' @enderror">{{ old('remarks', $attendanceremark->remarks) }}</textarea>
 		</div>
 	</div>
 
 	<div class="col-sm-8 offset-sm-4">
-		{!! Form::button('Update Remarks', ['class' => 'btn btn-sm btn-outline-secondary', 'type' => 'submit']) !!}
+		<button type="submit" class="btn btn-sm btn-outline-secondary">Update Remarks</button>
 	</div>
-	{{ Form::close() }}
+	</form>
 </div>
 @endsection
 
 @section('js')
 /////////////////////////////////////////////////////////////////////////////////////////
-$('#staff').select2({
+$('#sta').select2({
 	placeholder: 'Please choose',
 	allowClear: true,
 	closeOnSelect: true,
@@ -118,11 +125,6 @@ $('#to').datetimepicker({
 /////////////////////////////////////////////////////////////////////////////////////////
 // bootstrap validator
 $('#form').bootstrapValidator({
-	feedbackIcons: {
-		valid: '',
-		invalid: '',
-		validating: ''
-	},
 	fields: {
 		'staff_id': {
 			validators: {

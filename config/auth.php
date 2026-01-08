@@ -15,7 +15,7 @@ return [
 
 	'defaults' => [
 		'guard' => 'web',
-		'passwords' => 'logins',
+		'passwords' => 'webpass',		// password broker
 	],
 
 	/*
@@ -38,7 +38,7 @@ return [
 	'guards' => [
 		'web' => [
 			'driver' => 'session',
-			'provider' => 'logins',
+			'provider' => 'weblogin',
 		],
 	],
 
@@ -60,7 +60,7 @@ return [
 	*/
 
 	'providers' => [
-		'logins' => [
+		'weblogin' => [
 			// 'driver' => 'eloquent',
 			// 'model' => App\Models\User::class,
 			'driver' => 'loginuserprovider',
@@ -95,8 +95,8 @@ return [
 	*/
 
 	'passwords' => [
-		'logins' => [
-			'provider' => 'logins',
+		'webpass' => [		// password broker
+			'provider' => 'weblogin',
 			'table' => 'password_reset_tokens',
 			'expire' => 60,
 			'throttle' => 60,

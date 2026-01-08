@@ -68,7 +68,7 @@ class SalesCustomerController extends Controller
       'area' => $request->area,
     ]);
 
-    Session::flash('flash_message', 'Successfully Submit.');
+    Session::flash('message', 'Successfully Submit.');
     return redirect()->route('salescustomer.index');
   }
 
@@ -103,7 +103,7 @@ class SalesCustomerController extends Controller
         'area' => $request->area,
       ]);
 
-    Session::flash('flash_message', 'Successfully Updated.');
+    Session::flash('message', 'Successfully Updated.');
     return redirect()->route('salescustomer.index');
   }
 

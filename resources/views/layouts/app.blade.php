@@ -10,11 +10,11 @@ $currentYear = Carbon::now()->year;
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="" type="image/x-icon" rel="icon" />
 	<meta name="description" content="">
-	<title>{!! config('app.name') !!}</title>
-	<link href="{{ asset('images/logo.png') }}" type="image/x-icon" rel="icon" />
 	<meta name="keywords" content="erp system, erp" />
 	<!-- CSRF Token -->
 	<meta name="csrf-token" content="{{ csrf_token() }}">
+	<title>{!! config('app.name') !!}</title>
+	<link href="{{ asset('images/logo.png') }}" type="image/x-icon" rel="icon" />
 	<!-- Styles -->
 	<link href="{{ URL::asset('css/app.css') }}" rel="stylesheet">
 	@stack('styles')
@@ -47,14 +47,15 @@ $currentYear = Carbon::now()->year;
 		</div>
 	</body>
 
-	<script src="{{ mix('js/fullcalendar/index.global.js') }}"></script>
-	<script src="{{ mix('js/chart.js/dist/chart.umd.js') }}"></script>
+	<script>
+  	window.FontAwesomeConfig = { autoReplaceSvg: false, observeMutations: false };
+	</script>
 	<script src="{{ mix('js/app.js') }}"></script>
 	<script src="{{ asset('js/ckeditor/ckeditor.js') }}"></script>
 	<script src="{{ asset('js/ckeditor/adapters/jquery.js') }}"></script>
-	<script src="{{ asset('js/jquery.chained.js') }}"></script>
-	<script src="{{ asset('js/jquery.chained.remote.js') }}"></script>
-	<script >
+	<script src="{{ asset('js/jquery-chained/jquery.chained.js') }}"></script>
+	<script src="{{ asset('js/jquery-chained/jquery.chained.remote.js') }}"></script>
+	<script type="module">
 		jQuery.noConflict ();
 		(function($){
 			$(document).ready(function(){

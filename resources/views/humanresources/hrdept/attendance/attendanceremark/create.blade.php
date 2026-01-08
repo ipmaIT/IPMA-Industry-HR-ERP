@@ -4,54 +4,57 @@
 <div class="container row align-items-start justify-content-center">
 	@include('humanresources.hrdept.navhr')
 	<h4>Add Remarks Attendance</h4>
-	{!! Form::open(['route' => ['attendanceremark.store'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) !!}
+  <form method="POST" action="{{ route('attendanceremark.store') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" enctype="multipart/form-data">
+  @csrf
 
 	<div class="form-group row m-3 {{ $errors->has('staff_id') ? 'has-error' : NULL }}">
-		{{Form::label('staff', 'Staff : ', ['class' => 'col-sm-4 form-label'])}}
+		<label for="staff" class="col-sm-4 col-form-label">Staff : </label>
 		<div class="col-md-8">
-			<select name="staff_id" id="staff" class="form-select form-select-sm" value="{{ old('staff_id') }}"></select>
+			<select name="staff_id" id="staff" class="form-select form-select-sm" value="{{ old('staff_id') }}">
+				<option value="">Please choose</option>
+			</select>
 		</div>
 	</div>
 
 	<div class="form-group row m-3 {{ $errors->has('date_from') ? 'has-error' : NULL }}">
-		{{Form::label('from', 'From : ', ['class' => 'col-sm-4 form-label'])}}
+		<label for="from" class="col-sm-4 col-form-label">From : </label>
 		<div class="col-md-8" style="position: relative;">
 			<input type="text" name="date_from" id="from" class="form-control form-control-sm" value="{{ old('date_from') }}" placeholder="Date From">
 		</div>
 	</div>
 
 	<div class="form-group row m-3 {{ $errors->has('date_to') ? 'has-error' : NULL }}">
-		{{Form::label('to', 'To : ', ['class' => 'col-sm-4 form-label'])}}
+		<label for="to" class="col-sm-4 col-form-label">To : </label>
 		<div class="col-md-8" style="position: relative;">
 			<input type="text" name="date_to" id="to" class="form-control form-control-sm" value="{{ old('date_to') }}" placeholder="Date To">
 		</div>
 	</div>
 
 	<div class="form-group row m-3 {{ $errors->has('attendance_remarks') ? 'has-error' : NULL }}">
-		{{Form::label('ar', 'Attendance Remarks : ', ['class' => 'col-sm-4 form-label'])}}
+		<label for="ar" class="col-sm-4 col-form-label">Attendance Remarks : </label>
 		<div class="col-md-8">
 			<textarea name="attendance_remarks" id="ar" class="form-control form-control-sm" value="{{ old('attendance_remarks') }}" placeholder="Attendance Remarks (Remark Display For All)"></textarea>
 		</div>
 	</div>
 
 	<div class="form-group row m-3 {{ $errors->has('hr_attendance_remarks') ? 'has-error' : NULL }}">
-		{{Form::label('hrar', 'HR Attendance Remarks : ', ['class' => 'col-sm-4 form-label'])}}
+		<label for="hrar" class="col-sm-4 col-form-label">HR Attendance Remarks : </label>
 		<div class="col-md-8">
 			<textarea name="hr_attendance_remarks" id="hrar" class="form-control form-control-sm" value="{{ old('hr_attendance_remarks') }}" placeholder="HR Attendance Remarks (Remark Display Only For HR, Admin And Director)"></textarea>
 		</div>
 	</div>
 
 	<div class="form-group row m-3 {{ $errors->has('remarks') ? 'has-error' : NULL }}">
-		{{Form::label('rem', 'Remarks : ', ['class' => 'col-sm-4 form-label'])}}
+		<label for="rem" class="col-sm-4 col-form-label">Remarks : </label>
 		<div class="col-md-8">
 			<textarea name="remarks" id="rem" class="form-control form-control-sm" value="{{ old('remarks') }}" placeholder="Remarks (Remark Database : Can Just Leave It Blank)"></textarea>
 		</div>
 	</div>
 
 	<div class="col-sm-8 offset-sm-4">
-		{!! Form::button('Add Remarks', ['class' => 'btn btn-sm btn-outline-secondary', 'type' => 'submit']) !!}
+		<button type="submit" class="btn btn-sm btn-outline-secondary">Add Remarks</button>
 	</div>
-	{{ Form::close() }}
+	</form>
 
 </div>
 @endsection
@@ -125,11 +128,6 @@ $('#to').datetimepicker({
 /////////////////////////////////////////////////////////////////////////////////////////
 // bootstrap validator
 $('#form').bootstrapValidator({
-	feedbackIcons: {
-		valid: '',
-		invalid: '',
-		validating: ''
-	},
 	fields: {
 		'staff_id': {
 			validators: {
