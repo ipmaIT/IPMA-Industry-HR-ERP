@@ -29,7 +29,7 @@
 <?php
 use Illuminate\Http\Request;
 ?>
-@if( request()->id || session()->exists('lastBatchIdPay') )
+@if( isset(request()->id) || session()->exists('lastBatchId') )
 	<p>&nbsp</p>
 	<div id="processcsv" class="row col-sm-12">
 		<div class="progress col-sm-12" role="progressbar" aria-label="CSV Processing" aria-valuenow="{{ $batch->progress() }}" aria-valuemin="0" aria-valuemax="100">
@@ -87,9 +87,9 @@ $('#to1').datetimepicker({
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
-@if( request()->id || session()->exists('lastBatchIdPay') )
+@if( isset(request()->id) || session()->exists('lastBatchId') )
 	<?php
-	$batchId = $request->id ?? session()->get('lastBatchIdPay');
+	$batchId = $request->id ?? session()->get('lastBatchId');
 	?>
 	setInterval(percent, 500);
 	function percent() {
@@ -109,7 +109,7 @@ $('#to1').datetimepicker({
 					clearInterval(percent);
 					window.location.replace('{{ route('excelreport.create') }}');
 					<?php
-					session()->forget('lastBatchIdPay');
+					session()->forget('lastBatchId');
 					?>
 				}
 			},

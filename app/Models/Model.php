@@ -2,12 +2,17 @@
 
 namespace App\Models;
 
-// use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 // use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
-// class Model extends Model
+// auditable model
+use App\Traits\Auditable;
+
 class Model extends Eloquent {
-    // use HasFactory;
-    protected $guarded = [];
+	use HasFactory, Auditable;
+	protected static $auditIncludeSnapshot = true;
+	protected static $auditCriticalEvents = ['updated', 'deleted','force_deleted'];
+
+	protected $guarded = [];
 }

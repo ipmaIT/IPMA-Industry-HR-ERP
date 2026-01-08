@@ -31,7 +31,7 @@ class PasswordResetLinkController extends Controller
             // 'email' => ['required', 'email'],
             'username' => ['required'],
         ]);
-        
+
         // dd($status);
         // We will send the password reset link to this user. Once we have attempted
         // to send the link, we will examine the response then see the message we
@@ -42,7 +42,7 @@ class PasswordResetLinkController extends Controller
         );
 
         return $status == Password::RESET_LINK_SENT
-                    ? back()->with('status', __($status))
+                    ? back()->with('message', __($status))
                     // : back()->withInput($request->only('email'))
                     : back()->withInput($request->only('username'))
                             // ->withErrors(['email' => __($status)]);

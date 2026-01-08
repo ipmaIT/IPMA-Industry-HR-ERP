@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+// auditable model
+use App\Traits\Auditable;
+
 // db relation class to load
 // use Illuminate\Database\Eloquent\Relations\HasOne;
 // use Illuminate\Database\Eloquent\Relations\HasOneThrough;
@@ -22,7 +25,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 // class Staff extends Model
 class Staff extends Authenticatable
 {
-	use Notifiable, HasFactory, SoftDeletes;
+	use Notifiable, HasFactory, SoftDeletes, Auditable;
 
 	protected $connection = 'mysql';
 	protected $table = 'staffs';

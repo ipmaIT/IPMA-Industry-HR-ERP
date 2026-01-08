@@ -1,7 +1,6 @@
 <?php
-namespace {{ namespace }};
+namespace App\Models;
 
-{{ factoryImport }}
 // use Illuminate\Database\Eloquent\Model;
 use App\Models\Model;
 
@@ -11,25 +10,21 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 // use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 // use Illuminate\Database\Eloquent\Relations\HasMany;
 // use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-// use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 // use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-
-// load column name attribute
-use Illuminate\Database\Eloquent\Casts\Attribute;
 
 // load helper
 use Illuminate\Support\Str;
 
-// load sluggable
-// use Cviebrock\EloquentSluggable\Sluggable;
-// use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
-
-class {{ class }} extends Model
+class ActivityLog extends Model
 {
-	{{ factory }}
-	use SoftDeletes/*, Sluggable*/;
+	use SoftDeletes;
+
+	// Disable auditing for this model (to prevent recursive logging)
+	protected bool $auditEnabled = false;
+
 	// protected $connection = '';
-	// protected $table = '';
+	protected $table = 'activity_logs';
 	// protected $primaryKey = '';
 	// public $incrementing = false;
 	// protected $keyType = '';
@@ -37,37 +32,30 @@ class {{ class }} extends Model
 	// const UPDATED_AT = '';
 	// protected $rememberTokenName = '';
 
-	// protected $casts = [
-	// 	'is_active' => 'boolean',
-	// ];
+	protected $casts = [
+		'changes' => 'array',
+		'snapshot' => 'array',
+		'meta' => 'array',
+		'is_critical' => 'boolean',
+	];
 
-	// public function sluggable(): array
-	// {
-	// 	return [
-	// 		'slug' => ['source' => 'UniqueColumnName']
-	// 	];
-	// }
-
-	// public function getRouteKeyName()
-	// {
-	// 	return 'slug';
-	// }
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// set column attribute
-	// protected function ColumnName(): Attribute
+	// public function setNameAttribute($value)
 	// {
-	// 	return Attribute::make(
-	// 		set: fn ($value) => Str::slug($value),
-	// 	);
-	// }
-
-	// protected function setColumnNameAttribute($value)
-	// {
-	//     $this->attributes['ColumnName'] = ucwords(Str::lower($value));
+	//     $this->attributes['name'] = ucwords(Str::lower($value));
 	// }
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// relationship
+	public function belongstouser(): BelongsTo
+	{
+		return $this->belongsTo(\App\Models\Staff::class, 'staff_id');
+	}
 
+	public function model()
+	{
+		return $this->morphTo();
+	}
 }
