@@ -51,7 +51,7 @@ try {
     require ('./jQuery-ui');
     require ('./fullcalendar');
     require ('./chart');
-    require ('./addRemoveRowjQueryPlugins');
+    require ('./addRemoveRowBootstrapValidatorSweetAlert2AjaxjQueryPlugin');
 } catch (e) {}
 
 /**
