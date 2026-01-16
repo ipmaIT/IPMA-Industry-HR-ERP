@@ -120,7 +120,7 @@ $staffs = Staff::join('logins', 'staffs.id', '=', 'logins.staff_id')
 	<div class="form-group row mb-3 {{ $errors->has('ot_date') ? 'has-error' : '' }}">
 		<label for="nam" class="col-form-label col-sm-2">Date Overtime : </label>
 		<div class="col-md-10" style="position: relative">
-			<input type="text" name="name" value="{{ old('ot_date') }}" id="nam" class="form-control form-control-sm col-sm-12 @error('ot_date') is-invalid @enderror" placeholder="Date Overtime">
+			<input type="text" name="ot_date" value="{{ old('ot_date') }}" id="nam" class="form-control form-control-sm col-sm-12 @error('ot_date') is-invalid @enderror" placeholder="Date Overtime">
 		</div>
 	</div>
 

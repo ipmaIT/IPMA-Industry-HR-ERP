@@ -528,7 +528,7 @@ foreach ($c as $v) {
                     </div>
                     <!-------------------------------------------------------------------------------- LEAVE SHOW END -------------------------------------------------------------------------------->
 
-                    <form method="POST" action="{{ route('leavestatus.dirstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" data-id="{{ $a->id }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('leavestatus.dirstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="form" data-id="{{ $a->id }}" enctype="multipart/form-data">
                       @csrf
                       @method('PATCH')
                       <input type="hidden" name="id" value="{{ $a->id }}">
@@ -581,35 +581,36 @@ foreach ($c as $v) {
 @section('js')
 /////////////////////////////////////////////////////////////////////////////////////////
 // form submit via ajax
-$(".form").on('submit', function(e){
-	var ids = $(this).data('id');
-	e.preventDefault();
-	$.ajax({
-		url: '{{ route('leavestatus.dirstatus') }}',
-		type: 'PATCH',
-		data: {
-				_token: '{!! csrf_token() !!}',
-				id: ids,
-				leave_status_id: $(':input[name="leave_status_id"]:checked').val(),
-				verify_code: $('#dircode' + ids).val(),
-				remarks: $('#remarks' + ids).val()
-		},
-		dataType: 'json',
-		global: false,
-		async:false,
-		success: function (response) {
-			$('#dirapproval' + ids).modal('hide');
-			var row = $('#dirapproval' + ids).parent().parent();
-			// row.css('border', '5px solid red');
-			row.remove();
-			swal.fire('Success!', response.message, response.status);
-		},
-		error: function(resp) {
-			const res = resp.responseJSON;
-			$('#dirapproval' + ids).modal('hide');
-			swal.fire('Error!', res.message,'error');
-		}
-	});
+$(document).on('submit', '.form', function (e) {
+    e.preventDefault();
+
+    let form = $(this);
+    let ids  = form.data('id');
+
+    $.ajax({
+        url: form.attr('action'),
+        type: 'PATCH',
+        data: {
+            _token: '{{ csrf_token() }}',
+            id: ids,
+            leave_status_id: form.find('input[name="leave_status_id"]:checked').val(),
+            verify_code: form.find('#dircode' + ids).val(),
+            remarks: form.find('#remarks' + ids).val()
+        },
+        dataType: 'json',
+        success: function (response) {
+            $('#dirapproval' + ids).modal('hide');
+
+            // remove row
+            form.closest('tr').remove();
+
+            swal.fire('Success!', response.message, 'success');
+        },
+        error: function (resp) {
+            let res = resp.responseJSON ?? { message: 'Unknown error' };
+            swal.fire('Error!', res.message, 'error');
+        }
+    });
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////

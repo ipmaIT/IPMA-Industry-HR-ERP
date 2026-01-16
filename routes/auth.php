@@ -57,11 +57,38 @@ Route::middleware('auth')->group(function () {
 	Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
 				->name('logout');
 
+	// Route::middleware(['auth', 'adminAccess'])->group(function () {
+	// 	Route::get('/activity-logs/getActivityLogs', [\App\Http\Controllers\System\ActivityLogController::class, 'getActivityLogs'])->name('getActivityLogs');
+	// 	Route::get('/activity-logs', [\App\Http\Controllers\System\ActivityLogController::class, 'index'])->name('activity-logs.index');
+	// 	Route::get('/activity-logs/{log}', [\App\Http\Controllers\System\ActivityLogController::class, 'show'])->name('activity-logs.show');
+	// 	Route::delete('activity-logs//{log}', [\App\Http\Controllers\System\ActivityLogController::class, 'destroy'])->name('activity-logs.destroy');
+	// });
+
+
+
+
+
 	Route::middleware(['auth', 'adminAccess'])->group(function () {
-		Route::get('/activity-logs/getActivityLogs', [\App\Http\Controllers\System\ActivityLogController::class, 'getActivityLogs'])->name('getActivityLogs');
-		Route::get('/activity-logs', [\App\Http\Controllers\System\ActivityLogController::class, 'index'])->name('activity-logs.index');
-		Route::get('/activity-logs/{log}', [\App\Http\Controllers\System\ActivityLogController::class, 'show'])->name('activity-logs.show');
-		Route::delete('activity-logs//{log}', [\App\Http\Controllers\System\ActivityLogController::class, 'destroy'])->name('activity-logs.destroy');
+
+		Route::controller(\App\Http\Controllers\System\ActivityLogController::class)->group(function () {
+
+			Route::get('/activity-logs/getActivityLogs', 'getActivityLogs')->name('getActivityLogs');
+
+			Route::prefix('/activity-logs')->name('activity-logs.')->group(function () {
+				Route::get('/', 'index')->name('index');
+				Route::get('/{log}', 'show')->name('show');
+				Route::delete('{log}', 'destroy')->name('destroy');
+			});
+
+		});
 	});
+
+
+
+
+
+
+
+
 
 });
