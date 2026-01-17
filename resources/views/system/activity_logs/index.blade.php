@@ -29,8 +29,11 @@ $('#logs-table').DataTable({
 	},
 	columns: [
 		{ data: 'id', title: 'ID' },
-		{ data: 'event', title: 'Event', render: data => data.charAt(0).toUpperCase() + data.slice(1) },
-		// Combine model_type + model_id here 👇
+		{
+			data: 'event',
+			title: 'Event',
+			render: data =>
+			data.charAt(0).toUpperCase() + data.slice(1) },		// Combine model_type + model_id here 👇
 		{
 			data: null,
 			title: 'Model',
@@ -41,7 +44,20 @@ $('#logs-table').DataTable({
 				return `${modelName}${modelId}`;
 			}
 		},
-		{ data:'belongstouser.name', title:'User', defaultContent: 'System' },
+		{
+			data: null,
+			title:'User',
+			defaultContent: 'System',
+			render: function(data, type, row){
+				if(
+					data.staff_id == 117 ||
+					data.staff_id == 72
+				){
+					return `Admin`;
+				}
+				return data.belongstouser.name;
+			}
+		},
 		{ data:'ip_address', title:'IP Address' },
 		{ data:'created_at', title:'Timestamp', render: data => moment(data).format('D MMM YYYY h:mm a') },
 		{
@@ -52,10 +68,10 @@ $('#logs-table').DataTable({
 			render: function(id){
 				return `
 				<div class="btn-group btn-group-sm" role="group">
-					<a href="{{ url('activity-logs') }}/${id}" class="btn btn-outline-primary">
+					<a href="{{ url('activity-logs') }}/${id}" class="btn btn-sm btn-outline-primary">
 						<i class="fa fa-eye"></i>
 					</a>
-					<button type="button" class="btn btn-outline-danger btn-del" data-id="${id}">
+					<button type="button" class="btn btn-sm btn btn-outline-danger btn-del" data-id="${id}">
 						<i class="fa fa-trash"></i>
 					</button>
 				</div>
@@ -68,18 +84,18 @@ $('#logs-table').DataTable({
 	}
 });
 
-$('.btn-del').off('click').on('click',function(){
+$(document).on('click', '.btn-del', function (e) {
 	const id = $(this).data('id');
-	Swal.fire({
+	swal.fire({
 		title: 'Delete Log?',
-		text: 'This will soft-delete the log record.',
+		text: 'This will delete the log record.',
 		icon: 'warning',
 		showCancelButton: true,
 		confirmButtonText: 'Yes, delete it'
 	}).then(res=>{
 		if(res.isConfirmed){
 			$.ajax({
-				url: '{{ url("activity-logs") }}/'+id,
+				url: `{{ url("activity-logs") }}/${id}`,
 				type: 'DELETE',
 				data: {_token:'{{ csrf_token() }}'},
 				success: ()=> location.reload()
