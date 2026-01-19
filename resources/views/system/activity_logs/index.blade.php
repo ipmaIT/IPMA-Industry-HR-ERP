@@ -13,19 +13,23 @@
 
 @section('js')
 $('#logs-table').DataTable({
-	lengthMenu: [ [10, 50, 100, 200, -1], [10, 50, 100, 200, 'All'] ],
+	lengthMenu: [ [100, 200, 500, 1000], [100, 200, 500, 1000] ],
 	order: [[ 0, 'desc' ], [1, 'desc']],
 	responsive: true,
 	autoWidth: true,
 	fixedHeader: true,
+	processing: true,
+	serverSide: true,
+
 	// dom: 'Bfrtip',
 	ajax: {
-		type: 'GET',
 		url: '{{ route('getActivityLogs') }}',
-		dataSrc: '',
-		data: function(da){
-			da._token = '{!! csrf_token() !!}'
-		},
+		type: 'GET',
+		// dataSrc: '',
+		data: function (d) {
+			d._token = '{!! csrf_token() !!}'
+			d.search_value = d.search.value; // map DataTables search
+		}
 	},
 	columns: [
 		{ data: 'id', title: 'ID' },
