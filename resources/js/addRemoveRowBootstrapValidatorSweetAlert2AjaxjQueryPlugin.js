@@ -18,8 +18,8 @@
       maxRows: 5,
       startRow: 0,
       fieldName: 'data',
-      rowSelector: 'row',
-      removeClass: 'row_remove',
+      rowSelector: 'rowserial',
+      removeClass: 'serial_remove',
       rowTemplate: null,
       onAdd: null,
       onRemove: null,
@@ -184,9 +184,38 @@
       }
 
       return `
-        <div id="${settings.rowSelector}_${index}" class="${settings.rowSelector}">
+        <div id="${settings.rowSelector}_${index}" class="row m-0 ${settings.rowSelector}">
           <input type="hidden" name="${settings.fieldName}[${index}][${settings.swal.ajax.dbPrimaryKeyId}]" value="">
-          <button type="button" class="${settings.removeClass}" data-index="${index}">Remove</button>
+
+          <div class="form-group row m-0">
+            <label for="name_${index}" class="col-form-label col-sm-4">Name : </label>
+            <div class="col-sm-8 my-auto">
+              <input type="text"
+                   name="${settings.fieldName}[${index}][name]"
+                   value=""
+                   id="name_${index}"
+                   class="form-control form-control-sm"
+                   placeholder="Name">
+            </div>
+          </div>
+
+          <div class="form-group row m-0">
+            <label for="skill_${index}" class="col-form-label col-sm-4">Skill : </label>
+            <div class="col-sm-8 my-auto">
+              <input type="text"
+                   name="${settings.fieldName}[${index}][skill]"
+                   value=""
+                   id="skill_${index}"
+                   class="form-control form-control-sm"
+                   placeholder="Skill">
+            </div>
+          </div>
+
+          <div class="col-sm-4 m-0">
+            <button type="button"
+                class="btn btn-sm btn-outline-danger ${settings.removeClass}"
+                data-index="${index}">Remove</button>
+          </div>
         </div>
       `;
     }

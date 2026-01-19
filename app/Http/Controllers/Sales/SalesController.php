@@ -135,6 +135,7 @@ class SalesController extends Controller
 		$data += ['no' => $count];
 		$data += ['year' => now()->format('Y')];
 		if ($request->has('spec_req')) {
+			// $data += ['spec_req' => $request->spec_req];
 			$data += ['special_request' => ucwords(Str::lower($request->special_request))];
 		}
 		$sal = Sales::create($data);
@@ -245,6 +246,7 @@ class SalesController extends Controller
 		// $data += ['year' => now()->format('Y')];
 		if ($request->has('spec_req')) {
 			$data += ['special_request' => ucwords(Str::lower($request->special_request))];
+			// $data += ['spec_req' => $request->spec_req];
 		}
 		$sale->update($request->only($data));
 

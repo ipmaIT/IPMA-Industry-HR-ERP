@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 // use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class OptMachineAccessory extends Model
+class OptMachineAccessories extends Model
 {
     use HasFactory;
 	// protected $connection = 'mysql';
