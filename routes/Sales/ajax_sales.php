@@ -17,7 +17,6 @@ Route::middleware('auth')->group(function () {
 			Route::get('/getOptSalesType', 'getOptSalesType')->name('getOptSalesType');
 			Route::get('/getOptSalesDeliveryType', 'getOptSalesDeliveryType')->name('getOptSalesDeliveryType');
 
-			// Route::delete('{log}', 'destroy')->name('destroy');
 		});
 
 	});

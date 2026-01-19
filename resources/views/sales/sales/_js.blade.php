@@ -51,7 +51,7 @@ if( oldCust.length > 0 ) {
 			$(`#cust`).append(option1).trigger('change');
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
-			console.log(textStatus, errorThrown);
+			// // // // // console.log(textStatus, errorThrown);
 		}
 	});
 }
@@ -64,10 +64,11 @@ $.ajax({
 	url: "{{ route('sales.getOptSalesType') }}",
 	type: "GET",
 	success: function (response) {
-		// console.log(response);
+		// // // // // console.log(response);
 		let checkicmsmodule = $("#sale_Order");
 		checkicmsmodule.empty();
-		$.each(response, function (i, value) {
+		// $.each(response, function (i, value) {
+		response.forEach(function(value, i) {
 			let checked = (selectedSalesTypeId == value.id) ? 'checked' : '';
 			let row = `
 				<div class="form-check form-check-inline m-1">
@@ -88,7 +89,7 @@ $.ajax({
 		});
 	},
 	error: function (jqXHR, textStatus, errorThrown) {
-		console.log(textStatus, errorThrown);
+		// // // // console.log(textStatus, errorThrown);
 	}
 });
 
@@ -133,7 +134,8 @@ $.ajax({
 		// Convert all to strings for consistent comparison
 		deliveryIds = deliveryIds.map(id => String(id));
 
-		$.each(response, function (i, value) {
+		// $.each(response, function (i, value) {
+		response.forEach(function(value, i) {
 			// Check if this value.id is in the deliveryIds array
 			let checked1 = deliveryIds.includes(String(value.id)) ? 'checked' : '';
 
@@ -141,7 +143,7 @@ $.ajax({
 			<div class="form-check form-check-inline m-1">
 				<label class="form-check-label" for="dbdid_${i}">
 					<input type="checkbox"
-					name="sales_delivery_id[]"
+					name="sales_delivery_id[${i}]"
 					value="${value.id}"
 					id="dbdid_${i}"
 					class="form-check-input m-1"
@@ -156,7 +158,7 @@ $.ajax({
 	}),
 	error: (function(jqXHR, textStatus, errorThrown) {
 		alert( "error" );
-		console.log(textStatus, errorThrown);
+		// // // console.log(textStatus, errorThrown);
 	}),
 	complete: (function() {
 		// alert( "complete" );
@@ -192,7 +194,7 @@ if ($('#specReq').prop('checked')) {
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // select2
-function populateSelect(i = 0, name){
+function populateSelect(i = 0){
 	let ids = [];
 
 	$('.machine_accessory').each(function () {
@@ -262,7 +264,7 @@ function populateSelect(i = 0, name){
 				return query;
 			},
 			processResults: function (data) {
-				console.log(data);
+				// // // console.log(data);
 				return {
 					results: data.map(function (machAcsry) {
 						return {
@@ -276,45 +278,158 @@ function populateSelect(i = 0, name){
 		},
 	});
 
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// populate checkbox
+function populateCheckbox(i = 0, name = '', getItem = []) {
+
 	// getOptSalesGetItem
 	$.ajax({
 		url: "{{ route('getOptSalesGetItem') }}",
 		dataType: 'json',
 		type: "GET",
 		success: function (response) {
-			// console.log(response);
-			let gar = $(`#gar_${i}`);
-			gar.empty();
-			$.each(response, function (j, value) {
-				// let checked = (selectedSalesTypeId == value.id) ? 'checked' : '';
-				let row = `
 
+			const $checkbox = $("#gar_"+i);
+			if($checkbox.length > 0) $checkbox.empty();
+
+			console.log(getItem);
+			const obj = Array.isArray(getItem) ? getItem : Object.entries(getItem);
+			console.log(obj);
+
+			const cgetItems = obj.map(item =>  item[1]);
+
+			response.forEach(function(value, j) {
+				const checkboxId = `jdescitem${i}_${j}`;
+
+				// Check if this module_id exists in cicms
+				let found = cgetItems.find(m => m.sales_get_item_id == value.id);
+
+				// If found, mark checked
+				let isChecked = found ? 'checked' : '';
+
+				let row = `
 					<div class="form-check">
 						<input
 							type="checkbox"
-							name="${name}[${i}][sales_get_item_id][]"
+							name="${name}[${i}][gItems][${j}][sales_get_item_id]"
 							value="${value.id}"
-							id="jdescitem${i}_${j}"
+							id="${checkboxId}"
 							class="form-check-input @error('jobdesc.*.sales_get_item_id.*') is-invalid @enderror"
+							${isChecked}
 						>
 						<label
 							class="form-check-label"
-							for="jdescitem${i}_${j}"
+							for="${checkboxId}"
 						>
 							${value.get_item}
 						</label>
 					</div>
-
 				`;
-
-				gar.append(row);
+				$checkbox.append(row);
 			});
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
-			console.log(textStatus, errorThrown);
+			// // console.log(textStatus, errorThrown);
 		}
 	});
+
 }
+
+////
+	// checkbox
+	function addingicmsmodule(y=0, icmsMod = []){
+		$.ajax({
+			dataType: 'json',
+			url: "{{-- route('listicmsmodule') --}}",
+			type: "GET",
+			data: {
+				_token: '{{csrf_token()}}'
+			},
+			success: (function(response) {
+
+				const $checkicmsmodule = $("#checkbox_"+y);
+				if($checkicmsmodule.length > 0) $checkicmsmodule.empty();
+				// Pivot data from backend
+				// Normalize icmsMod to: [{ icms_module_id: X, remarks: Y }]
+				const obj = Array.isArray(icmsMod) ? icmsMod : Object.entries(icmsMod);
+				// const obj = Array.isArray(icmsMod) ? icmsMod : Object.value(icmsMod);
+
+				const cicms = obj.map(item =>  item[1]);
+				// console.log(cicms);
+
+				response.forEach(function(value, i) {
+					const checkboxId = `icms_${y}_${i}`;
+
+					// Check if this module_id exists in cicms
+					let found = cicms.find(m => m.icms_module_id == value.id);
+
+					// If found, mark checked
+					let isChecked = found ? 'checked' : '';
+
+					const row = `
+					<div id="cb_${y}_${i}" class="m-1">
+						<div class="form-check">
+							<input class="form-check-input icms-checkbox @error('applicants.*.icms.*.icms_module_id') is-invalid @enderror"
+							type="checkbox"
+							id="${checkboxId}"
+							name="applicants[${y}][icms][${i}][icms_module_id]"
+							value="${value.id}"
+							data-dll="#dll_container_${y}_${i}"
+							data-y="${y}" data-i="${i}" ${isChecked}>
+							<label class="form-check-label" for="${checkboxId}">&nbsp;${value.text}</label>
+							@error('applicants.*.icms.*.icms_module_id')
+							<div class="invalid-feedback">{{ $message }}</div>
+							@enderror
+						</div>
+					</div>
+					`;
+					$checkicmsmodule.append(row);
+				});
+			}),
+			error: (function(jqXHR, textStatus, errorThrown) {
+				alert( "error" );
+				// console.log(textStatus, errorThrown);
+			}),
+			complete: (function() {
+				// alert( "complete" );
+			})
+		});
+
+		// delegated handler
+		$(document).on('change', '.icms-checkbox', function() {
+			const $cb = $(this);
+			const dllSelector = $cb.data('dll');
+			const y = $cb.data('y');
+			const i = $cb.data('i');
+
+			if (!dllSelector) return;
+
+			let checkbicms = `
+				<div class="form-check dll-input">
+					<label class="form-check-label" for="icms_dll_${y}_${i}">Sila Nyatakan</label>
+					<input class="form-control form-control-sm" type="text" name="applicants[${y}][icms][${i}][remarks]" id="icms_dll_${y}_${i}">
+					@error('applicants.*.icms.*.icms_module_id.remarks')
+					<div class="invalid-feedback">
+						{{ $message }}
+					</div>
+					@enderror
+				</div>
+			`;
+
+			const $dll = $(dllSelector);
+
+			if ($cb.is(':checked')) {
+				if ($dll.find('.dll-input').length === 0) {
+					$dll.append(checkbicms);
+				}
+			} else {
+				$dll.find('.dll-input').remove(); // remove only input part, keep container
+			}
+		});
+	};
+
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // add item
@@ -326,7 +441,7 @@ $('#jdesc_wrap').remAddRow({
 	removeClass: 'jdesc_remove',
 	swal: {
 		ajax: {
-			url: `api/products`,
+			url: `{{ url('salesjobdescription') }}`,
 			method: 'DELETE',
 			dataType: 'json',
 			data: {
@@ -506,42 +621,53 @@ $('#jdesc_wrap').remAddRow({
 
 	`,
 	onAdd: (i, event, $row, name) => {
-		console.log(`Added row ${i} with field name: ${name}`);
-		populateSelect(i, name);
+		// console.log(`Added row ${i} with field name: ${name}`);
+		populateSelect(i);
+		populateCheckbox(i, name);
 	},
 	onRemove: async (i, event, $row, name) => {
-		console.log(`Remove row ${i} with field name: ${name}`);
+		// console.log(`Remove row ${i} with field name: ${name}`);
 	}
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // restore old data
-@php
-	$salespaymentItems = @$sale?->hasmanyjobdescription()?->with('belongstomanysalesgetitem')?->get();
-	$salesJobDesc = $salespaymentItems?->toArray()??[];
-	// $salesJD = old('jobdesc', $salesJobDesc);
+<?php
+// $items = @$sale?->hasmanyjobdescription()?->with('belongstomanysalesgetitem')?->get();
 
-	$salesJD = collect(old('jobdesc', $salesJobDesc))->map(function ($row) {
+$items = @$sale
+				?->hasmanyjobdescription()
+				?->get()
+				->map(function ($applicant) {
+					$modules = $applicant
+										?->belongstomanysalesgetitem()
+										?->get()
+										->map(function ($module) {
+											return [
+												$module->pivot->id, [
+													'sales_get_item_id' => $module->id,
+												]
+											];
+										})
+										->toArray();
 
-		// validation error case (already correct)
-		if (isset($row['sales_get_item_id'])) {
-			return $row;
-		}
+					return [
+						'id'       => $applicant->id,
+						'job_description'   => $applicant->job_description,
+						'quantity'    => $applicant->quantity,
+						'uom_id' => $applicant->uom_id,
+						'machine_id' => $applicant->machine_id,
+						'machine_accessory_id' => $applicant->machine_accessory_id,
+						'getItem'     => $modules,
+					];
+				})
+				->toArray() ?? [];
 
-		// edit case → normalize
-		if (isset($row['belongstomanysalesgetitem'])) {
-			$row['sales_get_item_id'] = collect($row['belongstomanysalesgetitem'])
-			->pluck('pivot.sales_get_item_id')
-			->map(fn ($id) => (string) $id)
-			->values()
-			->toArray();
-		}
 
-		return $row;
-	})->toArray();
 
-	// dd($salesJD);
-@endphp
+$salesJD = old('jobdesc', $items);
+// dd($salesJD);
+?>
 
 const sJD = @json($salesJD);
 if (sJD.length > 0) {
@@ -586,29 +712,14 @@ if (sJD.length > 0) {
 					id: sajobDesc.machine_accessory_id,
 				},
 			}).then(function (data) {
-				console.log(data[0].id, data[0].accessory);
+				// console.log(data[0].id, data[0].accessory);
 				var option = new Option(data[0].accessory, data[0].id, true, true);
 				$(`#jobdescmachacc_${j}`).append(option).trigger('change');
 			});
 		}
 
-		console.log(sajobDesc.sales_get_item_id);
-		// if (sajobDesc.belongstomanysalesgetitem.length > 0) {
-		// }
-		// ---- WAIT until checkboxes are rendered ----
-		setTimeout(() => {
-			if (Array.isArray(sajobDesc.sales_get_item_id)) {
-				sajobDesc.sales_get_item_id.forEach(id => {
-					$row.find(
-					`input[name="jobdesc[${j}][sales_get_item_id][]"][value="${id}"]`
-					).prop('checked', true);
-				});
-			}
-		}, 300);
-
-
-
-
+		console.log(sajobDesc.getItem);
+		populateCheckbox(j, 'jobdesc', sajobDesc.getItem);
 
 		$row.find(`[name="jobdesc[${j}][id]"]`).val(sajobDesc.id || '');
 		$row.find(`[name="jobdesc[${j}][job_description]"]`).val(sajobDesc.job_description || '');
@@ -620,7 +731,7 @@ if (sJD.length > 0) {
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // validator
-$('#form1').bootstrapValidator({
+$('#form').bootstrapValidator({
 	fields: {
 
 		date_order: {
