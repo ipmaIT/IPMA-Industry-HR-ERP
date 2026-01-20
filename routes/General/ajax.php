@@ -55,6 +55,8 @@ Route::post('/outstationattendancelocation', [AjaxDBController::class, 'outstati
 Route::post('/staffoutstationduration', [AjaxDBController::class, 'staffoutstationduration'])->name('staffoutstationduration');
 Route::post('/attendanceabsentindicator', [AjaxDBController::class, 'attendanceabsentindicator'])->name('attendanceabsentindicator');
 Route::post('/week_dates', [AjaxDBController::class, 'week_dates'])->name('week_dates');
+Route::get('/sales/getOptSalesGetItem', [AjaxDBController::class, 'getOptSalesGetItem'])->name('getOptSalesGetItem');
+
 
 
 

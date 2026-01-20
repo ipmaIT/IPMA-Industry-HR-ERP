@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\DB;
 
 // load models
 use App\Models\Sales\Sales;
+use App\Models\Sales\OptSalesType;
+use App\Models\Sales\OptSalesDeliveryType;
 
 // load batch and queue
 // use Illuminate\Bus\Batch;
@@ -40,11 +42,6 @@ use Log;
 
 class AjaxController extends Controller
 {
-	function __construct()
-	{
-		$this->middleware('auth');
-	}
-
 	public function saleamend(Request $request, Sales $saleamend): RedirectResponse
 	{
 		// dd($request->all());
@@ -110,6 +107,32 @@ class AjaxController extends Controller
 		]);
 	}
 
+	public function getOptSalesType(Request $request): JsonResponse
+	{
+		$values = OptSalesType::when($request->id, function($q1) use ($request){
+								$q1->where('id', $request->id);
+							})
+							->when($request->search, function($q1) use ($request){
+								$q1->where('delivery_type', 'LIKE', '%'.$request->search.'%');
+							})
+							->get();
+		return response()->json($values);
+	}
+
+	public function getOptSalesDeliveryType(Request $request): JsonResponse
+	{
+		$values = OptSalesDeliveryType::when($request->id, function($q1) use ($request){
+								$q1->where('id', $request->id);
+							})
+							->when($request->search, function($q1) use ($request){
+								$q1->where('delivery_type', 'LIKE', '%'.$request->search.'%');
+							})
+							->when($request->idNotIn, function($q1) use ($request){
+								$q1->whereNotIn('id', $request->idNotIn);
+							})
+							->get();
+		return response()->json($values);
+	}
 
 
 

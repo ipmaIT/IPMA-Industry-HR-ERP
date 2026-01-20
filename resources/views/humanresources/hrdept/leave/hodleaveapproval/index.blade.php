@@ -549,7 +549,7 @@ foreach ($c as $v) {
                     </div>
                     <!-------------------------------------------------------------------------------- LEAVE SHOW END -------------------------------------------------------------------------------->
 
-                    <form method="POST" action="{{ route('leavestatus.hodstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" data-id="{{ $a->id }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('leavestatus.hodstatus') }}" accept-charset="UTF-8" id="form{{ $a->id }}" autocomplete="off" class="form" data-id="{{ $a->id }}" enctype="multipart/form-data">
                       @csrf
                       @method('PATCH')
                       <input type="hidden" name="id" value="{{ $a->id }}">
@@ -751,7 +751,7 @@ foreach ($c as $v) {
                     </div>
                     <!-------------------------------------------------------------------------------- LEAVE SHOW END -------------------------------------------------------------------------------->
 
-                    <form method="POST" action="{{ route('leavestatus.hodstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" data-id="{{ $a->id }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('leavestatus.hodstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="form" data-id="{{ $a->id }}" enctype="multipart/form-data">
                       @csrf
                       @method('PATCH')
                       <input type="hidden" name="id" value="{{ $a->id }}">
@@ -954,7 +954,7 @@ foreach ($c as $v) {
                     </div>
                     <!-------------------------------------------------------------------------------- LEAVE SHOW END -------------------------------------------------------------------------------->
 
-                    <form method="POST" action="{{ route('leavestatus.hodstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" data-id="{{ $a->id }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('leavestatus.hodstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="form" data-id="{{ $a->id }}" enctype="multipart/form-data">
                       @csrf
                       @method('PATCH')
                       <input type="hidden" name="id" value="{{ $a->id }}">
@@ -1157,7 +1157,7 @@ foreach ($c as $v) {
                     </div>
                     <!-------------------------------------------------------------------------------- LEAVE SHOW END -------------------------------------------------------------------------------->
 
-                    <form method="POST" action="{{ route('leavestatus.hodstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" data-id="{{ $a->id }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('leavestatus.hodstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="form" data-id="{{ $a->id }}" enctype="multipart/form-data">
                       @csrf
                       @method('PATCH')
                       <input type="hidden" name="id" value="{{ $a->id }}">
@@ -1360,7 +1360,7 @@ foreach ($c as $v) {
                     </div>
                     <!-------------------------------------------------------------------------------- LEAVE SHOW END -------------------------------------------------------------------------------->
 
-                    <form method="POST" action="{{ route('leavestatus.hodstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" data-id="{{ $a->id }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('leavestatus.hodstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="form" data-id="{{ $a->id }}" enctype="multipart/form-data">
                       @csrf
                       @method('PATCH')
                     <input type="hidden" name="id" value="{{ $a->id }}">
@@ -1563,7 +1563,7 @@ foreach ($c as $v) {
                     </div>
                     <!-------------------------------------------------------------------------------- LEAVE SHOW END -------------------------------------------------------------------------------->
 
-                    <form method="POST" action="{{ route('leavestatus.hodstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" data-id="{{ $a->id }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('leavestatus.hodstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="form" data-id="{{ $a->id }}" enctype="multipart/form-data">
                       @csrf
                       @method('PATCH')
                     <input type="hidden" name="id" value="{{ $a->id }}">
@@ -1766,7 +1766,7 @@ foreach ($c as $v) {
                     </div>
                     <!-------------------------------------------------------------------------------- LEAVE SHOW END -------------------------------------------------------------------------------->
 
-                    <form method="POST" action="{{ route('formmethod.update', $formmethod) }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" data-id="{{ $a->id }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('formmethod.update', $formmethod) }}" accept-charset="UTF-8" id="form" autocomplete="off" class="form" data-id="{{ $a->id }}" enctype="multipart/form-data">
                       @csrf
                       @method('PATCH')
                     <input type="hidden" name="id" value="{{ $a->id }}">
@@ -1969,7 +1969,7 @@ foreach ($c as $v) {
                     </div>
                     <!-------------------------------------------------------------------------------- LEAVE SHOW END -------------------------------------------------------------------------------->
 
-                    <form method="POST" action="{{ route('leavestatus.hodstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" data-id="{{ $a->id }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('leavestatus.hodstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="form" data-id="{{ $a->id }}" enctype="multipart/form-data">
                       @csrf
                       @method('PATCH')
                     <input type="hidden" name="id" value="{{ $a->id }}">
@@ -2172,7 +2172,7 @@ foreach ($c as $v) {
                     </div>
                     <!-------------------------------------------------------------------------------- LEAVE SHOW END -------------------------------------------------------------------------------->
 
-                    <form method="POST" action="{{ route('leavestatus.hodstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" data-id="{{ $a->id }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('leavestatus.hodstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="form" data-id="{{ $a->id }}" enctype="multipart/form-data">
                       @csrf
                       @method('PATCH')
                     <input type="hidden" name="id" value="{{ $a->id }}">
@@ -2375,7 +2375,7 @@ foreach ($c as $v) {
                     </div>
                     <!-------------------------------------------------------------------------------- LEAVE SHOW END -------------------------------------------------------------------------------->
 
-                    <form method="POST" action="{{ route('leavestatus.hodstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" data-id="{{ $a->id }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('leavestatus.hodstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="form" data-id="{{ $a->id }}" enctype="multipart/form-data">
                       @csrf
                       @method('PATCH')
                     <input type="hidden" name="id" value="{{ $a->id }}">
@@ -2578,17 +2578,17 @@ foreach ($c as $v) {
                     </div>
                     <!-------------------------------------------------------------------------------- LEAVE SHOW END -------------------------------------------------------------------------------->
 
-                    <form method="POST" action="{{ route('leavestatus.hodstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" data-id="{{ $a->id }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('leavestatus.hodstatus') }}" accept-charset="UTF-8" id="form{{ $a->id }}" autocomplete="off" class="form" data-id="{{ $a->id }}" enctype="multipart/form-data">
                       @csrf
                       @method('PATCH')
-                    <input type="hidden" name="id" value="{{ $a->id }}">
+                      <input type="hidden" name="id" value="{{ $a->id }}">
 
-                    <div class="offset-sm-4 col-sm-6">
+                      <div class="offset-sm-4 col-sm-6">
                       @foreach($ls as $k => $val)
-                      <div class="form-check form-check-inline {{ $errors->has('leave_status_id') ? 'has-error' : '' }}">
-                        <input type="radio" name="leave_status_id" value="{{ $val['id'] }}" id="hodstatus{{ $a->id.$val['id'] }}" class="form-check-input">
-                        <label class="form-check-label" for="hodstatus{{ $a->id.$val['id'] }}">{{ $val['text'] }}</label>
-                      </div>
+                       <div class="form-check form-check-inline {{ $errors->has('leave_status_id') ? 'has-error' : '' }}">
+                          <input type="radio" name="leave_status_id" value="{{ $val['id'] }}" id="hodstatus{{ $a->id.$val['id'] }}" class="form-check-input">
+                          <label class="form-check-label" for="hodstatus{{ $a->id.$val['id'] }}">{{ $val['text'] }}</label>
+                        </div>
                       @endforeach
                     </div>
 
@@ -2633,36 +2633,38 @@ foreach ($c as $v) {
 @section('js')
 /////////////////////////////////////////////////////////////////////////////////////////
 // form submit via ajax
-$(".form").on('submit', function(e){
-	var ids = $(this).data('id');
-	e.preventDefault();
-	$.ajax({
-		url: '{{ route('leavestatus.hodstatus') }}',
-		type: 'PATCH',
-		data: {
-				_token: '{!! csrf_token() !!}',
-				id: ids,
-				leave_status_id: $(':input[name="leave_status_id"]:checked').val(),
-				verify_code: $('#hodcode' + ids).val(),
-				remarks: $('#remarks' + ids).val()
-		},
-		dataType: 'json',
-		global: false,
-		async:false,
-		success: function (response) {
-			$('#hodapproval' + ids).modal('hide');
-			var row = $('#hodapproval' + ids).parent().parent();
-			// row.css('border', '5px solid red');
-			row.remove();
-			swal.fire('Success!', response.message, response.status);
-		},
-		error: function(resp) {
-			const res = resp.responseJSON;
-			$('#hodapproval' + ids).modal('hide');
-			swal.fire('Error!', res.message,'error');
-		}
-	});
+$(document).on('submit', '.form', function (e) {
+    e.preventDefault();
+
+    let form = $(this);
+    let ids  = form.data('id');
+
+    $.ajax({
+        url: form.attr('action'),
+        type: 'PATCH',
+        data: {
+            _token: '{{ csrf_token() }}',
+            id: form.find('input[name="id"]').val(),
+            leave_status_id: form.find('input[name="leave_status_id"]:checked').val(),
+            verify_code: form.find('#hodcode' + ids).val(),
+            remarks: form.find('#remarks' + ids).val()
+        },
+        dataType: 'json',
+        success: function (response) {
+            $('#hodapproval' + ids).modal('hide');
+
+            // remove row
+            form.closest('tr').remove();
+
+            swal.fire('Success!', response.message, 'success');
+        },
+        error: function (resp) {
+            let res = resp.responseJSON ?? { message: 'Unknown error' };
+            swal.fire('Error!', res.message, 'error');
+        }
+    });
 });
+
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // tooltip

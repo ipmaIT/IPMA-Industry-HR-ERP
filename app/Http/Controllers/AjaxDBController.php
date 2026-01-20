@@ -727,6 +727,8 @@ class AjaxDBController extends Controller
 			$au = OptMachine::where('machine','LIKE','%'.$request->search.'%')->orderBy('id')->get();
 		} elseif ($request->has('id')) {
 			$au = OptMachine::where('id', $request->id)->get();
+		} elseif ($request->has('idNotIn')) {
+			$au = OptMachine::where('id', $request->idNotIn)->get();
 		} else {
 			$au = OptMachine::all();
 		}
@@ -740,24 +742,23 @@ class AjaxDBController extends Controller
 		return response()->json( $cuti );
 	}
 
-	// public function machineaccessories(Request $request): JsonResponse
-	// {
-	// 	// https://select2.org/data-sources/formats
-	// 	foreach ($request->jobdesc as $v) {
-	// 		$r = $v['machine_id'];
-	// 	}
-	// 	// dd($request->jobdesc, $r);
-
-	// 	$au = OptMachineAccessories::where('machine_id', $r)->get();
-	// 	foreach ($au as $key) {
-	// 		$cuti['results'][] = [
-	// 								'id' => $key->id,
-	// 								'text' => $key->accessory,
-	// 							];
-	// 		// $cuti['pagination'] = ['more' => true];
-	// 	}
-	// 	return response()->json( $cuti );
-	// }
+	public function machineaccessories(Request $request): JsonResponse
+	{
+		$values = OptMachineAccessories::when($request->search, function($q1) use ($request) {
+								$q1->where('accessory','LIKE','%'.$request->search.'%');
+							})
+						->when($request->id, function($q2) use ($request) {
+							$q2->where('id', $request->id);
+						})
+						->when($request->idNotIn, function($q3) use ($request) {
+							$q3->whereNotIn('id', $request->idNotIn);
+						})
+						->when($request->machine_id, function($q3) use ($request) {
+							$q3->where('machine_id', $request->machine_id);
+						})
+						->get();
+		return response()->json( $values );
+	}
 
 	public function category(Request $request): JsonResponse
 	{
@@ -1628,7 +1629,20 @@ class AjaxDBController extends Controller
 		return response()->json($absent);
 	}
 
-
+	public function getOptSalesGetItem(Request $request)
+	{
+		$values = OptSalesGetItem::when($request->search, function($q1) use ($request){
+								$q1->where('get_item', 'LIKE', '%'.$request->search.'%');
+							})
+							->when($request->id, function($q1) use ($request){
+								$q1->where('id', $request->id);
+							})
+							->when($request->idNotIn, function($q1) use ($request){
+								$q1->whereNotIn('id', $request->idNotIn);
+							})
+							->get();
+		return response()->json($values);
+	}
 
 
 

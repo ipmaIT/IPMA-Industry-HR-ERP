@@ -1,18 +1,23 @@
 		<!-- <header class="border-bottom lh-1 py-3"> -->
 			<!-- navigator -->
 			<!-- <nav class="navbar navbar-expand-lg bg-body-tertiary"> -->
-			<nav class="navbar navbar-expand-lg align-self-start rounded m-0 mb-1 bg-body-tertiary">
+			<nav class="navbar navbar-expand-lg rounded m-0 mb-1 bg-body-tertiary">
 				<div class="container-fluid">
-					<a class="navbar-brand" href="{{ url('/') }}"> <img src="{{ asset('images/logo.png') }}" class="img-fluid rounded" alt="Home" width="40%"> </a>
+
+					<img src="{{ asset('images/logo.png') }}" class="img-fluid rounded" alt="Home" width="5%">
+
 					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor04" aria-controls="navbarColor04" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
 					</button>
 					<div class="collapse navbar-collapse" id="navbarColor04">
-						<ul class="navbar-nav me-auto">
+						<ul class="navbar-nav mx-auto">
 							<li class="nav-item">
-								<a class="nav-link active" href="{{ url('/') }}">Home
+
+								<a class="nav-link active" href="{{ url('/') }}">
+									{!! config('app.name') !!}
 									<span class="visually-hidden">(current)</span>
 								</a>
+
 							</li>
 						</ul>
 						@if (Route::has('login'))

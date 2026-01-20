@@ -73,32 +73,17 @@ class SalesController extends Controller
 					'urgency' => 'nullable',
 					'sales_delivery_id' => 'required',
 					'special_delivery_instruction' => 'nullable',
+					'jobdesc' => 'required|array|min:1',
 					'jobdesc.*.job_description' => 'required',
 					'jobdesc.*.quantity' => 'required',
 					'jobdesc.*.uom_id' => 'required',
-					'jobdesc.*.sales_get_item_id' => 'required',
+					'jobdesc.*.gItems' => 'required|array|min:1',
+					'jobdesc.*.gItems.*.sales_get_item_id' => 'required',
 					'jobdesc.*.machine_id' => 'required',
 					'jobdesc.*.machine_accessory_id' => 'nullable',
 					'jobdesc.*.job_description' => 'required',
 				],
-				[
-					// 'date_order.required' => 'Please insert year',
-					// 'customer_id.required' => 'Please insert year',
-					// 'sales_type_id.required' => 'Please insert year',
-					'special_request.required_if' => ':attribute is needed when :attribute is checked',
-					// 'po_number.required' => 'Please insert year',
-					// 'delivery_at.required' => 'Please insert year',
-					// 'urgency.required' => 'Please insert year',
-					'sales_delivery_id.*.required' => ':attribute is required',
-					// 'special_delivery_instruction.required' => 'Please insert year',
-					// 'jobdesc.*.job_description.required' => 'Job Description',
-					// 'jobdesc.*.quantity.required' => 'Job Description',
-					// 'jobdesc.*.uom_id.required' => 'Job Description UOM',
-					// 'jobdesc.*.sales_get_item_id.required' => 'Job Description',
-					// 'jobdesc.*.machine_id.required' => 'Job Description Machine',
-					// 'jobdesc.*.machine_accessories_id.required' => 'Job Description',
-					// 'jobdesc.*.job_description.required' => 'Job Description',
-				],
+				[],
 				[
 					'date_order' => 'Date',
 					'customer_id' => 'Customer',
@@ -109,10 +94,12 @@ class SalesController extends Controller
 					'urgency' => 'Mark As Urgent',
 					'sales_delivery_id' => 'Delivery Instruction',
 					'special_delivery_instruction' => 'Special Delivery Instruction',
+					'jobdesc' => 'Job Description',
 					'jobdesc.*.job_description' => 'Job Description',
 					'jobdesc.*.quantity' => 'Job Description Quantity',
 					'jobdesc.*.uom_id' => 'Job Description UOM ',
-					'jobdesc.*.sales_get_item_id' => 'Job Description Delivery Instruction',
+					'jobdesc.*.gItems' => 'Job Description Acquire Items',
+					'jobdesc.*.gItems.*.sales_get_item_id' => 'Job Description Acquire Items Method',
 					'jobdesc.*.machine_id' => 'Job Description Machine',
 					'jobdesc.*.machine_accessory_id' => 'Job Description Machine Accessories',
 					'jobdesc.*.remarks' => 'Job Description Remarks',
@@ -128,15 +115,27 @@ class SalesController extends Controller
 
 		$count = Sales::whereYear('created_at', now()->format('Y'))->get()->count() + 1;
 
-		$data = $request->only(['date_order', 'customer_id', 'deliveryby_id', 'sales_type_id', 'po_number', 'delivery_at', 'urgency']);
-		$data += ['special_delivery_instruction' => ucwords(Str::lower($request->special_delivery_instruction))];
+		$data = $request->only([
+														'date_order',
+														'customer_id',
+														'sales_type_id',
+														'delivery_at',
+														'urgency',
+													]);
+
+		$data += ['special_delivery_instruction' => Str::title(Str::lower($request->special_delivery_instruction))];
+		$data += ['po_number' => Str::title(Str::lower($request->po_number))];
+
 		$data += ['staff_id' => \Auth::user()->belongstostaff->id];
 		$data += ['sales_by_id' => $sales_by];
 		$data += ['no' => $count];
 		$data += ['year' => now()->format('Y')];
+
 		if ($request->has('spec_req')) {
-			$data += ['special_request' => ucwords(Str::lower($request->special_request))];
+			$data += ['spec_req' => $request->spec_req];
+			$data += ['special_request' => Str::title(Str::lower($request->special_request))];
 		}
+
 		$sal = Sales::create($data);
 
 		if ($request->has('sales_delivery_id')) {
@@ -144,15 +143,16 @@ class SalesController extends Controller
 				$sal->belongstomanydelivery()->attach($v);
 			}
 		}
+
 		if ($request->has('jobdesc')) {
 			foreach ($request->jobdesc as $k => $v) {
 				// dump($k, $v);
-				$job_description = ucwords(Str::lower($v['job_description']));
+				$job_description = Str::title(Str::lower($v['job_description']));
 				$quantity = $v['quantity'];
 				$uom_id = $v['uom_id'];
 				$machine_id = $v['machine_id'];
 				$machine_accessory_id = $v['machine_accessory_id']??NULL;
-				$remarks = ucwords(Str::lower($v['remarks']));
+				$remarks = Str::title(Str::lower($v['remarks']));
 
 				$sjd = $sal->hasmanyjobdescription()->create([
 							'job_description' => $job_description,
@@ -162,10 +162,10 @@ class SalesController extends Controller
 							'machine_accessory_id' => $machine_accessory_id,
 							'remarks' => $remarks,
 						]);
-				$sjd->belongstomanysalesgetitem()->attach($v['sales_get_item_id']);
+				$sjd->belongstomanysalesgetitem()->attach($v['gItems']);
 			}
 		}
-		return redirect()->route('sale.index')->with('flash_message', 'Successfully Add New Customer Order');
+		return redirect()->route('sale.index')->with('success', 'Successfully Add New Customer Order');
 	}
 
 	public function show(Sales $sale): View
@@ -184,13 +184,14 @@ class SalesController extends Controller
 		$validated = $request->validate(
 				[
 					'date_order' => 'required|date',
-					'customer_id' => 'nullable',
+					'customer_id' => 'required',
 					'sales_type_id' => 'required',
 					'special_request' => 'required_if:spec_req,true',
 					'po_number' => 'nullable',
 					'delivery_at' => 'required',
 					'urgency' => 'nullable',
 					'sales_delivery_id' => 'required',
+					'jobdesc' => 'required|array|min:1',
 					'special_delivery_instruction' => 'nullable',
 					'jobdesc.*.job_description' => 'required',
 					'jobdesc.*.quantity' => 'required',
@@ -200,24 +201,7 @@ class SalesController extends Controller
 					'jobdesc.*.machine_accessory_id' => 'nullable',
 					'jobdesc.*.job_description' => 'required',
 				],
-				[
-					// 'date_order.required' => 'Please insert year',
-					// 'customer_id.required' => 'Please insert year',
-					// 'sales_type_id.required' => 'Please insert year',
-					'special_request.required_if' => ':attribute is needed when :attribute is checked',
-					// 'po_number.required' => 'Please insert year',
-					// 'delivery_at.required' => 'Please insert year',
-					// 'urgency.required' => 'Please insert year',
-					'sales_delivery_id.*.required' => ':attribute is required',
-					// 'special_delivery_instruction.required' => 'Please insert year',
-					// 'jobdesc.*.job_description.required' => 'Job Description',
-					// 'jobdesc.*.quantity.required' => 'Job Description',
-					// 'jobdesc.*.uom_id.required' => 'Job Description UOM',
-					// 'jobdesc.*.sales_get_item_id.required' => 'Job Description',
-					// 'jobdesc.*.machine_id.required' => 'Job Description Machine',
-					// 'jobdesc.*.machine_accessories_id.required' => 'Job Description',
-					// 'jobdesc.*.job_description.required' => 'Job Description',
-				],
+				[],
 				[
 					'date_order' => 'Date',
 					'customer_id' => 'Customer',
@@ -238,13 +222,14 @@ class SalesController extends Controller
 				]
 			);
 		$data = $request->only(['date_order', 'customer_id', 'deliveryby_id', 'sales_type_id', 'po_number', 'delivery_at', 'urgency']);
-		$data += ['special_delivery_instruction' => ucwords(Str::lower($request->special_delivery_instruction))];
+		$data += ['special_delivery_instruction' => Str::title(Str::lower($request->special_delivery_instruction))];
 		$data += ['staff_id' => \Auth::user()->belongstostaff->id];
 		// $data += ['sales_by_id' => $sales_by];
 		// $data += ['no' => $count];
 		// $data += ['year' => now()->format('Y')];
 		if ($request->has('spec_req')) {
-			$data += ['special_request' => ucwords(Str::lower($request->special_request))];
+			$data += ['special_request' => Str::title(Str::lower($request->special_request))];
+			$data += ['spec_req' => $request->spec_req];
 		}
 		$sale->update($request->only($data));
 
@@ -257,12 +242,12 @@ class SalesController extends Controller
 		if ($request->has('jobdesc')) {
 			foreach ($request->jobdesc as $k => $v) {
 				// dump($k, $v);
-				$job_description = ucwords(Str::lower($v['job_description']));
+				$job_description = Str::title(Str::lower($v['job_description']));
 				$quantity = $v['quantity'];
 				$uom_id = $v['uom_id'];
 				$machine_id = $v['machine_id'];
 				$machine_accessory_id = $v['machine_accessory_id']??NULL;
-				$remarks = ucwords(Str::lower($v['remarks']));
+				$remarks = Str::title(Str::lower($v['remarks']));
 				$id = ($v['id'])??null;
 
 				$sales0 = $sale->hasmanyjobdescription()->updateOrCreate([
@@ -287,5 +272,11 @@ class SalesController extends Controller
 
 	public function destroy(Sales $sale): JsonResponse
 	{
+		// $sale->detach();
+		$sale->delete();
+		return response()->json([
+			'status' => 'success',
+			'message' => 'Your data deleted',
+		]);
 	}
 }

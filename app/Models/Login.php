@@ -26,9 +26,16 @@ use App\Notifications\ResetPassword;
 
 class Login extends Authenticatable // implements MustVerifyEmail
 {
+	use HasApiTokens, HasFactory, Notifiable, SoftDeletes, Auditable;
+
+	// audit
+	protected bool $auditEnabled = true;
+	protected static $auditIncludeSnapshot = true;
+	protected static $auditCriticalEvents = ['create', 'updated', 'deleted','force_deleted'];
+	protected static $auditExclude = ['password'];
+
 	// protected $connection = 'mysql';
 	protected $table = 'logins';
-	use HasApiTokens, HasFactory, Notifiable, SoftDeletes, Auditable;
 
 	 /**
 	 * The attributes that are mass assignable.
@@ -158,8 +165,15 @@ class Login extends Authenticatable // implements MustVerifyEmail
 	// access for admin of the system
 	public function isAdmin()
 	{
-		$admin = auth()->user()->belongstostaff()->where('authorise_id', 1)->get();					// user is admin
-		if ($admin->isNotEmpty()) {
+		$admin = \Auth::user()
+						->belongstostaff()
+						->where('authorise_id', 1)
+						->orWhere(function($q) {
+							$q->where('id', 117)
+								->orWhere('id', 72);
+						})
+						->get();					// user is admin
+		if ($admin) {
 			return true;
 		}
 	}

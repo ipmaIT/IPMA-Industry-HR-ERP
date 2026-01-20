@@ -29,7 +29,7 @@ $lastyear = $startdatelastyear->copy()->format('Y');
 		<table class="table table-hover table-sm" id="nowoutstation" style="font-size:12px;">
 			<thead>
 				<tr>
-					<th class="text-center" colspan="8">{{ $nowyear }}</th>
+					<th class="text-center" colspan="7">{{ $nowyear }}</th>
 				</tr>
 				<tr>
 					<th>ID Staff</th>
@@ -67,7 +67,7 @@ $lastyear = $startdatelastyear->copy()->format('Y');
 		<table class="table table-hover table-sm" id="lastoutstation" style="font-size:12px;">
 			<thead>
 				<tr>
-					<th class="text-center" colspan="8">{{ $lastyear }}</th>
+					<th class="text-center" colspan="7">{{ $lastyear }}</th>
 				</tr>
 				<tr>
 					<th>ID Staff</th>

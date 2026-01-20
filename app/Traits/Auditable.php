@@ -131,7 +131,7 @@ trait Auditable
 			try { $req = Request::instance(); } catch (\Throwable) {}
 
 			ActivityLog::create([
-				'staff_id'     => Auth::id(),
+				'staff_id'     => \Auth::user()?->belongstostaff?->id,
 				'event'       => $event,
 				'model_type'  => static::class,
 				'model_id'    => $this->getKey(),

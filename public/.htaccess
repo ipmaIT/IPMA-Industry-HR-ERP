@@ -5,6 +5,10 @@
 
     RewriteEngine On
 
+    # Force HTTPS
+    # RewriteCond %{HTTPS} !=on
+    # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
@@ -23,5 +27,5 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_URI} !^/public/
-    RewriteRule ^(css|js|fonts|images|slick)/(.*)$ public/$1/$2 [L,NC]
+    RewriteRule ^(css|js|fonts|images|slick|vmserver)/(.*)$ public/$1/$2 [L,NC]
 </IfModule>

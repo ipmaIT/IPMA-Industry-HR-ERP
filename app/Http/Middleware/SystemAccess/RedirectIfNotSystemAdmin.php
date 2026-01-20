@@ -19,7 +19,7 @@ class RedirectIfNotSystemAdmin
 	{
 		// dd($request->user()->isAdmin());
 		if ( !$request->user()->isAdmin() ) {
-			return redirect()->back();
+			return abort('403');
 		}
 		return $next($request);
 	}

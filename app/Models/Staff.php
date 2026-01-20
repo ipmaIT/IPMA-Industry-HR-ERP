@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 // use Illuminate\Database\Eloquent\Model;
+use App\Models\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -23,7 +24,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 
 // class Staff extends Model
-class Staff extends Authenticatable
+class Staff extends Model // implements MustVerifyEmail
 {
 	use Notifiable, HasFactory, SoftDeletes, Auditable;
 

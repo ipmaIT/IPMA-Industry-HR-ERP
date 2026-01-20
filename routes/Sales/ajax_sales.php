@@ -4,10 +4,26 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Sales\AjaxController;
 
 // Ajax Controller : to CRUD data on the DB
-Route::patch('/saleamend/{saleamend}', [AjaxController::class, 'saleamend'])->name('saleamend');
-Route::patch('/saleapproved/{saleapproved}', [AjaxController::class, 'saleapproved'])->name('saleapproved');
-Route::patch('/salesend/{salesend}', [AjaxController::class, 'salesend'])->name('salesend');
 
+Route::middleware('auth')->group(function () {
+	Route::controller(AjaxController::class)->group(function () {
+
+	Route::patch('/saleamend/{saleamend}', 'saleamend')->name('saleamend');
+	Route::patch('/saleapproved/{saleapproved}', 'saleapproved')->name('saleapproved');
+	Route::patch('/salesend/{salesend}', 'salesend')->name('salesend');
+
+		Route::prefix('/sales')->name('sales.')->group(function () {
+
+			Route::get('/getOptSalesType', 'getOptSalesType')->name('getOptSalesType');
+			Route::get('/getOptSalesDeliveryType', 'getOptSalesDeliveryType')->name('getOptSalesDeliveryType');
+
+		});
+
+	});
+});
+
+
+// http://localhost:8000/sales/getOptSalesType
 
 
 

@@ -19,31 +19,38 @@ $currentYear = Carbon::now()->year;
 	<link href="{{ URL::asset('css/app.css') }}" rel="stylesheet">
 	@stack('styles')
 </head>
-	<body class="bg-secondary bg-opacity-10">
-		<div class="container-fluid row min-vh-100 align-items-center justify-content-center mx-auto">
-			<header class="row align-self-start justify-content-center m-0">
-				@include('layouts.navigation')
-				<div class="col-sm-12 row align-self-start justify-content-center m-0">
-					<div class="col-sm-4 text-center m-0">
-						<a class="blog-header-logo text-body-emphasis text-decoration-none" href="{{ url('/') }}">{!! config('app.name') !!}</a>
-					</div>
-					<div class="col-sm-12 align-items-start justify-content-center m-0">
-						@include('layouts.nav')
-					</div>
-					<div class="col-sm-12 align-items-start justify-content-center m-0">
-						@include('layouts.messages')
-					</div>
+	<!-- <body class="bg-secondary bg-opacity-10"> -->
+	<body class="d-flex flex-column bg-secondary bg-opacity-10 min-vh-100 ">
+
+		@include('layouts.navigation')
+
+			<div class="container-fluid mx-auto my-2">
+
+				<div class="col-sm-12 align-items-top justify-content-center m-0">
+					@include('layouts.nav')
 				</div>
-			</header>
-			<main class="col-sm-8 row justify-content-center m-0">
-				<article class="blog-post d-flex justify-content-center align-items-center">
+
+		</div>
+
+		<div class="container-fluid d-flex flex-fill p-1 mx-auto">
+
+			<div class="container mx-auto border border-success rounded">
+
+				<div class="col-sm-12 mx-auto">
+					@include('layouts.messages')
+				</div>
+
+				<main class="col-sm-12 mx-auto row justify-content-center m-0">
 					@yield('content')
-				</article>
-			</main>
-			<div class="container py-3 align-self-end text-center text-body-secondary bg-body-tertiary mx-auto m-0" >
-				<p>{{ config('app.name') }} made from <a href="">Bootstrap</a> & <a href="">Laravel v.{{ app()->version() }}</a> by <a href="{{ url('/') }}">IPMA Industry Sdn Bhd</a>.</p>
-				<p class="fw-lighter fs-6 text-body-secondary">Made with love by Dhiauddin and Tan</p>
+				</main>
+
 			</div>
+
+		</div>
+
+		<div class="container m-0 py-1 align-self-bottom text-center text-sm text-light-emphasis border border=success-subtle rounded-3">
+			<p>{{ config('app.name') }} made from <a href="">Bootstrap</a> & <a href="">Laravel v.{{ app()->version() }}</a> by <a href="{{ url('/') }}">IPMA Industry Sdn Bhd</a>.</p>
+			<small class="fw-lighter fs-6 text-body-secondary">Made with love by Dhiauddin and Tan</small>
 		</div>
 	</body>
 

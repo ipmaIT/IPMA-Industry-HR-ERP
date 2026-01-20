@@ -577,7 +577,7 @@ foreach ($c as $v) {
                     </div>
                     <!-------------------------------------------------------------------------------- LEAVE SHOW END -------------------------------------------------------------------------------->
 
-                    <form method="POST" action="{{ route('leavestatus.hrstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="" data-id="{{ $a->id }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('leavestatus.hrstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="form" data-id="{{ $a->id }}" enctype="multipart/form-data">
                       @csrf
                       @method('PATCH')
                     <input type="hidden" name="id" value="{{ $a->id }}">
@@ -659,6 +659,40 @@ $(".form").on('submit', function(e){
 		}
 	});
 });
+
+
+$(document).on('submit', '.form', function (e) {
+    e.preventDefault();
+
+    let form = $(this);
+    let ids  = form.data('id');
+
+    $.ajax({
+        url: form.attr('action'),
+        type: 'PATCH',
+        data: {
+            _token: '{{ csrf_token() }}',
+            id: ids,
+            leave_status_id: form.find('input[name="leave_status_id"]:checked').val(),
+            verify_code: form.find('#hrcode' + ids).val(),
+            remarks: form.find('#remarks' + ids).val()
+        },
+        dataType: 'json',
+        success: function (response) {
+            $('#hrapproval' + ids).modal('hide');
+
+            // remove row
+            form.closest('tr').remove();
+
+            swal.fire('Success!', response.message, 'success');
+        },
+        error: function (resp) {
+            let res = resp.responseJSON ?? { message: 'Unknown error' };
+            swal.fire('Error!', res.message, 'error');
+        }
+    });
+});
+
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // tooltip
