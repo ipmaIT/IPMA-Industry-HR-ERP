@@ -105,7 +105,7 @@ $.ajax({
 									'sales_delivery_id' => $module->id,
 								]
 							];
-						}) ?? [];
+						});
 
 	$itemsArrayb = $itemsa?->toArray()??[];
 	$oldItemsValuec = old('delivery', $itemsArrayb)??[];
