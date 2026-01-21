@@ -144,6 +144,11 @@ class Staff extends Model // implements MustVerifyEmail
 		return $this->hasMany(\App\Models\HumanResources\HRDisciplinary::class, 'staff_id');
 	}
 
+	public function hasmanysales(): HasMany
+	{
+		return $this->hasMany(\App\Models\Sales\Sales::class, 'staff_id');
+	}
+
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// db relation belongsToMany
 	public function belongstomanydepartment(): BelongsToMany

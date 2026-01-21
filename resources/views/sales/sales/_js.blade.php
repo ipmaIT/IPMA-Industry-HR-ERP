@@ -34,27 +34,26 @@ $('#cust').select2({
 		}
 	},
 });
-const oldCust = @json(old('customer_id', @$sale?->customer_id))??[];
-if( oldCust.length > 0 ) {
-	$.ajax({
-		url: "{{ route('customer.customer') }}",
-		type: "POST",
-		dataType: 'json',
-		data: {
-			_token: '{!! csrf_token() !!}',
-			id: `${oldCust}`,
-		},
-		success: function (data) {
-			const itema = Array.isArray(data) ? data[0] : data;	// change object to array
-			if (!itema) return;
-			const option1 = new Option(itema.results[0].text, itema.results[0].id, true, true);
-			$(`#cust`).append(option1).trigger('change');
-		},
-		error: function (jqXHR, textStatus, errorThrown) {
-			// // // // // console.log(textStatus, errorThrown);
-		}
-	});
-}
+const oldCust = @json(old('customer_id', @$sale?->customer_id));
+$.ajax({
+	url: "{{ route('customer.customer') }}",
+	type: "POST",
+	dataType: 'json',
+	data: {
+		_token: '{!! csrf_token() !!}',
+		id: `${oldCust}`,
+	},
+	success: function (data) {
+		const itema = Array.isArray(data) ? data[0] : data;	// change object to array
+		if (!itema) return;
+		console.log(itema.results[0].text);
+		const option1 = new Option(itema.results[0].text, itema.results[0].id, true, true);
+		$(`#cust`).append(option1).trigger('change');
+	},
+	error: function (jqXHR, textStatus, errorThrown) {
+		// console.log(textStatus, errorThrown);
+	}
+});
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // populate order type
@@ -63,8 +62,8 @@ $.ajax({
 	dataType: 'json',
 	url: "{{ route('sales.getOptSalesType') }}",
 	type: "GET",
-	success: function (response) {
-		// // // // // console.log(response);
+	success: function (response){
+	// console.log(response);
 		let checkicmsmodule = $("#sale_Order");
 		checkicmsmodule.empty();
 		// $.each(response, function (i, value) {
@@ -89,21 +88,31 @@ $.ajax({
 		});
 	},
 	error: function (jqXHR, textStatus, errorThrown) {
-		// // // // console.log(textStatus, errorThrown);
+		// console.log(textStatus, errorThrown);
 	}
 });
 
 
 /////////////////////////////////////////////////////////////////////////////////////////
-// populate order type
+// populate sale delivery
 @php
-	$itemsa = @$sale?->belongstomanydelivery()?->get();
+	$itemsa = @$sale?->belongstomanydelivery()
+						?->get()
+						->map(function ($module) {
+							// delivery
+							return [
+								$module->pivot->id, [
+									'sales_delivery_id' => $module->id,
+								]
+							];
+						}) ?? [];
+
 	$itemsArrayb = $itemsa?->toArray()??[];
-	$oldItemsValuec = old('sales_delivery_id', $itemsArrayb)??[];
+	$oldItemsValuec = old('delivery', $itemsArrayb)??[];
 	// dd($oldItemsValuec);
 @endphp
 
-const sdeliveryId = @json(old('sales_delivery_id', @$oldItemsValuec)) ?? [];
+const sdeliveryId = @json($oldItemsValuec)??[];
 
 $.ajax({
 	url: "{{ route('sales.getOptSalesDeliveryType') }}",
@@ -114,51 +123,46 @@ $.ajax({
 	},
 	success: (function(response) {
 
-		// append data into $("#ger")
-		let checkicmsmodule = $("#ger");
-		checkicmsmodule.empty();
+		// begin with empty it and append data into $("#ger")
+		let cdeliveries = $("#ger");
+		cdeliveries.empty();
 
-		// Convert sdeliveryId to a proper array for easier checking
-		// If it's an array of objects, extract the IDs
-		let deliveryIds = [];
-		if (Array.isArray(sdeliveryId)) {
-			if (sdeliveryId.length > 0 && typeof sdeliveryId[0] === 'object') {
-				// If it's an array of objects (like from toArray()), extract IDs
-				deliveryIds = sdeliveryId.map(item => item.id || item);
-			} else {
-				// If it's already an array of IDs
-				deliveryIds = sdeliveryId;
-			}
-		}
+		// convert array to object from old data
+		const obj = Array.isArray(sdeliveryId) ? sdeliveryId : Object.entries(sdeliveryId);
+		// console.log(sdeliveryId);
+		// console.log(obj);
 
-		// Convert all to strings for consistent comparison
-		deliveryIds = deliveryIds.map(id => String(id));
+		// map the old data object
+		const cicms = obj.map(item =>  item[1]);
+		// console.log(cicms);
 
-		// $.each(response, function (i, value) {
+		// populate the checkbox from ajax
 		response.forEach(function(value, i) {
-			// Check if this value.id is in the deliveryIds array
-			let checked1 = deliveryIds.includes(String(value.id)) ? 'checked' : '';
+
+			// compare old data with the ajax data
+			let found = cicms.find(m => m.sales_delivery_id == value.id);
+			let isChecked = found ? 'checked' : '';
 
 			let $row = `
 			<div class="form-check form-check-inline m-1">
 				<label class="form-check-label" for="dbdid_${i}">
 					<input type="checkbox"
-					name="sales_delivery_id[${i}]"
-					value="${value.id}"
-					id="dbdid_${i}"
-					class="form-check-input m-1"
-					${checked1}
+						name="delivery[${i}][sales_delivery_id]"
+						value="${value.id}"
+						id="dbdid_${i}"
+						class="form-check-input m-1"
+						${isChecked}
 					>
 					${value.delivery_type}
 				</label>
 			</div>
 			`;
-			checkicmsmodule.append($row);
+			cdeliveries.append($row);
 		});
 	}),
 	error: (function(jqXHR, textStatus, errorThrown) {
 		alert( "error" );
-		// // // console.log(textStatus, errorThrown);
+		// console.log(textStatus, errorThrown);
 	}),
 	complete: (function() {
 		// alert( "complete" );
@@ -167,7 +171,7 @@ $.ajax({
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // special request description
-let sr = @json(old('', @$sale->special_request));
+let sr = @json(old('special_request', @$sale->special_request));
 //if(sr){
 //	$(`#specReq`).prop('checked').trigger('chamge');
 //}
@@ -264,7 +268,7 @@ function populateSelect(i = 0){
 				return query;
 			},
 			processResults: function (data) {
-				// // // console.log(data);
+				// console.log(data);
 				return {
 					results: data.map(function (machAcsry) {
 						return {
@@ -281,7 +285,8 @@ function populateSelect(i = 0){
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
-// populate checkbox
+// populate checkbox acquire item
+
 function populateCheckbox(i = 0, name = '', getItem = []) {
 
 	// getOptSalesGetItem
@@ -294,9 +299,9 @@ function populateCheckbox(i = 0, name = '', getItem = []) {
 			const $checkbox = $("#gar_"+i);
 			if($checkbox.length > 0) $checkbox.empty();
 
-			console.log(getItem);
+			// console.log(getItem);
 			const obj = Array.isArray(getItem) ? getItem : Object.entries(getItem);
-			console.log(obj);
+			// console.log(obj);
 
 			const cgetItems = obj.map(item =>  item[1]);
 
@@ -316,7 +321,7 @@ function populateCheckbox(i = 0, name = '', getItem = []) {
 							name="${name}[${i}][gItems][${j}][sales_get_item_id]"
 							value="${value.id}"
 							id="${checkboxId}"
-							class="form-check-input @error('jobdesc.*.sales_get_item_id.*') is-invalid @enderror"
+							class="form-check-input @error('jobdesc.*.gItems.*.sales_get_item_id') is-invalid @enderror"
 							${isChecked}
 						>
 						<label
@@ -331,105 +336,11 @@ function populateCheckbox(i = 0, name = '', getItem = []) {
 			});
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
-			// // console.log(textStatus, errorThrown);
+			// console.log(textStatus, errorThrown);
 		}
 	});
 
 }
-
-////
-	// checkbox
-	function addingicmsmodule(y=0, icmsMod = []){
-		$.ajax({
-			dataType: 'json',
-			url: "{{-- route('listicmsmodule') --}}",
-			type: "GET",
-			data: {
-				_token: '{{csrf_token()}}'
-			},
-			success: (function(response) {
-
-				const $checkicmsmodule = $("#checkbox_"+y);
-				if($checkicmsmodule.length > 0) $checkicmsmodule.empty();
-				// Pivot data from backend
-				// Normalize icmsMod to: [{ icms_module_id: X, remarks: Y }]
-				const obj = Array.isArray(icmsMod) ? icmsMod : Object.entries(icmsMod);
-				// const obj = Array.isArray(icmsMod) ? icmsMod : Object.value(icmsMod);
-
-				const cicms = obj.map(item =>  item[1]);
-				// console.log(cicms);
-
-				response.forEach(function(value, i) {
-					const checkboxId = `icms_${y}_${i}`;
-
-					// Check if this module_id exists in cicms
-					let found = cicms.find(m => m.icms_module_id == value.id);
-
-					// If found, mark checked
-					let isChecked = found ? 'checked' : '';
-
-					const row = `
-					<div id="cb_${y}_${i}" class="m-1">
-						<div class="form-check">
-							<input class="form-check-input icms-checkbox @error('applicants.*.icms.*.icms_module_id') is-invalid @enderror"
-							type="checkbox"
-							id="${checkboxId}"
-							name="applicants[${y}][icms][${i}][icms_module_id]"
-							value="${value.id}"
-							data-dll="#dll_container_${y}_${i}"
-							data-y="${y}" data-i="${i}" ${isChecked}>
-							<label class="form-check-label" for="${checkboxId}">&nbsp;${value.text}</label>
-							@error('applicants.*.icms.*.icms_module_id')
-							<div class="invalid-feedback">{{ $message }}</div>
-							@enderror
-						</div>
-					</div>
-					`;
-					$checkicmsmodule.append(row);
-				});
-			}),
-			error: (function(jqXHR, textStatus, errorThrown) {
-				alert( "error" );
-				// console.log(textStatus, errorThrown);
-			}),
-			complete: (function() {
-				// alert( "complete" );
-			})
-		});
-
-		// delegated handler
-		$(document).on('change', '.icms-checkbox', function() {
-			const $cb = $(this);
-			const dllSelector = $cb.data('dll');
-			const y = $cb.data('y');
-			const i = $cb.data('i');
-
-			if (!dllSelector) return;
-
-			let checkbicms = `
-				<div class="form-check dll-input">
-					<label class="form-check-label" for="icms_dll_${y}_${i}">Sila Nyatakan</label>
-					<input class="form-control form-control-sm" type="text" name="applicants[${y}][icms][${i}][remarks]" id="icms_dll_${y}_${i}">
-					@error('applicants.*.icms.*.icms_module_id.remarks')
-					<div class="invalid-feedback">
-						{{ $message }}
-					</div>
-					@enderror
-				</div>
-			`;
-
-			const $dll = $(dllSelector);
-
-			if ($cb.is(':checked')) {
-				if ($dll.find('.dll-input').length === 0) {
-					$dll.append(checkbicms);
-				}
-			} else {
-				$dll.find('.dll-input').remove(); // remove only input part, keep container
-			}
-		});
-	};
-
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // add item
@@ -633,8 +544,6 @@ $('#jdesc_wrap').remAddRow({
 /////////////////////////////////////////////////////////////////////////////////////////
 // restore old data
 <?php
-// $items = @$sale?->hasmanyjobdescription()?->with('belongstomanysalesgetitem')?->get();
-
 $items = @$sale
 				?->hasmanyjobdescription()
 				?->get()
@@ -658,7 +567,8 @@ $items = @$sale
 						'uom_id' => $applicant->uom_id,
 						'machine_id' => $applicant->machine_id,
 						'machine_accessory_id' => $applicant->machine_accessory_id,
-						'getItem'     => $modules,
+						'remarks' => $applicant->remarks,
+						'gItems'     => $modules,
 					];
 				})
 				->toArray() ?? [];
@@ -718,8 +628,8 @@ if (sJD.length > 0) {
 			});
 		}
 
-		console.log(sajobDesc.getItem);
-		populateCheckbox(j, 'jobdesc', sajobDesc.getItem);
+		// console.log(sajobDesc.gItems);
+		populateCheckbox(j, 'jobdesc', sajobDesc.gItems);
 
 		$row.find(`[name="jobdesc[${j}][id]"]`).val(sajobDesc.id || '');
 		$row.find(`[name="jobdesc[${j}][job_description]"]`).val(sajobDesc.job_description || '');
