@@ -91,6 +91,8 @@ class ActivityLogController extends Controller
 			3 => 'staff_id',
 			4 => 'ip_address',
 			5 => 'created_at',
+			6 => 'route_name',
+			7 => 'model_id',
 		];
 
 		$query = ActivityLog::select([
@@ -100,6 +102,8 @@ class ActivityLogController extends Controller
 			'staff_id',
 			'ip_address',
 			'created_at',
+			'route_name',
+			'model_id',
 		]);
 
 		if ($request->search_value) {
