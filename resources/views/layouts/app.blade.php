@@ -16,7 +16,8 @@ $currentYear = Carbon::now()->year;
 	<title>{!! config('app.name') !!}</title>
 	<link href="{{ asset('images/logo.png') }}" type="image/x-icon" rel="icon" />
 	<!-- Styles -->
-	<link href="{{ URL::asset('css/app.css') }}" rel="stylesheet">
+	<link href="{{ asset('css/app.css') }}" rel="stylesheet">
+	<!-- <link href="{{ asset('bootstrap.css') }}" rel="stylesheet"> -->
 	@stack('styles')
 </head>
 	<!-- <body class="bg-secondary bg-opacity-10"> -->
@@ -48,9 +49,14 @@ $currentYear = Carbon::now()->year;
 
 		</div>
 
-		<div class="container m-0 py-1 align-self-bottom text-center text-sm text-light-emphasis border border=success-subtle rounded-3">
-			<p>{{ config('app.name') }} made from <a href="">Bootstrap</a> & <a href="">Laravel v.{{ app()->version() }}</a> by <a href="{{ url('/') }}">IPMA Industry Sdn Bhd</a>.</p>
-			<small class="fw-lighter fs-6 text-body-secondary">Made with love by Dhiauddin and Tan</small>
+		<div class="container-fluid row mt-2">
+			<div class="col-sm-12 d-flex justify-content-center">
+				<p class="m-0 fs-6 text-sm text-light-emphasis">
+					<a href="{{ config('app.url') }}">{{ config('app.name') }}</a> develop using <a href="">Laravel v.{{ app()->version() }}</a></p>
+			</div>
+			<div class="col-sm-12 d-flex justify-content-center">
+				<small class="m-0 fw-lighter fs-6 text-body-secondary">Made with love by Dhiauddin and Tan</small>
+			</div>
 		</div>
 	</body>
 

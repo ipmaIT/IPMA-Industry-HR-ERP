@@ -16,12 +16,44 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+// load helper
+use Illuminate\Support\Str;
+
 class Sales extends Model
 {
 	use HasFactory, SoftDeletes;
 
 	// protected $connection = 'mysql';
 	protected $table = 'sales';
+
+	protected $casts = [
+		'spec_req' => 'boolean',
+		'urgency' => 'boolean',
+		'date_order' => 'date',
+		'delivery_at' => 'date',
+		'confirm_date' => 'date',
+	];
+
+	public function setSpecialRequestAttribute($value)
+	{
+		$this->attributes['special_request'] = ucwords(Str::lower($value));
+	}
+
+	public function setSpecialDeliveryInstructionAttribute($value)
+	{
+		$this->attributes['special_delivery_instruction'] = ucwords(Str::lower($value));
+	}
+
+	public function setPoNumberAttribute($value)
+	{
+		$this->attributes['po_number'] = Str::upper(Str::lower($value));
+	}
+
+	public function setRemarksAttribute($value)
+	{
+		$this->attributes['remarks'] = Str::upper(Str::lower($value));
+	}
+
 
 	/////////////////////////////////////////////////////////////////////////////////////////
 	// hasmany relationship
@@ -41,6 +73,11 @@ class Sales extends Model
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	//belongsto relationship
 	public function belongstostaff(): BelongsTo
+	{
+		return $this->belongsTo(\App\Models\Staff::class, 'staff_id');
+	}
+
+	public function belongstoapprover(): BelongsTo
 	{
 		return $this->belongsTo(\App\Models\Staff::class, 'approved_by');
 	}

@@ -16,12 +16,29 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+// load helper
+use Illuminate\Support\Str;
+
 class SalesJobDescription extends Model
 {
 	use HasFactory;
 
 	// protected $connection = 'mysql';
 	protected $table = 'sales_job_descriptions';
+
+	protected $casts = [
+		'quantity' => 'decimal:2',
+	];
+
+	public function setRemarksAttribute($value)
+	{
+		$this->attributes['remarks'] = ucwords(Str::lower($value));
+	}
+
+	public function setJobDescriptionAttribute($value)
+	{
+		$this->attributes['job_description'] = ucwords(Str::lower($value));
+	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////
 	// hasmany relationship

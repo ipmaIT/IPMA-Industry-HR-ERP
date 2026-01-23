@@ -71,7 +71,8 @@ class SalesController extends Controller
 					'po_number' => 'nullable',
 					'delivery_at' => 'required',
 					'urgency' => 'nullable',
-					'sales_delivery_id' => 'required',
+					'delivery' => 'required',
+					'delivery.*.sales_delivery_id' => 'required',
 					'special_delivery_instruction' => 'nullable',
 					'jobdesc' => 'required|array|min:1',
 					'jobdesc.*.job_description' => 'required',
@@ -92,7 +93,8 @@ class SalesController extends Controller
 					'po_number' => 'PO Number',
 					'delivery_at' => 'Estimation Delivery Date',
 					'urgency' => 'Mark As Urgent',
-					'sales_delivery_id' => 'Delivery Instruction',
+					'delivery' => 'Delivery Instruction',
+					'delivery.*.sales_delivery_id' => 'Delivery Instruction Method',
 					'special_delivery_instruction' => 'Special Delivery Instruction',
 					'jobdesc' => 'Job Description',
 					'jobdesc.*.job_description' => 'Job Description',
@@ -121,50 +123,27 @@ class SalesController extends Controller
 														'sales_type_id',
 														'delivery_at',
 														'urgency',
+														'special_delivery_instruction',
+														'spec_req',
+														'special_request',
 													]);
 
-		$data += ['special_delivery_instruction' => Str::title(Str::lower($request->special_delivery_instruction))];
-		$data += ['po_number' => Str::title(Str::lower($request->po_number))];
-
-		$data += ['staff_id' => \Auth::user()->belongstostaff->id];
+		$data += ['year' => now()->format('Y')];
 		$data += ['sales_by_id' => $sales_by];
 		$data += ['no' => $count];
-		$data += ['year' => now()->format('Y')];
 
-		if ($request->has('spec_req')) {
-			$data += ['spec_req' => $request->spec_req];
-			$data += ['special_request' => Str::title(Str::lower($request->special_request))];
+		$sal = \Auth::user()->belongstostaff->hasmanysales()->create($data);
+
+		// checkbox: no need to check id
+		foreach ($request->delivery ?? [] as $deli) {
+			$sal->belongstomanydelivery()->attach($deli);
 		}
 
-		$sal = Sales::create($data);
-
-		if ($request->has('sales_delivery_id')) {
-			foreach ($request->sales_delivery_id as $k => $v) {
-				$sal->belongstomanydelivery()->attach($v);
-			}
+		foreach ($request->jobdesc ?? [] as $jobd) {
+			$sjd = $sal->hasmanyjobdescription()->create(Arr::except($jobd, ['gItems']));
+			$sjd->belongstomanysalesgetitem()->attach($jobd['gItems']);
 		}
 
-		if ($request->has('jobdesc')) {
-			foreach ($request->jobdesc as $k => $v) {
-				// dump($k, $v);
-				$job_description = Str::title(Str::lower($v['job_description']));
-				$quantity = $v['quantity'];
-				$uom_id = $v['uom_id'];
-				$machine_id = $v['machine_id'];
-				$machine_accessory_id = $v['machine_accessory_id']??NULL;
-				$remarks = Str::title(Str::lower($v['remarks']));
-
-				$sjd = $sal->hasmanyjobdescription()->create([
-							'job_description' => $job_description,
-							'quantity' => $quantity,
-							'uom_id' => $uom_id,
-							'machine_id' => $machine_id,
-							'machine_accessory_id' => $machine_accessory_id,
-							'remarks' => $remarks,
-						]);
-				$sjd->belongstomanysalesgetitem()->attach($v['gItems']);
-			}
-		}
 		return redirect()->route('sale.index')->with('success', 'Successfully Add New Customer Order');
 	}
 
@@ -180,23 +159,24 @@ class SalesController extends Controller
 	public function update(Request $request, Sales $sale): RedirectResponse
 	{
 		// dd($request->all());
-
 		$validated = $request->validate(
 				[
 					'date_order' => 'required|date',
-					'customer_id' => 'required',
+					'customer_id' => 'nullable',
 					'sales_type_id' => 'required',
 					'special_request' => 'required_if:spec_req,true',
 					'po_number' => 'nullable',
 					'delivery_at' => 'required',
 					'urgency' => 'nullable',
-					'sales_delivery_id' => 'required',
-					'jobdesc' => 'required|array|min:1',
+					'delivery' => 'required',
+					'delivery.*.sales_delivery_id' => 'required',
 					'special_delivery_instruction' => 'nullable',
+					'jobdesc' => 'required|array|min:1',
 					'jobdesc.*.job_description' => 'required',
 					'jobdesc.*.quantity' => 'required',
 					'jobdesc.*.uom_id' => 'required',
-					'jobdesc.*.sales_get_item_id' => 'required',
+					'jobdesc.*.gItems' => 'required|array|min:1',
+					'jobdesc.*.gItems.*.sales_get_item_id' => 'required',
 					'jobdesc.*.machine_id' => 'required',
 					'jobdesc.*.machine_accessory_id' => 'nullable',
 					'jobdesc.*.job_description' => 'required',
@@ -210,64 +190,56 @@ class SalesController extends Controller
 					'po_number' => 'PO Number',
 					'delivery_at' => 'Estimation Delivery Date',
 					'urgency' => 'Mark As Urgent',
-					'sales_delivery_id' => 'Delivery Instruction',
+					'delivery' => 'Delivery Instruction',
+					'delivery.*.sales_delivery_id' => 'Delivery Instruction Method',
 					'special_delivery_instruction' => 'Special Delivery Instruction',
+					'jobdesc' => 'Job Description',
 					'jobdesc.*.job_description' => 'Job Description',
 					'jobdesc.*.quantity' => 'Job Description Quantity',
 					'jobdesc.*.uom_id' => 'Job Description UOM ',
-					'jobdesc.*.sales_get_item_id' => 'Job Description Delivery Instruction',
+					'jobdesc.*.gItems' => 'Job Description Acquire Items',
+					'jobdesc.*.gItems.*.sales_get_item_id' => 'Job Description Acquire Items Method',
 					'jobdesc.*.machine_id' => 'Job Description Machine',
 					'jobdesc.*.machine_accessory_id' => 'Job Description Machine Accessories',
 					'jobdesc.*.remarks' => 'Job Description Remarks',
 				]
 			);
-		$data = $request->only(['date_order', 'customer_id', 'deliveryby_id', 'sales_type_id', 'po_number', 'delivery_at', 'urgency']);
-		$data += ['special_delivery_instruction' => Str::title(Str::lower($request->special_delivery_instruction))];
-		$data += ['staff_id' => \Auth::user()->belongstostaff->id];
-		// $data += ['sales_by_id' => $sales_by];
-		// $data += ['no' => $count];
-		// $data += ['year' => now()->format('Y')];
-		if ($request->has('spec_req')) {
-			$data += ['special_request' => Str::title(Str::lower($request->special_request))];
-			$data += ['spec_req' => $request->spec_req];
+
+		$user = \Auth::user()->belongstostaff->belongstomanydepartment()->wherePivot('main', 1)->first()->id;
+		if ($user == 6) {
+			$sales_by = 2;
+		} else {
+			$sales_by = 1;
 		}
+
+		$data = $request->only([
+														'date_order',
+														'customer_id',
+														'sales_type_id',
+														'delivery_at',
+														'urgency',
+														'special_delivery_instruction',
+														'spec_req',
+														'special_request',
+													]);
+
+		$data += ['year' => now()->format('Y')];
+		$data += ['sales_by_id' => $sales_by];
+		$data += ['staff_id' => \Auth::user()->belongstostaff->id];
+
 		$sale->update($request->only($data));
 
-		if ($request->has('sales_delivery_id')) {
-			// foreach ($request->sales_delivery_id as $k => $v) {
-			$sale->belongstomanydelivery()->sync($request->sales_delivery_id);
-			// }
+		// checkbox: no need to check id
+		foreach ($request->delivery ?? [] as $deli) {
+			$sale->belongstomanydelivery()->sync($deli);
 		}
 
-		if ($request->has('jobdesc')) {
-			foreach ($request->jobdesc as $k => $v) {
-				// dump($k, $v);
-				$job_description = Str::title(Str::lower($v['job_description']));
-				$quantity = $v['quantity'];
-				$uom_id = $v['uom_id'];
-				$machine_id = $v['machine_id'];
-				$machine_accessory_id = $v['machine_accessory_id']??NULL;
-				$remarks = Str::title(Str::lower($v['remarks']));
-				$id = ($v['id'])??null;
-
-				$sales0 = $sale->hasmanyjobdescription()->updateOrCreate([
-																	'id' => $id,
-																],
-																[
-																	'job_description' => $job_description,
-																	'quantity' => $quantity,
-																	'uom_id' => $uom_id,
-																	'machine_id' => $machine_id,
-																	'machine_accessory_id' => $machine_accessory_id,
-																	'remarks' => $remarks,
-															]);
-				// dump($v['sales_get_item_id']);
-				if ($v['sales_get_item_id']) {
-					$sales0->belongstomanysalesgetitem()->sync($v['sales_get_item_id']);
-				}
-			}
+		foreach ($request->jobdesc ?? [] as $jobd) {
+			$sjd = $sale->hasmanyjobdescription()->updateOrCreate(Arr::except($jobd, ['gItems']));
+			$sjd->belongstomanysalesgetitem()->sync($jobd['gItems']);
 		}
-		return redirect()->route('sale.index')->with('flash_message', 'Successfully Edit Order');
+
+		return redirect()->route('sale.index')->with('success', 'Successfully Edit Order');
 	}
 
 	public function destroy(Sales $sale): JsonResponse

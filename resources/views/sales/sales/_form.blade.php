@@ -64,7 +64,13 @@
 		<div class="form-group row m-2 @error('delivery_at') has-error @enderror">
 			<label for="delivery" class="col-form-label col-sm-4">Estimate Delivery Date : </label>
 			<div class="col-sm-8" style="position: relative;">
-				<input type="text" name="delivery_at" value="{{ old('delivery_at', @$sale->delivery_at) }}" id="delivery" class="form-control form-control-sm col-sm-12 @error('delivery_at', @$sale->delivery_at) is-invalid @enderror" placeholder="Estimate Delivery Date">
+				<input
+					type="text"
+					name="delivery_at"
+					value="{{ old('delivery_at', @$sale?->delivery_at) }}"
+					id="delivery"
+					class="form-control form-control-sm col-sm-12 @error('delivery_at') is-invalid @enderror"
+					placeholder="Estimate Delivery Date">
 				@error('delivery_at')
 				<div class="invalid-feedback">
 					{{ $message }}
