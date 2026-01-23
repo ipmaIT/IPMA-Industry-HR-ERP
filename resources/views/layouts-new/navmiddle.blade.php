@@ -1,1 +1,0 @@
-@include('humanresources.hrdept.navhr')

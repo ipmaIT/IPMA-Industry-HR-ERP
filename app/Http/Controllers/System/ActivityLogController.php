@@ -93,7 +93,14 @@ class ActivityLogController extends Controller
 			5 => 'created_at',
 		];
 
-		$query = ActivityLog::with('belongstouser');
+		$query = ActivityLog::select([
+			'id',
+			'event',
+			'model_type',
+			'staff_id',
+			'ip_address',
+			'created_at',
+		]);
 
 		if ($request->search_value) {
 			$search = $request->search_value;
@@ -101,18 +108,16 @@ class ActivityLogController extends Controller
 			$query->where(function ($q) use ($search) {
 				$q->where('model_type', 'LIKE', "%{$search}%")
 				->orWhere('ip_address', 'LIKE', "%{$search}%")
-
-		  // 👇 search related user name
-				->orWhereHas('belongstouser', function ($uq) use ($search) {
-					$uq->where('name', 'LIKE', "%{$search}%");
-				});
+				->orWhere('staff_id', 'LIKE', "%{$search}%");
+				// ->orWhereHas('belongstouser', function ($uq) use ($search) {
+				// 	$uq->where('name', 'LIKE', "{$search}%");
+				// });
 			});
 		}
 
 		$totalRecords = ActivityLog::count();
-		$filteredRecords = $query->count();
+		$filteredRecords = (clone $query)->count();
 
-	// 🔃 Ordering
 		$orderColumn = $columns[$request->order[0]['column']] ?? 'created_at';
 		$orderDir = $request->order[0]['dir'] ?? 'desc';
 
@@ -129,6 +134,5 @@ class ActivityLogController extends Controller
 			'data' => $data,
 		]);
 	}
-
 
 }

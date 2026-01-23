@@ -49,13 +49,13 @@ class ActivityLog extends Model
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// relationship
-	public function belongstouser(): BelongsTo
-	{
-		return $this->belongsTo(\App\Models\Staff::class, 'staff_id');
-	}
+	// public function belongstouser(): BelongsTo
+	// {
+	// 	return $this->belongsTo(\App\Models\Staff::class, 'staff_id');
+	// }
 
-	public function model()
-	{
-		return $this->morphTo();
-	}
+	// public function model()
+	// {
+	// 	return $this->morphTo();
+	// }
 }

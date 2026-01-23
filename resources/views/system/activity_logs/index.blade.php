@@ -48,19 +48,24 @@ $('#logs-table').DataTable({
 				return `${modelName}${modelId}`;
 			}
 		},
+		// {
+		// 	data: null,
+		// 	title:'User',
+		// 	defaultContent: 'System',
+		// 	render: function(data, type, row){
+		// 		if(
+		// 			data.staff_id == 117 ||
+		// 			data.staff_id == 72
+		// 		){
+		// 			return `Admin`;
+		// 		}
+		// 		return data.belongstouser.name;
+		// 	}
+		// },
 		{
-			data: null,
+			data: 'staff_id',
 			title:'User',
-			defaultContent: 'System',
-			render: function(data, type, row){
-				if(
-					data.staff_id == 117 ||
-					data.staff_id == 72
-				){
-					return `Admin`;
-				}
-				return data.belongstouser.name;
-			}
+			defaultContent: 'System'
 		},
 		{ data:'ip_address', title:'IP Address' },
 		{ data:'created_at', title:'Timestamp', render: data => moment(data).format('D MMM YYYY h:mm a') },
