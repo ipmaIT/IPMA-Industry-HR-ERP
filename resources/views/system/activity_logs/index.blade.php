@@ -63,7 +63,7 @@ var table = $('#logs-table').DataTable({
 		// 	}
 		// },
 		{
-			data: 'name',
+			data: 'staff_id',
 			title:'User',
 			defaultContent: 'System'
 		},
