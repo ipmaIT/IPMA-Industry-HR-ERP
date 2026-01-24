@@ -31,7 +31,7 @@ class Login extends Authenticatable // implements MustVerifyEmail
 	// audit
 	protected bool $auditEnabled = true;
 	protected static $auditIncludeSnapshot = true;
-	protected static $auditCriticalEvents = ['create', 'updated', 'deleted','force_deleted'];
+	protected static $auditCriticalEvents = ['created', 'updated', 'deleted','force_deleted'];
 	protected static $auditExclude = ['password'];
 
 	// protected $connection = 'mysql';
