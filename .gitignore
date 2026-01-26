@@ -20,12 +20,9 @@ yarn-error.log
 /*.editorconfig
 /testweb.sql
 /*.log
-/app/Http/Requests/HumanResources/Profile/ProfileRequestUpdate - emergency_spouse_children.php
 /.env
 *.git
 * - Copy.php
-/public/js/chart.js
-/public/js/fullcalendar
 /public/js/app.js
 /public/js/app.js.map
 /public/js/app.js.LICENSE.txt

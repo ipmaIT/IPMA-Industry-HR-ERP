@@ -1,5 +1,6 @@
 <?php
-namespace App\Models\sales;
+
+namespace App\Models\Sales;
 
 // use Illuminate\Database\Eloquent\Model;
 use App\Models\Model;
@@ -26,7 +27,7 @@ use Illuminate\Support\Str;
 class SalesAmend extends Model
 {
 	//
-	use SoftDeletes/*, Sluggable*/;
+	use SoftDeletes;
 	// protected $connection = '';
 	// protected $table = '';
 	// protected $primaryKey = '';
@@ -54,24 +55,29 @@ class SalesAmend extends Model
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// set column attribute
-	protected function amend(): Attribute
-	{
-		return Attribute::make(
-			set: fn ($value) => Str::title(Str::lower($value)),
-		);
-	}
-
-	protected function remarks(): Attribute
-	{
-		return Attribute::make(
-			set: fn ($value) => Str::title(Str::lower($value)),
-		);
-	}
-
-	// protected function setColumnNameAttribute($value)
+	// protected function amend(): Attribute
 	// {
-	//     $this->attributes['ColumnName'] = ucwords(Str::lower($value));
+	// 	return Attribute::make(
+	// 		set: fn ($value) => Str::title(Str::lower($value)),
+	// 	);
 	// }
+
+	// protected function remarks(): Attribute
+	// {
+	// 	return Attribute::make(
+	// 		set: fn ($value) => Str::title(Str::lower($value)),
+	// 	);
+	// }
+
+	protected function setAmendAttribute($value)
+	{
+	    $this->attributes['amend'] = Str::title(Str::lower($value));
+	}
+
+	protected function setRemarksAttribute($value)
+	{
+	    $this->attributes['remarks'] = Str::title(Str::lower($value));
+	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// relationship

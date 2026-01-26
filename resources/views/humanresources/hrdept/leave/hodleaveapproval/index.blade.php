@@ -1765,7 +1765,8 @@ foreach ($c as $v) {
                       </div>
                     </div>
                     <!-------------------------------------------------------------------------------- LEAVE SHOW END -------------------------------------------------------------------------------->
-                    <form method="POST" action="{{ route('leavestatus.hodstatus') }}" accept-charset="UTF-8" id="form" autocomplete="off" class="form" data-id="{{ $a->id }}" enctype="multipart/form-data">
+
+                    <form method="POST" action="{{ route('formmethod.update', $formmethod) }}" accept-charset="UTF-8" id="form" autocomplete="off" class="form" data-id="{{ $a->id }}" enctype="multipart/form-data">
                       @csrf
                       @method('PATCH')
                     <input type="hidden" name="id" value="{{ $a->id }}">

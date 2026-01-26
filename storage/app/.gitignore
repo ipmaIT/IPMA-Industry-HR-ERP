@@ -1,3 +1,5 @@
-*
-!public/
+!/disciplinary
+!/user_profile
+!/excel
+!/leaves
 !.gitignore

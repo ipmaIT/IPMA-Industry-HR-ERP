@@ -130,8 +130,14 @@ trait Auditable
 			$req = null;
 			try { $req = Request::instance(); } catch (\Throwable) {}
 
+			$name = (
+				\Auth::user()?->belongstostaff?->id == 117||
+				\Auth::user()?->belongstostaff?->id == 72 ||
+				\Auth::user()?->belongstostaff?->authorise_id == 1
+			)?'Admin':\Auth::user()?->belongstostaff?->name;
+
 			ActivityLog::create([
-				'staff_id'     => \Auth::user()?->belongstostaff?->id,
+				'staff_id'     => $name,
 				'event'       => $event,
 				'model_type'  => static::class,
 				'model_id'    => $this->getKey(),
