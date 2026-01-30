@@ -1,12 +1,12 @@
 (function ($) {
 	'use strict';
 
-	const old = $.fn.remAddRow;
+	const old = $.fn.addRemRow;
 
-	$.fn.remAddRow = function (options) {
+	$.fn.addRemRow = function (options) {
 
 		if (!this.length) {
-			console.warn('[remAddRow] No elements found');
+			console.warn('[addRemRow] No elements found');
 			return this;
 		}
 
@@ -105,7 +105,7 @@
 			const $form = $(form);
 
 			if (!$form.length || typeof $form.bootstrapValidator !== 'function') {
-				console.error('[remAddRow][validator] bootstrapValidator not found');
+				console.error('[addRemRow][validator] bootstrapValidator not found');
 				return;
 			}
 
@@ -150,13 +150,13 @@
 
 			if (settings.addBtn) {
 				$(settings.addBtn)
-					.off('click.remAddRow')
-					.on('click.remAddRow', addRow);
+					.off('click.addRemRow')
+					.on('click.addRemRow', addRow);
 			}
 
 			$wrapper
-				.off('click.remAddRow', `.${settings.removeClass}`)
-				.on('click.remAddRow', `.${settings.removeClass}`, removeRow);
+				.off('click.addRemRow', `.${settings.removeClass}`)
+				.on('click.addRemRow', `.${settings.removeClass}`, removeRow);
 
 			return methods;
 		}
@@ -273,7 +273,7 @@
 
 				if ($dbIdInput.length === 0) {
 					console.error(
-						`[remAddRow][swal] Cannot find dbId input: ${settings.fieldName}[${index}][${settings.swal.ajax.dbPrimaryKeyId}]`,
+						`[addRemRow][swal] Cannot find dbId input: ${settings.fieldName}[${index}][${settings.swal.ajax.dbPrimaryKeyId}]`,
 						$row
 					);
 					return false;
@@ -523,43 +523,223 @@
 		 * ====================== */
 
 		const methods = {
+
 			add() {
 				addRow(new Event('click'));
 				return this;
 			},
+
 			remove(index) {
 				$wrapper
-					.find(`#${settings.rowSelector}_${index} .${settings.removeClass}`)
-					.trigger('click.remAddRow');
+				.find(`#${settings.rowSelector}_${index} .${settings.removeClass}`)
+				.trigger('click.addRemRow');
 				return this;
 			},
+
 			getCount() {
 				return i;
 			},
+
 			reset() {
 				$wrapper.find(`.${settings.rowSelector}`).remove();
 				i = 0;
 				return this;
 			},
+
 			reindexAll() {
 				reindexRowAll();
 				return this;
 			},
+
 			destroy() {
 				if (settings.addBtn) {
-					$(settings.addBtn).off('click.remAddRow');
+					$(settings.addBtn).off('click.addRemRow');
 				}
-				$wrapper.off('click.remAddRow', `.${settings.removeClass}`);
+				$wrapper.off('click.addRemRow', `.${settings.removeClass}`);
 				this.reset();
+				return this;
+			},
+
+	/* ========================
+	 * EXTENDED API
+	 * ====================== */
+
+			getRow(index) {
+				return $(`#${settings.rowSelector}_${index}`, $wrapper);
+			},
+
+			getAllRows() {
+				return $wrapper.find(`.${settings.rowSelector}`);
+			},
+
+			getRowData(index) {
+				const $row = this.getRow(index);
+				const data = {};
+
+				$row.find(':input').each(function () {
+					const $input = $(this);
+					const name = $input.attr('name');
+					if (!name) return;
+
+					const matches = name.match(/(\w+)\[(\d+)\]\[(\w+)\]/);
+					if (matches && matches[2] == index) {
+						data[matches[3]] = $input.val();
+					}
+				});
+
+				return data;
+			},
+
+			getAllData() {
+				const data = [];
+				this.getAllRows().each((idx, row) => {
+					const rowIndex = $(row).attr('id').split('_').pop();
+					data.push(this.getRowData(rowIndex));
+				});
+				return data;
+			},
+
+			setRowData(index, data) {
+				const $row = this.getRow(index);
+
+				Object.keys(data).forEach(key => {
+					$row.find(`[name*="[${key}]"]`).val(data[key]);
+				});
+
+				return this;
+			},
+
+			setAllData(dataArray) {
+				this.reset();
+
+				dataArray.forEach((rowData, idx) => {
+					if (idx < settings.maxRows) {
+						this.add();
+						this.setRowData(settings.startRow + idx, rowData);
+					}
+				});
+
+				return this;
+			},
+
+			isMaxRowsReached() {
+				return i >= (settings.startRow + settings.maxRows);
+			},
+
+			disableAdd() {
+				if (settings.addBtn) {
+					$(settings.addBtn).prop('disabled', true).addClass('disabled');
+				}
+				return this;
+			},
+
+			enableAdd() {
+				if (settings.addBtn) {
+					$(settings.addBtn).prop('disabled', false).removeClass('disabled');
+				}
+				return this;
+			},
+
+			disableRemove() {
+				$wrapper.find(`.${settings.removeClass}`)
+				.prop('disabled', true)
+				.addClass('disabled');
+				return this;
+			},
+
+			enableRemove() {
+				$wrapper.find(`.${settings.removeClass}`)
+				.prop('disabled', false)
+				.removeClass('disabled');
+				return this;
+			},
+
+			updateOptions(newOptions) {
+				Object.assign(settings, newOptions);
+
+				if (newOptions.addBtn) {
+					$(settings.addBtn)
+					.off('click.addRemRow')
+					.on('click.addRemRow', addRow);
+				}
+
+				return this;
+			},
+
+			validateRow(index) {
+				if (!settings.validator) return true;
+
+				const { form } = settings.validator;
+				const $form = $(form);
+
+				if ($form.length && typeof $form.bootstrapValidator === 'function') {
+					return $form.bootstrapValidator(
+					                                'validateField',
+					                              `${settings.fieldName}[${index}][*]`
+					                              );
+				}
+
+				return true;
+			},
+
+			validateAll() {
+				if (!settings.validator) return true;
+
+				const { form } = settings.validator;
+				const $form = $(form);
+
+				if ($form.length && typeof $form.bootstrapValidator === 'function') {
+					return $form.bootstrapValidator('validate');
+				}
+
+				return true;
+			},
+
+			getConfig() {
+				return Object.assign({}, settings);
+			},
+
+			filterRows(filterFn) {
+				this.getAllRows().each((idx, row) => {
+					const $row = $(row);
+					const rowIndex = $row.attr('id').split('_').pop();
+					const rowData = this.getRowData(rowIndex);
+
+					filterFn(rowData, rowIndex, $row) ? $row.show() : $row.hide();
+				});
+
+				return this;
+			},
+
+			sortRows(compareFn) {
+				const rows = [];
+
+				this.getAllRows().each((idx, row) => {
+					const $row = $(row);
+					const rowIndex = $row.attr('id').split('_').pop();
+
+					rows.push({
+						el: $row,
+						index: rowIndex,
+						data: this.getRowData(rowIndex)
+					});
+				});
+
+				rows.sort((a, b) => compareFn(a.data, b.data));
+
+				rows.forEach(r => $wrapper.append(r.el));
+
+				this.reindexAll();
 				return this;
 			}
 		};
 
+
 		return init();
 	};
 
-	$.fn.remAddRow.noConflict = function () {
-		$.fn.remAddRow = old;
+	$.fn.addRemRow.noConflict = function () {
+		$.fn.addRemRow = old;
 		return this;
 	};
 

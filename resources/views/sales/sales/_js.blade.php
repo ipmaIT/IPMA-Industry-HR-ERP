@@ -17,6 +17,7 @@ $('#nam, #delivery').datetimepicker({
 /////////////////////////////////////////////////////////////////////////////////////////
 // customer
 $('#cust').select2({
+	theme: 'bootstrap-5',
 	placeholder: 'Please Select',
 	width: '100%',
 	allowClear: true,
@@ -344,7 +345,7 @@ function populateCheckbox(i = 0, name = '', getItem = []) {
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // add item
-$('#jdesc_wrap').remAddRow({
+$('#jdesc_wrap').addRemRow({
 	addBtn: '#jdesc_add',
 	maxRows: 1000,
 	fieldName: 'jobdesc',
