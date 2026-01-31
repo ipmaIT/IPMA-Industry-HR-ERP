@@ -45,13 +45,12 @@ try {
     const Swal = require('sweetalert2');
 	window.swal = require ('sweetalert2');
 
-	// require ('./bootstrapValidator4/js/bootstrapValidator');
-    require ('./bootstrapValidator5');
+    require ('bootstrapValidator5');
     require ('./bootstrap');
     require ('./jQuery-ui');
     require ('./fullcalendar');
     require ('./chart');
-    require ('./addRemoveRowBootstrapValidator6SweetAlert2Ajax');
+    require ('addremrow-validator5-swal2-ajax');
 } catch (e) {}
 
 /**
