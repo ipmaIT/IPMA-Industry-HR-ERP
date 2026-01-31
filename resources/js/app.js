@@ -35,8 +35,6 @@ try {
     // require('../../node_modules/jquery-chained/jquery.chained');
     // require('../../node_modules/jquery-chained/jquery.chained.remote');
     // require('jquery-ui/dist/jquery-ui');
-    require('./dataTable-any-number');
-    require('./datetime-moment');
 
     require('select2');
 	window.moment = require('moment');
@@ -45,11 +43,14 @@ try {
     const Swal = require('sweetalert2');
 	window.swal = require ('sweetalert2');
 
-    require ('bootstrapValidator5');
     require ('./bootstrap');
     require ('./jQuery-ui');
     require ('./fullcalendar');
     require ('./chart');
+
+    require('./dataTable-any-number');
+    require('./dataTable-moment');
+    require ('bootstrapValidator5');
     require ('addremrow-validator5-swal2-ajax');
 } catch (e) {}
 

@@ -20,7 +20,7 @@
  *    $('#example').DataTable();
  */
 
-(function (factory) {
+/*(function (factory) {
 	if (typeof define === "function" && define.amd) {
 		define(["jquery", "moment", "datatables.net"], factory);
 	} else {
@@ -64,11 +64,63 @@ $.fn.dataTable.moment = function ( format, locale ) {
 			// Strip out surrounding white space
 			d = $.trim( d );
 		}
-		
+
 		return !moment(d, format, locale, true).isValid() ?
 			Infinity :
 			parseInt( moment( d, format, locale, true ).format( 'x' ), 10 );
 	};
 };
 
-}));
+}));*/
+
+
+// datatable-moment.js
+import $ from 'jquery';
+import moment from 'moment';
+import 'datatables.net';
+
+
+// if (!window.jQuery || !window.moment) {
+//     throw new Error('jQuery or moment not found. Load globals first.');
+// }
+// console.log('plugin loaded', {
+//     $: window.$,
+//     moment: window.moment
+// });
+
+
+$.fn.dataTable.moment = function (format, locale) {
+	const types = $.fn.dataTable.ext.type;
+
+		// Type detection
+	types.detect.unshift(function (d) {
+		if (d) {
+			if (d.replace) {
+				d = d.replace(/(<.*?>)|(\r?\n|\r)/g, '');
+			}
+			d = $.trim(d);
+		}
+
+		if (d === '' || d === null) {
+			return 'moment-' + format;
+		}
+
+		return moment(d, format, locale, true).isValid()
+		? 'moment-' + format
+		: null;
+	});
+
+		// Sorting
+	types.order['moment-' + format + '-pre'] = function (d) {
+		if (d) {
+			if (d.replace) {
+				d = d.replace(/(<.*?>)|(\r?\n|\r)/g, '');
+			}
+			d = $.trim(d);
+		}
+
+		return !moment(d, format, locale, true).isValid()
+		? Infinity
+		: parseInt(moment(d, format, locale, true).format('x'), 10);
+	};
+};
