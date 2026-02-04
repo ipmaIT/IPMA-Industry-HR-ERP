@@ -2,12 +2,12 @@
   "private": true,
   "scripts": {
     "dev": "npm run development",
-    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "watch": "npm run development -- --watch",
-    "watch-poll": "npm run watch -- --watch-poll",
-    "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "development": "mix",
+    "watch": "mix watch",
+    "watch-poll": "mix watch -- --watch-options-poll=1000",
+    "hot": "cross-env NODE_ENV=development mix watch --hot",
     "prod": "npm run production",
-    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+    "production": "mix --production"
   },
   "devDependencies": {
     "@claviska/jquery-minicolors": "^2.3.6",
@@ -27,6 +27,7 @@
     "bootstrap-icons": "^1.13.1",
     "bootstrapvalidator5": "^2.0.0",
     "chart.js": "^4.5.1",
+    "cross-env": "^7",
     "datatables.net": "^2.3.7",
     "datatables.net-autofill-bs5": "^2.7.1",
     "datatables.net-bs5": "^2.3.7",
@@ -53,7 +54,6 @@
     "select2-bootstrap-5-theme": "^1.3.0",
     "select2-theme-bootstrap5": "^0.1.1",
     "sweetalert2": "11.26.17",
-    "tailwindcss": "^3",
-    "webpack-cli": "^6.0.1"
+    "tailwindcss": "^3"
   }
 }
