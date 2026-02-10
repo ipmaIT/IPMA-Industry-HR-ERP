@@ -50,7 +50,7 @@ try {
 
     require('./dataTable-any-number');
     require('./dataTable-moment');
-    require ('bootstrapValidator5');
+    require ('bootstrapvalidator5');
     require ('addremrow-validator5-swal2-ajax');
 } catch (e) {}
 
