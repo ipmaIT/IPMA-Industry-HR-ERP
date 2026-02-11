@@ -8,50 +8,51 @@
  */
 
 try {
-    require ('./jQuery');
-    require('bootstrap/dist/js/bootstrap.bundle');
+	require ('./jQuery');
+
+	require('bootstrap/dist/js/bootstrap.bundle');
+
 	require('@claviska/jquery-minicolors');
-    require('@fortawesome/fontawesome-free');
+
+	require('@fortawesome/fontawesome-free');
+
 	require('datatables.net');
-    require('datatables.net-autofill');
-    require('datatables.net-colreorder');
-    require('datatables.net-fixedheader');
-    require('datatables.net-responsive');
-    require('datatables.net-bs5');
-    require('datatables.net-autofill-bs5');
-    require('datatables.net-colreorder-bs5');
-    require('datatables.net-fixedheader-bs5');
-    require('datatables.net-responsive-bs5');
-    require('jszip');
-    require('pdfmake');
-    require( 'pdfmake/build/vfs_fonts');
+	require('datatables.net-autofill');
+	require('datatables.net-colreorder');
+	require('datatables.net-fixedheader');
+	require('datatables.net-responsive');
+	require('datatables.net-bs5');
+	require('datatables.net-autofill-bs5');
+	require('datatables.net-buttons-bs5');
+	require('datatables.net-colreorder-bs5');
+	require('datatables.net-fixedheader-bs5');
+	require('datatables.net-responsive-bs5');
+	require('jszip');
+	require('pdfmake');
+	require( 'pdfmake/build/vfs_fonts');
 
+	require('pc-bootstrap4-datetimepicker');
 
-    // these are different breed of javascript which previously compatible with jquery... hareyyyyy
-    // require('fullcalendar');
-    // require('chart.js');
-
-    require('pc-bootstrap4-datetimepicker');
-    // require('../../node_modules/jquery-chained/jquery.chained');
-    // require('../../node_modules/jquery-chained/jquery.chained.remote');
-    // require('jquery-ui/dist/jquery-ui');
-
-    require('select2');
+	require('select2');
 	window.moment = require('moment');
-    moment().format();
+	moment().format();
 
-    const Swal = require('sweetalert2');
+	const Swal = require('sweetalert2');
 	window.swal = require ('sweetalert2');
 
-    require ('./bootstrap');
-    require ('./jQuery-ui');
-    require ('./fullcalendar');
-    require ('./chart');
+	require ('./jQuery-ui');
+	require ('./fullcalendar');
+	require ('./chart');
 
-    require('./dataTable-any-number');
-    require('./dataTable-moment');
-    require ('bootstrapvalidator5');
-    require ('addremrow-validator5-swal2-ajax');
+	require('./dataTable-any-number');
+	require('./dataTable-moment');
+	require ('bootstrapvalidator5');
+	require ('addremrow-validator5-swal2-ajax');
+
+	require ('./bootstrap');
+
+	window.config = require('./config/plugins').default;
+
 } catch (e) {}
 
 /**

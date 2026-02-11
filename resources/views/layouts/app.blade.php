@@ -69,7 +69,6 @@ $currentYear = Carbon::now()->year;
 	<script src="{{ asset('js/jquery-chained/jquery.chained.js') }}"></script>
 	<script src="{{ asset('js/jquery-chained/jquery.chained.remote.js') }}"></script>
 	<script type="module">
-		jQuery.noConflict ();
 		(function($){
 			$(document).ready(function(){
 				@section('js')
