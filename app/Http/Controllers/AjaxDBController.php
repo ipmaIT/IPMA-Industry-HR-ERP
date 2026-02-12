@@ -587,6 +587,7 @@ class AjaxDBController extends Controller
 
 	public function customer(Request $request): JsonResponse
 	{
+		$cuti = [];
 		// https://select2.org/data-sources/formats
 		if ($request->has('search')) {
 			$au = Customer::orderBy('customer')
