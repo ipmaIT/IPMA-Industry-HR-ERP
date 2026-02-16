@@ -119,16 +119,11 @@ $(document).ready(function(){
 $.fn.dataTable.moment( 'D MMM YYYY' );
 $.fn.dataTable.moment( 'YYYY' );
 $.fn.dataTable.moment( 'h:mm a' );
-$('#sales').DataTable({
-	"lengthMenu": [ [30, 60, 100, -1], [30, 60, 100, "All"] ],
+var table = $('#sales').DataTable({
+	...config.datatable,
 	"columnDefs": [
 		{ type: 'date', 'targets': [1,3] },
 	],
-	"order": [[ 1, 'desc' ]],
-	"responsive": true,
-	"autoWidth": false,
-	"fixedHeader": true,
-	"dom": 'Bfrtip',
 })
 .on( 'length.dt page.dt order.dt search.dt', function ( e, settings, len ) {
 	$(document).ready(function(){
@@ -137,6 +132,7 @@ $('#sales').DataTable({
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
+
 $('.sale-approve').click(function(e){
 	e.preventDefault();
 	var jobdescID = $(this).data('id');
@@ -144,15 +140,7 @@ $('.sale-approve').click(function(e){
 });
 function SwalApprove(jobdescID){
 	swal.fire({
-		title: 'Are you sure?',
-		text: "This will approved the Order Sale",
-		type: 'info',
-		showCancelButton: true,
-		confirmButtonColor: '#3085d6',
-		cancelButtonColor: '#d33',
-		confirmButtonText: 'Yes, approve it!',
-		showLoaderOnConfirm: true,
-
+		...config.swal,
 		preConfirm: function() {
 			return new Promise(function(resolve) {
 				$.ajax({
@@ -160,23 +148,21 @@ function SwalApprove(jobdescID){
 					type: 'PATCH',
 					dataType: 'json',
 					data: {
-							_token : $('meta[name=csrf-token]').attr('content'),
 							id: jobdescID,
 					},
 				})
 				.done(function(response){
 					swal.fire('Approved!', response.message, response.status)
 					.then(function(){
-						window.location.reload(true);
+						// window.location.reload(true);
+						table.ajax.reload();
 					});
-					//$('#delete_product_' + jobdescID).parent().parent().remove();
 				})
 				.fail(function(){
 					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
-		allowOutsideClick: false
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
@@ -193,15 +179,7 @@ $('.sale-send').click(function(e){
 });
 function SwalNextProcess(jobnextID){
 	swal.fire({
-		title: 'Are you sure?',
-		text: "This will move Sales Order to the next process",
-		type: 'info',
-		showCancelButton: true,
-		confirmButtonColor: '#3085d6',
-		cancelButtonColor: '#d33',
-		confirmButtonText: 'Yes, push to the next process!',
-		showLoaderOnConfirm: true,
-
+		...config.swal,,
 		preConfirm: function() {
 			return new Promise(function(resolve) {
 				$.ajax({
@@ -209,16 +187,16 @@ function SwalNextProcess(jobnextID){
 					type: 'PATCH',
 					dataType: 'json',
 					data: {
-							_token : $('meta[name=csrf-token]').attr('content'),
+							// _token : $('meta[name=csrf-token]').attr('content'),
 							id: jobnextID,
 					},
 				})
 				.done(function(response){
 					swal.fire('Approved!', response.message, response.status)
 					.then(function(){
-						window.location.reload(true);
+						// window.location.reload(true);
+						table.ajax.reload();
 					});
-					//$('#delete_product_' + jobnextID).parent().parent().remove();
 				})
 				.fail(function(){
 					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
@@ -236,9 +214,3 @@ function SwalNextProcess(jobnextID){
 
 /////////////////////////////////////////////////////////////////////////////////////////
 @endsection
-
-@section('nonjquery')
-/////////////////////////////////////////////////////////////////////////////////////////
-@endsection
-
-

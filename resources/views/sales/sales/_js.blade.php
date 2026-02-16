@@ -17,18 +17,13 @@ $('#nam, #delivery').datetimepicker({
 /////////////////////////////////////////////////////////////////////////////////////////
 // customer
 $('#cust').select2({
-	theme: 'bootstrap-5',
-	placeholder: 'Please Select',
-	width: '100%',
-	allowClear: true,
-	closeOnSelect: true,
+	...config.select2,
 	ajax: {
 		url: '{{ route('customer.customer') }}',
 		type: 'POST',
 		dataType: 'json',
 		data: function (params) {
 			var query = {
-				_token: '{!! csrf_token() !!}',
 				search: params.term,
 			}
 			return query;
@@ -41,7 +36,6 @@ $.ajax({
 	type: "POST",
 	dataType: 'json',
 	data: {
-		_token: '{!! csrf_token() !!}',
 		id: `${oldCust}`,
 	},
 	success: function (data) {
@@ -120,7 +114,6 @@ $.ajax({
 	type: "GET",
 	dataType: 'json',
 	data: {
-		_token: '{{csrf_token()}}'
 	},
 	success: (function(response) {
 
@@ -208,18 +201,13 @@ function populateSelect(i = 0){
 	});
 
 	$(`#jdu_${i},.uom`).select2({
-		theme: 'bootstrap-5',
-		placeholder: 'UOM',
-		width: '100%',
-		allowClear: true,
-		closeOnSelect: true,
+		...config.select2,
 		ajax: {
 			url: '{{ route('uom.uom') }}',
 			type: 'POST',
 			dataType: 'json',
 			data: function (params) {
 				var query = {
-					_token: '{!! csrf_token() !!}',
 					search: params.term,
 				}
 				return query;
@@ -228,18 +216,13 @@ function populateSelect(i = 0){
 	});
 
 	$(`#jobdescmach_${i},.machine`).select2({
-		theme: 'bootstrap-5',
-		placeholder: 'Machine',
-		width: '100%',
-		allowClear: true,
-		closeOnSelect: true,
+		...config.select2,
 		ajax: {
 			url: '{{ route('machine.machine') }}',
 			type: 'GET',
 			dataType: 'json',
 			data: function (params) {
 				var query = {
-					_token: '{!! csrf_token() !!}',
 					search: params.term,
 				}
 				return query;
@@ -250,10 +233,7 @@ function populateSelect(i = 0){
 	});
 
 	$(`#jobdescmachacc_${i},.machine_accessory`).select2({
-		theme: 'bootstrap-5',
-		placeholder: 'Machine Accessories',
-		width: '100%',
-		allowClear: true,
+		...config.select2,
 		closeOnSelect: true,
 		ajax: {
 			url: '{{ route('machineaccessories.machineaccessories') }}',
@@ -261,7 +241,6 @@ function populateSelect(i = 0){
 			dataType: 'json',
 			data: function (params) {
 				var query = {
-					_token: '{!! csrf_token() !!}',
 					search: params.term,
 					machine_id: $(`#jobdescmach_${i}`).val(),
 					idNotIn: ids,
@@ -591,7 +570,6 @@ if (sJD.length > 0) {
 				type: 'POST',
 				url: '{{ route('uom.uom') }}',
 				data: {
-					_token: '{!! csrf_token() !!}',
 					id: sajobDesc.uom_id,
 				},
 			}).then(function (data) {
@@ -605,7 +583,6 @@ if (sJD.length > 0) {
 				url: '{{ route('machine.machine') }}',
 				type: 'GET',
 				data: {
-					_token: '{!! csrf_token() !!}',
 					id: sajobDesc.machine_id,
 				},
 			}).then(function (data) {
@@ -619,7 +596,6 @@ if (sJD.length > 0) {
 				type: 'GET',
 				url: '{{ route('machineaccessories.machineaccessories') }}',
 				data: {
-					_token: '{!! csrf_token() !!}',
 					id: sajobDesc.machine_accessory_id,
 				},
 			}).then(function (data) {
