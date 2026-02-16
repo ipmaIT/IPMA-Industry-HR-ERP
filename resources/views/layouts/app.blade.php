@@ -21,7 +21,7 @@ $currentYear = Carbon::now()->year;
 	@stack('styles')
 </head>
 	<!-- <body class="bg-secondary bg-opacity-10"> -->
-	<body class="d-flex flex-column bg-secondary bg-opacity-10 min-vh-100 ">
+	<body class="d-flex flex-column bg-secondary bg-opacity-10 min-vh-100" data-route="{{ Route::currentRouteName() }}">
 
 		@include('layouts.navigation')
 
@@ -61,14 +61,13 @@ $currentYear = Carbon::now()->year;
 	</body>
 
 	<script>
-  	window.FontAwesomeConfig = { autoReplaceSvg: false, observeMutations: false };
 	</script>
 	<script src="{{ mix('js/app.js') }}"></script>
 	<script src="{{ asset('js/ckeditor/ckeditor.js') }}"></script>
 	<script src="{{ asset('js/ckeditor/adapters/jquery.js') }}"></script>
 	<script src="{{ asset('js/jquery-chained/jquery.chained.js') }}"></script>
 	<script src="{{ asset('js/jquery-chained/jquery.chained.remote.js') }}"></script>
-	<script type="module">
+	<script>
 		(function($){
 			$(document).ready(function(){
 				@section('js')

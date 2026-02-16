@@ -9,7 +9,7 @@ use \Carbon\Carbon;
 	<div class="row justify-content-center">
 		<div class="table-responsive">
 			<h2>Customer Order &nbsp; <a href="{{ route('sale.create') }}" class="btn btn-sm btn-outline-secondary" > <span class="mdi mdi-point-of-sale"></span>Add Order </a></h2>
-			<table class="table table-sm table-hover m-3" id="sales" style="font: 12px sans-serif;">
+			<table class="table table-sm table-hover m-3" id="sales" style="font: 12px roboto-flex;">
 				<thead>
 					<tr>
 						<th>ID</th>
@@ -89,14 +89,16 @@ use \Carbon\Carbon;
 							<td>
 								{!!
 									!is_null($sale->approved_by)?
-									NULL:
-									'<a href="'.route('sale.edit', $sale->id).'" class="btn btn-sm btn-outline-secondary">
-										<i class="fa-regular fa-pen-to-square fa-beat"></i>
-									</a>
-									<button class="btn btn-sm btn-outline-secondary" data-id="'.$sale->id.'">
-										<i class="fa-solid fa-trash-can fa-beat" style="color: red;"></i>
-									</button>'
-								!!}
+									NULL: '
+									<div class="btn-group btn-group-sm" role="group">
+										<a href="'.route('sale.edit', $sale->id).'" class="btn btn-sm btn-outline-secondary">
+											<i class="fa-regular fa-pen-to-square fa-beat"></i>
+										</a>
+										<button class="btn btn-sm btn-outline-secondary" data-id="'.$sale->id.'">
+											<i class="fa-solid fa-trash-can fa-beat" style="color: red;"></i>
+										</button>
+									</div>
+								' !!}
 							</td>
 						</tr>
 					@endforeach
@@ -108,109 +110,15 @@ use \Carbon\Carbon;
 @endsection
 
 @section('js')
-/////////////////////////////////////////////////////////////////////////////////////////
-// tooltip
-$(document).ready(function(){
-	$('[data-bs-toggle="tooltip"]').tooltip();
-});
+window.data = {
+	route: {
+	},
+	url: {
+		saleapproved: '{{ url('saleapproved') }}',
+		salesend: '{{ url('salesend') }}',
+	},
+	old: {
+	},
+};
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// datatables
-$.fn.dataTable.moment( 'D MMM YYYY' );
-$.fn.dataTable.moment( 'YYYY' );
-$.fn.dataTable.moment( 'h:mm a' );
-var table = $('#sales').DataTable({
-	...config.datatable,
-	"columnDefs": [
-		{ type: 'date', 'targets': [1,3] },
-	],
-})
-.on( 'length.dt page.dt order.dt search.dt', function ( e, settings, len ) {
-	$(document).ready(function(){
-		$('[data-bs-toggle="tooltip"]').tooltip();
-	});
-});
-
-/////////////////////////////////////////////////////////////////////////////////////////
-
-$('.sale-approve').click(function(e){
-	e.preventDefault();
-	var jobdescID = $(this).data('id');
-	SwalApprove(jobdescID);
-});
-function SwalApprove(jobdescID){
-	swal.fire({
-		...config.swal,
-		preConfirm: function() {
-			return new Promise(function(resolve) {
-				$.ajax({
-					url: '{{ url('saleapproved') }}' + '/' + jobdescID,
-					type: 'PATCH',
-					dataType: 'json',
-					data: {
-							id: jobdescID,
-					},
-				})
-				.done(function(response){
-					swal.fire('Approved!', response.message, response.status)
-					.then(function(){
-						// window.location.reload(true);
-						table.ajax.reload();
-					});
-				})
-				.fail(function(){
-					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
-				})
-			});
-		},
-	})
-	.then((result) => {
-		if (result.dismiss === swal.DismissReason.cancel) {
-			swal.fire('Cancelled', 'Sale is not approved', 'info')
-		}
-	});
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////
-$('.sale-send').click(function(e){
-	e.preventDefault();
-	var jobnextID = $(this).data('id');
-	SwalNextProcess(jobnextID);
-});
-function SwalNextProcess(jobnextID){
-	swal.fire({
-		...config.swal,,
-		preConfirm: function() {
-			return new Promise(function(resolve) {
-				$.ajax({
-					url: '{{ url('salesend') }}' + '/' + jobnextID,
-					type: 'PATCH',
-					dataType: 'json',
-					data: {
-							// _token : $('meta[name=csrf-token]').attr('content'),
-							id: jobnextID,
-					},
-				})
-				.done(function(response){
-					swal.fire('Approved!', response.message, response.status)
-					.then(function(){
-						// window.location.reload(true);
-						table.ajax.reload();
-					});
-				})
-				.fail(function(){
-					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
-				})
-			});
-		},
-		allowOutsideClick: false
-	})
-	.then((result) => {
-		if (result.dismiss === swal.DismissReason.cancel) {
-			swal.fire('Cancelled', 'Sale Order not proceed to the next process', 'info')
-		}
-	});
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////
 @endsection

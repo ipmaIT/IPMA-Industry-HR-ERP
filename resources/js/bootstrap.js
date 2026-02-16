@@ -36,27 +36,35 @@
 //     encrypted: true
 // });
 
+
 // routing js
+
+import { loadModule } from './moduleLoader';
+
 $(async function () {
 
-	const token = document
-	.querySelector('meta[name="csrf-token"]')
-	?.getAttribute('content');
+    const token = document
+        .querySelector('meta[name="csrf-token"]')
+        ?.getAttribute('content');
 
-	if (!token) {
-		console.error('CSRF token not found');
-		return;
-	}
+    if (!token) {
+        console.error('CSRF token not found');
+        return;
+    }
 
-	$.ajaxSetup({
-		headers: {
-			'X-CSRF-TOKEN': token
-		}
-	});
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': token
+        }
+    });
 
-	try {
-		await $.get('/sanctum/csrf-cookie');
-	} catch (e) {
-		console.warn('Sanctum cookie failed');
-	}
+    try {
+        await $.get('/sanctum/csrf-cookie');
+    } catch (e) {
+        console.warn('Sanctum cookie failed');
+    }
+
+    const route = document.body.dataset.route;
+    await loadModule(route);
+
 });

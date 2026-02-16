@@ -22,7 +22,7 @@
 			</div>
 		</div>
 		<div class="card-footer">
-			<div class="flex justify-content-end">
+			<div class="d-flex justify-content-end">
 				<button type="submit" class="'btn btn-sm btn-outline-secondary">Confirm</button>
 			</div>
 		</div>

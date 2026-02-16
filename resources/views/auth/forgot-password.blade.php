@@ -20,7 +20,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="card-footer">
+		<div class="card-footer d-flex justify-content-end">
 			<button type="submit" class="btn btn-sm btn-outline-secondary m-0 col-auto">Email Password Reset Link</button>
 		</div>
 	</div>
