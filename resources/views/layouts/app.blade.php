@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="en" data-bs-theme="auto">
 <?php
 use \Carbon\Carbon;
-
 $currentYear = Carbon::now()->year;
 ?>
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,11 +15,10 @@ $currentYear = Carbon::now()->year;
 	<title>{!! config('app.name') !!}</title>
 	<link href="{{ asset('images/logo.png') }}" type="image/x-icon" rel="icon" />
 	<!-- Styles -->
-	<link href="{{ asset('css/app.css') }}" rel="stylesheet">
-	<!-- <link href="{{ asset('bootstrap.css') }}" rel="stylesheet"> -->
+	<link href="{{ mix('css/app.css') }}" rel="stylesheet">
+	<!-- <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet"> -->
 	@stack('styles')
 </head>
-	<!-- <body class="bg-secondary bg-opacity-10"> -->
 	<body class="d-flex flex-column bg-secondary bg-opacity-10 min-vh-100" data-route="{{ Route::currentRouteName() }}">
 
 		@include('layouts.navigation')
