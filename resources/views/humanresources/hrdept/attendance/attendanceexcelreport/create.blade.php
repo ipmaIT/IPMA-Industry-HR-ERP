@@ -33,7 +33,7 @@ use Illuminate\Http\Request;
 	<p>&nbsp</p>
 	<div id="processcsv" class="row col-sm-12">
 		<div class="progress col-sm-12" role="progressbar" aria-label="CSV Processing" aria-valuenow="{{ $batch->progress() }}" aria-valuemin="0" aria-valuemax="100">
-			<div class="col-sm-auto progress-bar csvprogress" style="width: 0%">0% CSV Processing</div>
+			<div class="col-sm-auto progress-bar csvprogress rounded-5" style="width: 0%">0% Processing</div>
 		</div>
 	</div>
 	<div id="uploadStatus" class="col-sm-auto ">
@@ -154,7 +154,4 @@ $(document).ready(function() {
 		}
 	})
 });
-@endsection
-
-@section('nonjquery')
 @endsection
