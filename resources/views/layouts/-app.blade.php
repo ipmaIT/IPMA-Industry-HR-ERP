@@ -16,47 +16,52 @@ $currentYear = Carbon::now()->year;
 	<link href="{{ asset('images/logo.png') }}" type="image/x-icon" rel="icon" />
 	<!-- Styles -->
 	<link href="{{ mix('css/app.css') }}" rel="stylesheet">
-	<!-- <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet"> -->
+	<link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet">
 	@stack('styles')
 </head>
-	<body class="d-flex flex-column bg-secondary bg-opacity-10 min-vh-100" data-route="{{ Route::currentRouteName() }}">
+<body class="bg-primary-sibtle bg-opacity-75 min-vh-100 d-flex flex-column" data-route="{{ Route::currentRouteName() }}">
 
-		@include('layouts.navigation')
+	@include('layouts.navigation')
 
-			<div class="container-fluid mx-auto my-2">
+	<div class="container-fluid flex-fill d-flex flex-column">
 
-				<div class="col-sm-12 align-items-top justify-content-center m-0">
-					@include('layouts.nav')
+			@include('layouts.nav')
+
+			<div class="container-fluid p-1 mx-auto d-flex justify-content-between flex-fill">
+
+				<div class="col-sm-1 m-0">
 				</div>
 
-		</div>
+				<div class="col-sm-10 m-0 my-2 p-1 row align-self-center border border-success rounded">
 
-		<div class="container-fluid d-flex flex-fill p-1 mx-auto">
+					<div class="col-sm-12 mx-auto">
+						@include('layouts.messages')
+					</div>
 
-			<div class="container mx-auto border border-success rounded">
+					<div class="col-sm-12 m-0 my-2 p-1 d-flex justify-content-center">
+						@yield('content')
+					</div>
 
-				<div class="col-sm-12 mx-auto">
-					@include('layouts.messages')
 				</div>
 
-				<main class="col-sm-12 mx-auto d-flex flex-fill justify-content-center m-0">
-					@yield('content')
-				</main>
+				<div class="col-sm-1 m-0">
+				</div>
 
 			</div>
 
 		</div>
 
-		<div class="container-fluid row mt-2">
-			<div class="col-sm-12 d-flex justify-content-center">
-				<p class="m-0 fs-6 text-sm text-light-emphasis">
-					<a href="{{ config('app.url') }}">{{ config('app.name') }}</a> develop using <a href="">Laravel v.{{ app()->version() }}</a></p>
-			</div>
-			<div class="col-sm-12 d-flex justify-content-center">
-				<small class="m-0 fw-lighter fs-6 text-body-secondary">Made with love by Dhiauddin and Tan</small>
-			</div>
-		</div>
-	</body>
+	</div>
+
+	<!-- footer -->
+	<div class="container m-0 mx-auto py-1 align-self-end text-center text-sm text-light-emphasis">
+		<a href="{{ config('app.url') }}">&copy; {{ config('app.name') }}</a> develop using <a href="">Laravel v.{{ app()->version() }}</a>
+		<br/>
+		<small class="m-0 fw-lighter fs-6 text-body-secondary">Made with love by Dhiauddin and Tan</small>
+	</div>
+	<!-- footer end -->
+
+</body>
 
 	<script>
 	</script>

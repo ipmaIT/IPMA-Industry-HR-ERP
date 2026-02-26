@@ -24,6 +24,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 // https://laracasts.com/discuss/channels/laravel/how-to-override-the-tomail-function-in-illuminateauthnotificationsresetpasswordphp
 use App\Notifications\ResetPassword;
 
+// load string helper if somehow user not passing an array
+use Illuminate\Support\Str;
+
 class Login extends Authenticatable // implements MustVerifyEmail
 {
 	use HasApiTokens, HasFactory, Notifiable, SoftDeletes, Auditable;
@@ -165,59 +168,214 @@ class Login extends Authenticatable // implements MustVerifyEmail
 	// access for admin of the system
 	public function isAdmin()
 	{
-		$admin = \Auth::user()
-						->belongstostaff()
-						->where('authorise_id', 1)
-						->orWhere(function($q) {
-							$q->where('id', 117)
-								->orWhere('id', 72);
-						})
-						->get();					// user is admin
-		if ($admin) {
+		$user = auth()->user();
+
+		if (!$user) {
+			return false;
+		}
+
+		return $user->belongstostaff()
+		->where('authorise_id', 1)
+		->exists()
+		|| in_array($user->id, [117, 72]);
+	}
+
+	// high management
+	public function isHighManagement($highManagement, $dept)
+	{
+		$user = auth()->user();
+
+		if (!$user || !$user->belongstostaff) {
+			return false;
+		}
+
+    // Admin always allowed
+		if ($user->isAdmin()) {
 			return true;
 		}
+
+    // User division id
+		$userDivId = $user->belongstostaff->div_id;
+
+    // Convert high management levels to array
+		$allowedDivisions = Str::contains($highManagement, '|')
+		? explode('|', $highManagement)
+		: [$highManagement];
+
+    // First check division match
+		if (!in_array($userDivId, $allowedDivisions)) {
+			return false;
+		}
+
+    // If dept is NULL, no department restriction
+		if (strtolower($dept) === 'null') {
+			return true;
+		}
+
+    // Convert department list to array
+		$allowedDepartments = Str::contains($dept, '|')
+		? explode('|', $dept)
+		: [$dept];
+
+    // Get user's main department id
+		$userDept = $user->belongstostaff
+		->belongstomanydepartment()
+		->wherePivot('main', 1)
+		->first();
+
+		if (!$userDept) {
+			return false;
+		}
+
+		return in_array($userDept->id, $allowedDepartments);
 	}
 
 	// high management level 1
-	public function isHighManagement(array $hm)
+	public function isHighManagementlvl1($highManagement, $dept)
 	{
-		$g = auth()->user()->belongstostaff()->whereIn('div_id', $hm)->get();
-		foreach($g as $t) {
-			if(!is_null($t->div_id)) {
-				return true;
-			}
+		$user = auth()->user();
+
+		if (!$user || !$user->belongstostaff) {
+			return false;
 		}
+
+    // Admin always allowed
+		if ($user->isAdmin()) {
+			return true;
+		}
+
+    // User division id
+		$userDivId = $user->belongstostaff->div_id;
+
+    // Convert high management levels to array
+		$allowedDivisions = Str::contains($highManagement, '|')
+		? explode('|', $highManagement)
+		: [$highManagement];
+
+    // First check division match
+		if (!in_array($userDivId, $allowedDivisions)) {
+			return false;
+		}
+
+    // If dept is NULL, no department restriction
+		if (strtolower($dept) === 'null') {
+			return true;
+		}
+
+    // Convert department list to array
+		$allowedDepartments = Str::contains($dept, '|')
+		? explode('|', $dept)
+		: [$dept];
+
+    // Get user's main department id
+		$userDept = $user->belongstostaff
+		->belongstomanydepartment()
+		->wherePivot('main', 1)
+		->first();
+
+		if (!$userDept) {
+			return false;
+		}
+
+		return in_array($userDept->id, $allowedDepartments);
 	}
 
-	// high management level 1
-	public function isHighManagementlvl1(array $hm)
+	public function isHighManagementlvl2($highManagement, $dept)
 	{
-		$g = auth()->user()->belongstostaff()->whereIn('div_id', $hm)->get();
-		foreach($g as $t) {
-			if(!is_null($t->div_id)) {
-				return true;
-			}
+		$user = auth()->user();
+
+		if (!$user || !$user->belongstostaff) {
+			return false;
 		}
+
+    // Admin always allowed
+		if ($user->isAdmin()) {
+			return true;
+		}
+
+    // User division id
+		$userDivId = $user->belongstostaff->div_id;
+
+    // Convert high management levels to array
+		$allowedDivisions = Str::contains($highManagement, '|')
+		? explode('|', $highManagement)
+		: [$highManagement];
+
+    // First check division match
+		if (!in_array($userDivId, $allowedDivisions)) {
+			return false;
+		}
+
+    // If dept is NULL, no department restriction
+		if (strtolower($dept) === 'null') {
+			return true;
+		}
+
+    // Convert department list to array
+		$allowedDepartments = Str::contains($dept, '|')
+		? explode('|', $dept)
+		: [$dept];
+
+    // Get user's main department id
+		$userDept = $user->belongstostaff
+		->belongstomanydepartment()
+		->wherePivot('main', 1)
+		->first();
+
+		if (!$userDept) {
+			return false;
+		}
+
+		return in_array($userDept->id, $allowedDepartments);
 	}
 
-	public function isHighManagementlvl2(array $hm)
+	public function isHighManagementlvl3($highManagement, $dept)
 	{
-		$g = auth()->user()->belongstostaff()->whereIn('div_id', $hm)->get();
-		foreach($g->get() as $t) {
-			if(!is_null($t->div_id)) {
-				return true;
-			}
-		}
-	}
+		$user = auth()->user();
 
-	public function isHighManagementlvl3(array $hm)
-	{
-		$g = auth()->user()->belongstostaff()->whereIn('div_id', $hm)->get();
-		foreach($g->get() as $t) {
-			if(!is_null($t->div_id)) {
-				return true;
-			}
+		if (!$user || !$user->belongstostaff) {
+			return false;
 		}
+
+    // Admin always allowed
+		if ($user->isAdmin()) {
+			return true;
+		}
+
+    // User division id
+		$userDivId = $user->belongstostaff->div_id;
+
+    // Convert high management levels to array
+		$allowedDivisions = Str::contains($highManagement, '|')
+		? explode('|', $highManagement)
+		: [$highManagement];
+
+    // First check division match
+		if (!in_array($userDivId, $allowedDivisions)) {
+			return false;
+		}
+
+    // If dept is NULL, no department restriction
+		if (strtolower($dept) === 'null') {
+			return true;
+		}
+
+    // Convert department list to array
+		$allowedDepartments = Str::contains($dept, '|')
+		? explode('|', $dept)
+		: [$dept];
+
+    // Get user's main department id
+		$userDept = $user->belongstostaff
+		->belongstomanydepartment()
+		->wherePivot('main', 1)
+		->first();
+
+		if (!$userDept) {
+			return false;
+		}
+
+		return in_array($userDept->id, $allowedDepartments);
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////

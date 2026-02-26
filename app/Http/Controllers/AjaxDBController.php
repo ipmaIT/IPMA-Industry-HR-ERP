@@ -1,85 +1,80 @@
 <?php
-
 namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
+// for controller output
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
+
+use Illuminate\Database\Eloquent\Builder;
+
+// load helper
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
+
+use App\Helpers\UnavailableDateTime;
+
+// load batch and queue
+// use Illuminate\Bus\Batch;
+use Illuminate\Support\Facades\Bus;
+
+// load Carbon
+use \Carbon\{
+	Carbon, CarbonPeriod, CarbonInterval
+};
 
 use Log;
 use Session;
-
-// for controller output
 use Exception;
 use Throwable;
-use \Carbon\Carbon;
-use App\Models\Login;
 
 // load model
-use App\Models\Staff;
+use App\Models\{
+	Login, Staff, Setting, Customer };
+use App\Models\Sales\{
+	OptUOM, OptMachine, OptSalesGetItem, OptMachineAccessories
+};
 
-use App\Models\Setting;
-use App\Models\Customer;
-use \Carbon\CarbonPeriod;
-use Illuminate\View\View;
-use \Carbon\CarbonInterval;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use App\Models\Sales\OptUOM;
-use Illuminate\Http\Request;
-use App\Models\Sales\OptMachine;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Bus;
-use App\Helpers\UnavailableDateTime;
-use App\Http\Controllers\Controller;
-
-use App\Models\Sales\OptSalesGetItem;
-use Illuminate\Http\RedirectResponse;
-use App\Models\HumanResources\HRLeave;
-use App\Models\HumanResources\OptRace;
-use App\Models\HumanResources\OptTcms;
-use App\Models\HumanResources\OptBranch;
-use App\Models\HumanResources\OptGender;
-use App\Models\HumanResources\OptStatus;
-use Illuminate\Support\Facades\Redirect;
-use App\Models\HumanResources\HROvertime;
-use App\Models\HumanResources\OptCountry;
-use App\Models\HumanResources\OptDayType;
-use Illuminate\Database\Eloquent\Builder;
-use App\Models\HumanResources\OptCategory;
-use App\Models\HumanResources\OptDivision;
-use App\Models\HumanResources\OptReligion;
-use App\Models\HumanResources\HRAttendance;
-use App\Models\HumanResources\HROutstation;
-use App\Models\HumanResources\OptAuthorise;
-use App\Models\HumanResources\OptLeaveType;
-
-use App\Models\HumanResources\OptWeekDates;
-use App\Models\Sales\OptMachineAccessories;
-use App\Models\HumanResources\OptDepartment;
-use App\Models\HumanResources\OptLeaveStatus;
-
-use App\Models\HumanResources\OptWorkingHour;
-
-// load helper
-use App\Models\HumanResources\DepartmentPivot;
-
-// load array helper
-use App\Models\HumanResources\HROvertimeRange;
-use App\Models\HumanResources\OptHealthStatus;
-use App\Models\HumanResources\OptRelationship;
-
-// load batch and queue
-use App\Models\HumanResources\OptRestdayGroup;
-// use Illuminate\Bus\Batch;
-
-// load Carbon
-use App\Models\HumanResources\OptMaritalStatus;
-use App\Models\HumanResources\HRHolidayCalendar;
-use App\Models\HumanResources\OptEducationLevel;
-
-use App\Models\HumanResources\HRLeaveEntitlement;
-use App\Models\HumanResources\HRLeaveApprovalBackup;
-use App\Models\HumanResources\HROutstationAttendance;
-use App\Models\HumanResources\HRLeaveApprovalSupervisor;
-use App\Models\HumanResources\OptTaxExemptionPercentage;
+use App\Models\HumanResources\{
+	HRLeave,
+	OptRace,
+	OptTcms,
+	OptBranch,
+	OptGender,
+	OptStatus,
+	HROvertime,
+	OptCountry,
+	OptDayType,
+	OptCategory,
+	OptDivision,
+	OptReligion,
+	HRAttendance,
+	HROutstation,
+	OptAuthorise,
+	OptLeaveType,
+	OptWeekDates,
+	OptDepartment,
+	OptLeaveStatus,
+	OptWorkingHour,
+	DepartmentPivot,
+	HROvertimeRange,
+	OptHealthStatus,
+	OptRelationship,
+	OptRestdayGroup,
+	OptMaritalStatus,
+	HRHolidayCalendar,
+	OptEducationLevel,
+	HRLeaveEntitlement,
+	HRLeaveApprovalBackup,
+	HROutstationAttendance,
+	HRLeaveApprovalSupervisor,
+	OptTaxExemptionPercentage,
+};
 
 class AjaxDBController extends Controller
 {
@@ -88,12 +83,11 @@ class AjaxDBController extends Controller
 		$this->middleware(['auth']);
 	}
 
-	//////////////////////////////////////////////////////////////////////////////////////////////
 	// compared username
 	public function loginuser(Request $request): JsonResponse
 	{
 		$valid = true;
-		$log = \App\Models\Login::all();
+		$log = Login::all();
 		foreach($log as $k) {
 			if($k->username == $request->username) {
 				$valid = false;
@@ -107,7 +101,7 @@ class AjaxDBController extends Controller
 	public function icuser(Request $request): JsonResponse
 	{
 		$valid = true;
-		$log = \App\Models\Staff::all();
+		$log = Staff::all();
 		foreach($log as $k) {
 			if($k->ic == $request->ic) {
 				$valid = false;
@@ -121,7 +115,7 @@ class AjaxDBController extends Controller
 	public function emailuser(Request $request): JsonResponse
 	{
 		$valid = true;
-		$log = \App\Models\Staff::all();
+		$log = Staff::all();
 		foreach($log as $k) {
 			if($k->email == $request->email) {
 				$valid = false;

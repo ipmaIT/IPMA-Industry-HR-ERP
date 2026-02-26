@@ -379,13 +379,15 @@ $leaveMa =  $us->hasmanyleavematernity()?->where('year', $i)->first();
 @endsection
 
 @section('js')
-/////////////////////////////////////////////////////////////////////////////////////////
+
+
 // tooltip on reason
 $(document).ready(function(){
 	$('[data-bs-toggle="tooltip"]').tooltip();
 });
 
-/////////////////////////////////////////////////////////////////////////////////////////
+
+
 // datatables
 $.fn.dataTable.moment( 'D MMM YYYY' );
 $.fn.dataTable.moment( 'D MMM YYYY h:mm a' );
@@ -413,7 +415,8 @@ $('#bapprover, #sapprover, #hodapprover, #dirapprover, #hrapprover').DataTable({
 	});}
 );
 
-/////////////////////////////////////////////////////////////////////////////////////////
+
+
 // cancel leave
 $(document).on('click', '.cancel_btn', function(e){
 	var ackID = $(this).data('id');
@@ -436,7 +439,7 @@ function SwalDelete(ackID){
 		preConfirm: function() {
 			return new Promise(function(resolve) {
 				$.ajax({
-					url: '{{ url('leavecancel') }}' + '/' + ackID,
+					url: `{{ url('leavecancel') }}/${ackID}`,
 					type: 'PATCH',
 					dataType: 'json',
 					data: {
@@ -471,7 +474,8 @@ $(document).on('click', '.swal2-confirm', function(e){
 });
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
+
+
 // replacement approve leave
 $(document).on('click', '.rapprover_btn', function(e){
 	var ackID = $(this).data('id');
@@ -528,6 +532,7 @@ $(document).on('click', '.swal2-confirm', function(e){
 	window.location.reload(true);
 });
 
-/////////////////////////////////////////////////////////////////////////////////////////
+
+
 @endsection
 

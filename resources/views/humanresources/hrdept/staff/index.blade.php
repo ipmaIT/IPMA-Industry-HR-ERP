@@ -299,9 +299,7 @@ $(document).ready(function(){
 $.fn.dataTable.moment( 'D MMM YYYY' );
 $.fn.dataTable.moment( 'D MMM YYYY h:mm a' );
 $('#staff, #inactivestaff').DataTable({
-	"lengthMenu": [ [-1], ["All"] ],
-	"order": [[1, "asc" ]],	// sorting the 6th column descending
-	responsive: true
+	...config.datatable
 })
 .on( 'length.dt page.dt order.dt search.dt', function ( e, settings, len ) {
 	$(document).ready(function(){
