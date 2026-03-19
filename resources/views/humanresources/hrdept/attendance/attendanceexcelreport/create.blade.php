@@ -32,8 +32,10 @@ use Illuminate\Http\Request;
 @if( isset(request()->id) || session()->exists('lastBatchId') )
 	<p>&nbsp</p>
 	<div id="processcsv" class="row col-sm-12">
-		<div class="progress col-sm-12" role="progressbar" aria-label="CSV Processing" aria-valuenow="{{ $batch->progress() }}" aria-valuemin="0" aria-valuemax="100">
-			<div class="col-sm-auto progress-bar csvprogress rounded-5" style="width: 0%">0% Processing</div>
+		<div class="progress col-sm-12" style="height: 30px;" role="progressbar" aria-label="CSV Processing" aria-valuenow="{{ $batch->progress() }}" aria-valuemin="0" aria-valuemax="100">
+			<div class="progress-bar progress-bar-striped progress-bar-animated csvprogress rounded-5" style="width: {{ $batch->progress() }}%">
+				{{ $batch->progress() }}% Processing
+			</div>
 		</div>
 	</div>
 	<div id="uploadStatus" class="col-sm-auto ">
@@ -91,22 +93,23 @@ $('#to1').datetimepicker({
 	<?php
 	$batchId = $request->id ?? session()->get('lastBatchId');
 	?>
-	setInterval(percent, 500);
+	var percentInterval = setInterval(percent, 5000);
 	function percent() {
 		$.ajax({
-			url: '{{ route('progress', ['id' => $batchId]) }}',
+			url: '{{ route('progress', ['id' => $batchId], false) }}',
 			type: "GET",
 			data: { _token: '{{ csrf_token() }}'},
+			cache: false,
 			dataType: 'json',
 			success: function (response) {
 				window.percentbar = response.progress;
-				$('.progress').attr('aria-valuenow', percentbar).css('width', percentbar + '%');
-				$(".csvprogress").width(percentbar + '%');
-				$(".csvprogress").html(percentbar +'%');
+				$('.progress').attr('aria-valuenow', percentbar);
+				$(".csvprogress").css('width', percentbar + '%');
+				$(".csvprogress").html(percentbar +'% Processing');
 				$('#processedJobs').html(response.processedJobs);
 				console.log(percentbar);
 				if (percentbar == 100) {
-					clearInterval(percent);
+					clearInterval(percentInterval);
 					window.location.replace('{{ route('excelreport.create') }}');
 					<?php
 					session()->forget('lastBatchId');
@@ -122,6 +125,15 @@ $('#to1').datetimepicker({
 /////////////////////////////////////////////////////////////////////////////////////////
 // bootstrap validator
 $(document).ready(function() {
+	// Add loading state to button submit
+	$('#form').on('submit', function() {
+		if ($('#form').data('bootstrapValidator').isValid()) {
+			var submitBtn = $(this).find('button[type="submit"]');
+			submitBtn.prop('disabled', true);
+			submitBtn.html('<i class="fas fa-spinner fa-spin"></i> Generating... Please wait');
+		}
+	});
+
 	$('#form').bootstrapValidator({
 		feedbackIcons: {
 			valid: 'fas fa-light fa-check',

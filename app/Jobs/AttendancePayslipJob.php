@@ -427,28 +427,28 @@ class AttendancePayslipJob implements ShouldQueue
 
 									if ($early[$k1][$k2]->count() > 0 && $early[$k1][$k2]->count() <= 15) {
 										$earlymerit[$k1] += HRAttendancePayslipSetting::find(1)->value;
-										$earlyout[$k1][$k2] += 15;
+										$earlyout[$k1] += 15;
 									}
 
 									if ($early[$k1][$k2]->count() > 15 && $early[$k1][$k2]->count() <= 30) {
 										$earlymerit[$k1] += HRAttendancePayslipSetting::find(2)->value;
-										$earlyout[$k1][$k2] += 30;
+										$earlyout[$k1] += 30;
 									}
 
 									if ($early[$k1][$k2]->count() > 30 && $early[$k1][$k2]->count() <= 45) {
 										$earlymerit[$k1] += HRAttendancePayslipSetting::find(3)->value;
-										$earlyout[$k1][$k2] += 45;
+										$earlyout[$k1] += 45;
 									}
 
 									if ($early[$k1][$k2]->count() > 45 && $early[$k1][$k2]->count() <= 60) {
 										$earlymerit[$k1] += HRAttendancePayslipSetting::find(4)->value;
-										$earlyout[$k1][$k2] += 60;
+										$earlyout[$k1] += 60;
 									}
 
 									if ($early[$k1][$k2]->count() > 60) {
 										// $earlymerit[$k1] += (HRAttendancePayslipSetting::find(4)->value) + (($earlyout[$k1] - 61) * HRAttendancePayslipSetting::find(5)->value);
 										$earlymerit[$k1] += (HRAttendancePayslipSetting::find(4)->value) + (($early[$k1][$k2]->count() - 61) * HRAttendancePayslipSetting::find(5)->value);
-										$earlyout[$k1][$k2] += 60;
+										$earlyout[$k1] += 60;
 									}
 								}
 							}
