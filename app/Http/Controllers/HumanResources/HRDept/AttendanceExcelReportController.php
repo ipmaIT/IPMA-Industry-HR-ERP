@@ -156,14 +156,18 @@ class AttendanceExcelReportController extends Controller
 				->groupBy('staff_id')
 				// ->ddrawsql();
 				->get();
+		$staff = [];
 		foreach ($hratt as $v) {
 			$staff[] = ['staff_id' => $v->staff_id];
+		}
+
+		if (empty($staff)) {
+			return redirect()->back()->withErrors(['from' => 'No attendance records found for the selected date range.']);
 		}
 
 		// $dataprocess = $hratt->chunk(5);
 
 		$stchunk = array_chunk($staff, 5);
-
 
 		// process collection
 		// $batch = Bus::batch([])->name('Staff Appraisal Process on -> '.now())->dispatch();
