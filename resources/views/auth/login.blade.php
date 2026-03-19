@@ -49,8 +49,8 @@
 		</div>
 		<div class="card-footer">
 
-			<div class="flex items-center justify-end mt-4">
-				<button type="submit" class="btn btn-sm btn-outline-secondary">Login</button>
+			<div class="d-flex justify-content-end mt-4">
+				<button type="submit" class="btn btn-sm btn-outline-secondary me-2">Login</button>
 				@if (Route::has('password.request'))
 					<a class="" href="{{ route('password.request') }}">
 						{{ __('Forgot your password?') }}

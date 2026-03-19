@@ -6,7 +6,7 @@
 		<a class="nav-item nav-link link-body-emphasis {{ (request()->route()->uri == 'costingdept')?'active':NULL }}" href="{{ route('costingdept.index') }}">Costing Department</a>
 		<a class="nav-item nav-link link-body-emphasis {{ (request()->route()->uri == 'activity-logs')?'active':NULL }}" href="{{ route('activity-logs.index') }}">Activity Log</a>
 	@else
-		<a class="nav-item nav-link link-body-emphasis" href="#">Announcement</a>
-		<a class="nav-item nav-link link-body-emphasis" href="#">Scan Job</a>
+<!-- 		<a class="nav-item nav-link link-body-emphasis" href="#">Announcement</a>
+		<a class="nav-item nav-link link-body-emphasis" href="#">Scan Job</a> -->
 	@endauth
 </nav>
