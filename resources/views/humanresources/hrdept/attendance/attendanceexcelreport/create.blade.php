@@ -1,6 +1,79 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+	#spark {
+		position: absolute;
+		top: 50%;
+		left: 0%;
+		width: 10px;
+		height: 10px;
+		background: radial-gradient(circle, #fff 0%, yellow 40%, orange 70%, red 100%);
+		border-radius: 50%;
+		transform: translate(-50%, -50%);
+		box-shadow: 0 0 8px yellow, 0 0 16px orange, 0 0 24px red;
+		pointer-events: none;
+	}
+
+	.spark-trail {
+		position: absolute;
+		width: 6px;
+		height: 6px;
+		background: orange;
+		border-radius: 50%;
+		pointer-events: none;
+		animation: fadeOut 600ms linear forwards;
+	}
+
+	@keyframes fadeOut {
+		0% { opacity: 1; transform: scale(1); }
+		100% { opacity: 0; transform: translateY(-15px) scale(0.2); }
+	}
+
+	.boom {
+		position: absolute;
+		width: 20px;
+		height: 20px;
+		border-radius: 50%;
+		background: radial-gradient(circle, white, yellow, orange, red);
+		animation: explode 700ms ease-out forwards;
+		pointer-events: none;
+	}
+
+	@keyframes explode {
+		0% { transform: scale(0.5); opacity: 1; }
+		70% { transform: scale(3); opacity: 1; }
+		100% { transform: scale(4); opacity: 0; }
+	}
+
+	#flash {
+		position: fixed;
+		inset: 0;
+		background: white;
+		opacity: 0;
+		pointer-events: none;
+		z-index: 9999;
+	}
+
+	@keyframes screenShake {
+		0% { transform: translate(0px, 0px); }
+		20% { transform: translate(-10px, 5px); }
+		40% { transform: translate(10px, -5px); }
+		60% { transform: translate(-8px, 4px); }
+		80% { transform: translate(8px, -4px); }
+		100% { transform: translate(0px, 0px); }
+	}
+
+	.shake { animation: screenShake 400ms ease-in-out; }
+
+	@keyframes flashBang {
+		0% { opacity: 0; }
+		20% { opacity: 1; }
+		100% { opacity: 0; }
+	}
+
+	.flash-active { animation: flashBang 400ms ease-out; }
+</style>
 <div class="container justify-content-center align-items-start">
 @include('humanresources.hrdept.navhr')
 	<h4 class="align-items-start">Generate Payslip Excel Report</h4>
@@ -32,10 +105,13 @@ use Illuminate\Http\Request;
 @if( isset(request()->id) || session()->exists('lastBatchId') )
 	<p>&nbsp</p>
 	<div id="processcsv" class="row col-sm-12">
-		<div class="progress col-sm-12" style="height: 30px;" role="progressbar" aria-label="CSV Processing" aria-valuenow="{{ $batch->progress() }}" aria-valuemin="0" aria-valuemax="100">
+		<div id="flash"></div>
+		<div class="progress col-sm-12" style="height: 30px; position: relative; overflow: visible;" role="progressbar" aria-label="CSV Processing" aria-valuenow="{{ $batch->progress() }}" aria-valuemin="0" aria-valuemax="100">
 			<div class="progress-bar progress-bar-striped progress-bar-animated csvprogress rounded-5" style="width: {{ $batch->progress() }}%">
 				{{ $batch->progress() }}% Processing
 			</div>
+			
+			<div id="spark" style="left: {{ $batch->progress() }}%"></div>
 		</div>
 	</div>
 	<div id="uploadStatus" class="col-sm-auto ">
@@ -93,6 +169,22 @@ $('#to1').datetimepicker({
 	<?php
 	$batchId = $request->id ?? session()->get('lastBatchId');
 	?>
+	window.percentbar = {{ isset($batch) ? $batch->progress() : 0 }};
+	
+	setInterval(() => {
+		if (window.percentbar > 0 && window.percentbar < 100) {
+			let trail = $('<div class="spark-trail"></div>');
+			let offsetX = (Math.random() - 0.5) * 10;
+			let offsetY = (Math.random() - 0.5) * 10;
+			trail.css({
+				left: `calc(${window.percentbar}% + ${offsetX}px)`,
+				top: `calc(50% + ${offsetY}px)`,
+			});
+			$('.progress').append(trail);
+			setTimeout(() => trail.remove(), 600);
+		}
+	}, 50);
+
 	var percentInterval = setInterval(percent, 5000);
 	function percent() {
 		$.ajax({
@@ -106,11 +198,23 @@ $('#to1').datetimepicker({
 				$('.progress').attr('aria-valuenow', percentbar);
 				$(".csvprogress").css('width', percentbar + '%');
 				$(".csvprogress").html(percentbar +'% Processing');
+				$('#spark').css('left', percentbar + '%');
 				$('#processedJobs').html(response.processedJobs);
 				console.log(percentbar);
-				if (percentbar == 100) {
+				if (percentbar >= 100) {
+					window.percentbar = 100;
 					clearInterval(percentInterval);
-					window.location.replace('{{ route('excelreport.create') }}');
+					
+					let boom = $('<div class="boom"></div>');
+					boom.css({ left: '100%', top: '50%', transform: 'translate(-50%, -50%)' });
+					$('.progress').append(boom);
+					$('#flash').addClass('flash-active');
+					$('body').addClass('shake');
+
+					setTimeout(() => {
+						window.location.replace('{{ route('excelreport.create') }}');
+					}, 800);
+					
 					<?php
 					session()->forget('lastBatchId');
 					?>
